@@ -1,6 +1,6 @@
 # Dalo
 
-Prototipo de comunicación básica entre Lengua de Señas Colombiana (LSC) y español para el **Meta Global AI Developer Hackathon 2026**.
+Prototipo web de comunicación básica entre Lengua de Señas Colombiana (LSC) y español para el **Meta Global AI Developer Hackathon 2026**.
 
 ## Estado
 
@@ -18,7 +18,23 @@ El objetivo inicial es reconocer cinco expresiones por cámara y ampliar únicam
 
 - [Propuesta del proyecto](PROPUESTA.md): alcance, arquitectura inicial, recursos candidatos, cronograma y evaluación.
 
-La propuesta inicial contempla escritorio. Se está evaluando una primera versión web y su uso como herramienta complementaria durante videoconferencias. La integración directa con la cámara, el micrófono o los subtítulos de plataformas externas requiere trabajo adicional y no está implementada.
+La primera versión será web para distribuir la demo mediante un enlace HTTPS. Dalo funcionará junto a aplicaciones de videollamada existentes. No incorporará su propio servicio de videoconferencia.
+
+## Uso junto a una videollamada
+
+La demo permitirá capturar expresiones desde la cámara local, confirmar resultados y copiar el texto al chat de la reunión o compartir la ventana de Dalo. La voz generada se reproducirá en el equipo local; no se enviará automáticamente como micrófono de la llamada.
+
+La integración directa con audio, video o subtítulos de plataformas externas se evaluará después. La entrada por micrófono no implica capturar el audio del participante remoto. El uso simultáneo de cámara con otra aplicación se comprobará en el entorno de demo.
+
+## Arquitectura prevista
+
+- Interfaz web y captura de cámara y micrófono con permisos del navegador.
+- Extracción de puntos con MediaPipe y evaluación del clasificador temporal en el navegador.
+- Python para preparación de datos y entrenamiento cuando sea necesario.
+- Backend para acceder a Meta y aplicar límites de consumo, con credenciales exclusivamente en el servidor.
+- Catálogo de videos autorizados y resultados fuera de vocabulario explícitos.
+
+El framework y el alojamiento están pendientes de selección. Todavía no hay un enlace de demo publicado.
 
 ## Datos y credenciales
 

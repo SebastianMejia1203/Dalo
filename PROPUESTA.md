@@ -7,7 +7,7 @@
 
 ## 1. Resumen
 
-Dalo será una aplicación de escritorio para facilitar intercambios básicos entre personas sordas usuarias de Lengua de Señas Colombiana (LSC) y personas oyentes que se comunican en español.
+Dalo será una aplicación web para facilitar intercambios básicos entre personas sordas usuarias de Lengua de Señas Colombiana (LSC) y personas oyentes que se comunican en español. La demo se distribuirá mediante un enlace HTTPS y funcionará como herramienta de apoyo junto a aplicaciones de videollamada existentes.
 
 El prototipo permitirá escribir o dictar una expresión en español y reproducir su representación mediante un video validado en LSC. En la dirección contraria, permitirá grabar una expresión breve frente a una cámara e intentará reconocerla dentro de un vocabulario limitado, mostrando su significado en español y ofreciendo reproducción por voz.
 
@@ -17,7 +17,9 @@ La aplicación solicitará confirmación o permitirá repetir cuando el resultad
 
 Los intercambios cotidianos entre personas que utilizan LSC y personas que no conocen esta lengua pueden presentar barreras de comunicación.
 
-La primera versión se enfocará en un punto de atención al cliente: saludar, agradecer, solicitar ayuda, pedir que se repita una expresión y despedirse. Este contexto permitirá construir una demostración concreta y evaluar si ambas personas consiguen comunicar una intención básica.
+La primera versión se enfocará en intercambios básicos de saludo, agradecimiento, solicitud de ayuda, repetición y despedida. Podrá utilizarse presencialmente o como apoyo durante una videollamada de otra plataforma. Dalo no incorporará su propio servicio de videoconferencia.
+
+En la demo, cada persona podrá abrir Dalo junto a la reunión. Para comunicar resultados al participante remoto se podrá compartir la ventana con los videos y el texto, o copiar el texto confirmado al chat de la reunión. La aplicación no enviará automáticamente su voz generada al micrófono de la llamada.
 
 La definición del vocabulario y la evaluación deberán contar con una persona competente en LSC y, preferentemente, con participación de personas sordas usuarias de la lengua.
 
@@ -25,7 +27,7 @@ La definición del vocabulario y la evaluación deberán contar con una persona 
 
 ### Objetivo general
 
-Desarrollar y evaluar un prototipo de escritorio que facilite la comunicación básica entre LSC y español mediante un catálogo de expresiones verificadas y reconocimiento visual de vocabulario limitado.
+Desarrollar y evaluar un prototipo web accesible mediante un enlace que facilite la comunicación básica entre LSC y español mediante un catálogo de expresiones verificadas y reconocimiento visual de vocabulario limitado.
 
 ### Objetivos específicos
 
@@ -45,8 +47,10 @@ Desarrollar y evaluar un prototipo de escritorio que facilite la comunicación b
 | Captura de señas | Grabaciones breves iniciadas y terminadas por el usuario. |
 | Entrada en español | Texto y voz. |
 | Salida en español | Texto y voz opcional, después de confirmar el resultado. |
-| Plataforma | Aplicación de escritorio; Windows como primer entorno de validación. |
-| Contexto | Intercambios básicos en un punto de atención. |
+| Plataforma | Aplicación web publicada por HTTPS; Chrome y Edge de escritorio como primeros navegadores de prueba. |
+| Contexto | Intercambios básicos presenciales y apoyo a videollamadas externas. |
+| Distribución | Enlace público de demo e instrucciones breves de uso. |
+| Uso con reuniones | Compartir la ventana de Dalo o copiar manualmente texto confirmado al chat de la llamada. |
 
 Las cantidades son metas condicionadas a los datos disponibles. La aplicación mostrará por separado qué expresiones puede reproducir y cuáles puede reconocer.
 
@@ -58,6 +62,9 @@ Las cantidades son metas condicionadas a los datos disponibles. La aplicación m
 - Generación automática de señas mediante avatares o videos sintéticos.
 - Construcción de frases concatenando videos de palabras españolas.
 - Sustitución de intérpretes profesionales.
+- Videollamadas propias dentro de Dalo.
+- Integración automática con audio, video, chat o subtítulos de Zoom, Meet o Teams.
+- Instalación de cámaras o micrófonos virtuales como requisito de la demo web.
 
 La ampliación a entre 20 y 30 expresiones en ambas direcciones se considerará una fase posterior.
 
@@ -79,9 +86,15 @@ Ejemplo: distintas maneras de pedir que alguien repita pueden asociarse a una mi
 2. Pulsa «Grabar seña», realiza una expresión y termina la captura.
 3. El sistema analiza la secuencia y propone un resultado o solicita repetir.
 4. La persona confirma o descarta la propuesta.
-5. El resultado confirmado se muestra en español y puede reproducirse mediante voz.
+5. El resultado confirmado se muestra en español, permite copiarlo y puede reproducirse mediante voz en el equipo local.
 
 Los estados de grabación, análisis y error deberán ser visibles sin depender de señales sonoras. La interfaz priorizará controles grandes, contraste suficiente, navegación por teclado y mensajes breves.
+
+### Apoyo durante una videollamada
+
+La demo mantendrá un flujo explícito: capturar una expresión local, confirmar su significado y compartir el texto o la ventana mediante los controles de la plataforma de reunión. Reproducir voz en Dalo no garantiza que los participantes remotos la escuchen.
+
+La entrada por micrófono recogerá la fuente autorizada por el usuario; no se asumirá que incluye la voz del participante remoto. La captura opcional de una pestaña con audio se investigará después del flujo básico y dependerá del navegador, la fuente elegida y sus permisos. Si se necesita capturar la cámara mientras otra aplicación la utiliza, se comprobará la compatibilidad en el entorno de prueba y se explicará cualquier limitación.
 
 ## 6. Vocabulario inicial
 
@@ -130,7 +143,9 @@ Cámara
     → texto y voz opcional
 ```
 
-La detección de puntos y el clasificador visual se ejecutarán localmente en la arquitectura inicial. Los servicios de Meta se utilizarán para las tareas de lenguaje y voz previstas. La interfaz deberá explicar cuándo se envía contenido a un servicio externo.
+La extracción de puntos se propone en el navegador mediante MediaPipe. Se comprobará primero la viabilidad de ejecutar también el clasificador temporal en el navegador; Python se utilizará para preparar datos y entrenar cuando sea necesario. Si la inferencia requiere un servidor, se documentarán los datos enviados y se medirá su latencia antes de adoptar esa alternativa.
+
+Un backend realizará las llamadas a Meta y aplicará validación de entradas, límites de uso y control de costos. Las claves de Meta permanecerán en el servidor. Los servicios de Meta se utilizarán para las tareas de lenguaje y voz previstas. La interfaz deberá explicar cuándo se envía contenido a un servicio externo.
 
 ## 8. Uso de modelos de Meta
 
@@ -183,19 +198,20 @@ Los puntajes del modelo no se presentarán como probabilidades de acierto sin un
 
 | Componente | Opción inicial |
 | --- | --- |
-| Lenguaje principal | Python. |
-| Interfaz de escritorio | PySide6. |
-| Captura y manejo de video | OpenCV. |
-| Puntos de manos, postura y rostro | MediaPipe. |
-| Clasificación inicial | Comparación temporal de secuencias. |
-| Entrenamiento, si es necesario | PyTorch y una red temporal pequeña. |
-| Lenguaje y voz de entrada | Meta Model API. |
-| Voz de salida | Motor del sistema operativo, sujeto a comprobar disponibilidad de español. |
-| Catálogo | Archivos JSON y videos locales autorizados. |
+| Interfaz web | TypeScript; framework por confirmar según experiencia del desarrollador. |
+| Captura de cámara y micrófono | APIs del navegador, con permisos y despliegue HTTPS. |
+| Puntos de manos, postura y rostro | MediaPipe para web; comprobar la combinación de tareas necesaria. |
+| Clasificación inicial | Comparación temporal de secuencias; evaluar ejecución en el navegador. |
+| Preparación de datos y entrenamiento | Python; OpenCV y PyTorch cuando sean necesarios. |
+| Backend | Servicio para llamadas a Meta, validación y límites de uso; framework por confirmar. |
+| Lenguaje y voz de entrada | Meta Model API mediante el backend. |
+| Voz de salida | Síntesis del navegador, sujeta a disponibilidad de español; reproducción local. |
+| Catálogo | Archivos JSON y videos autorizados servidos por la aplicación. |
+| Publicación | Frontend HTTPS y backend con secretos configurados en el servidor. |
 
 Esta selección busca reducir la cantidad de tecnologías que debe mantener una sola persona. Las versiones se fijarán después de verificar su compatibilidad. No se requiere una base de datos ni infraestructura de GPU para comenzar la primera prueba.
 
-Las credenciales de Meta se cargarán desde configuración local excluida del repositorio. La distribución pública no incluirá claves del desarrollador.
+Las credenciales de Meta se cargarán desde variables de entorno del backend excluidas del repositorio. No se incluirán claves en el código del frontend, los archivos publicados ni las respuestas de la API. La demo pública tendrá límites de tamaño, duración y frecuencia de solicitudes para controlar el consumo.
 
 ## 12. Cronograma
 
@@ -204,15 +220,15 @@ El cronograma distingue la planificación del 26 de octubre del periodo de const
 | Fecha | Actividades | Resultado verificable |
 | --- | --- | --- |
 | 26 oct. | Revisar reglas, recursos, licencias y opciones de validación. | Propuesta y lista de decisiones pendientes. |
-| 27 oct. | Elegir cinco expresiones, comprobar datos, configurar cámara y acceso a Meta. | Captura funcional, muestra de datos y primera llamada a la API. |
+| 27 oct. | Elegir cinco expresiones, comprobar datos, probar cámara en el navegador y acceso a Meta desde backend. | Captura funcional, muestra de datos y primera llamada a la API. |
 | 28 oct. | Implementar extracción de puntos y primer clasificador. | Reconocimiento experimental de clips. |
 | 29 oct. | Evaluar con participantes separados y revisar falsas aceptaciones. | Informe inicial y decisión de mantener o reducir el vocabulario. |
 | 30 oct. | Implementar español a intención y reproducción de videos. | Primer flujo completo de español a LSC. |
 | 31 oct. | Integrar cámara, clasificación y confirmación. | Primer flujo completo de LSC a español. |
 | 1 nov. | Integrar voz y manejo de errores. | Interacción bidireccional con entrada y salida por voz. |
-| 2 nov. | Validar con personas competentes en LSC y probar conversaciones. | Hallazgos lingüísticos, de usabilidad y de precisión. |
-| 3 nov. | Corregir, documentar, empaquetar y grabar la demo. | Versión candidata y video de tres minutos. |
-| 4 nov. | Verificar acceso público, instalación y entrega. | Proyecto presentado antes de las 9:00 p. m., hora de Colombia. |
+| 2 nov. | Validar con personas competentes en LSC y probar apoyo durante una videollamada. | Hallazgos lingüísticos, de usabilidad, compatibilidad y precisión. |
+| 3 nov. | Corregir, documentar, publicar por HTTPS y grabar la demo. | Enlace público, versión candidata y video de tres minutos. |
+| 4 nov. | Verificar acceso desde otro equipo, permisos de cámara y entrega. | Proyecto presentado antes de las 9:00 p. m., hora de Colombia. |
 
 Se buscará apoyo de validación desde el inicio. La ampliación de vocabulario tendrá menor prioridad que corregir expresiones, errores y problemas de uso.
 
@@ -260,19 +276,22 @@ Para contenido de participantes se propone el modo estándar. La documentación 
 | Interpretación lingüística incorrecta. | Validar catálogo y videos antes de presentarlos como correctos. |
 | Confusión entre categorías o movimientos desconocidos. | Incluir negativos, ajustar rechazo y solicitar confirmación. |
 | Fallos de cámara, iluminación u oclusión de manos. | Mostrar indicaciones de encuadre y permitir repetir. |
-| Dependencia de conectividad para Meta. | Informar el fallo y conservar acceso al catálogo local de expresiones. |
+| Dependencia de conectividad para Meta. | Informar el fallo; permitir consultar el contenido ya cargado cuando esté disponible, sin prometer funcionamiento sin conexión. |
+| Cámara ocupada por la plataforma de reunión. | Probar el uso simultáneo en el entorno de demo y documentar alternativas, sin prometer compatibilidad universal. |
+| El audio de la reunión no está disponible para Dalo. | Mantener entrada explícita por texto o micrófono; tratar captura de pestaña como experimento posterior. |
+| Consumo no previsto en la demo pública. | Aplicar límites en backend y monitorizar uso antes de distribuir el enlace. |
 | Alcance excesivo para un desarrollador. | Priorizar cinco expresiones y los dos flujos completos. |
-| Retrasos de empaquetado o entrega. | Preparar la versión candidata y la demo el 3 de noviembre. |
+| Retrasos de publicación o entrega. | Preparar el despliegue HTTPS y la demo el 3 de noviembre. |
 
 La captura, el entrenamiento y la publicación de grabaciones tendrán autorizaciones diferenciadas. No se publicarán videos de participantes por el solo hecho de haber autorizado su uso en pruebas.
 
 ## 16. Entregables del hackatón
 
 - Repositorio público con el código desarrollado durante el evento.
-- README con instalación, configuración, ejecución y limitaciones.
+- README con configuración, ejecución local, acceso a la demo y limitaciones de uso junto a videollamadas.
 - Registro de dependencias, fuentes, licencias y atribuciones.
 - Catálogo con vocabulario disponible en cada dirección y estado de validación.
-- Aplicación ejecutable o procedimiento reproducible para iniciarla.
+- Enlace público HTTPS a la aplicación web y procedimiento reproducible para ejecutarla localmente.
 - Informe breve de evaluación y condiciones de prueba.
 - Video público de demostración de tres minutos.
 - Descripción explícita del uso de Meta y de las contribuciones originales.
@@ -312,9 +331,15 @@ Debe permitir capturar una expresión, extraer sus puntos corporales, compararla
 ## 19. Decisiones pendientes
 
 - Confirmar el stack según la experiencia del desarrollador.
+- Elegir alojamiento del frontend y backend y definir límites de la demo pública.
+- Seleccionar una plataforma de reunión y un entorno de navegador para validar el uso complementario.
 - Revisar licencias y acceso efectivo a los recursos candidatos.
 - Seleccionar las cinco expresiones iniciales a partir de los datos utilizables.
 - Conseguir validación lingüística y participación de usuarios de LSC.
 - Definir condiciones de captura y protocolo de evaluación.
 - Comprobar modelos disponibles en la cuenta de Meta y consumo real.
 - Revisar la rúbrica completa de evaluación, cuya tabla no estaba incluida en el texto compartido.
+
+## 20. Decisión de plataforma
+
+Se acuerda una primera versión web para facilitar la distribución y evaluación mediante un enlace. Dalo seguirá siendo una herramienta de apoyo a videollamadas externas. La captura y el envío automático de audio o video de una reunión no son requisitos de esta primera demo y se evaluarán como integraciones posteriores.
