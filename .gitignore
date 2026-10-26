@@ -1,0 +1,32 @@
+# Credenciales y configuración local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Frontend y archivos generados
+node_modules/
+dist/
+build/
+coverage/
+
+# Datos y grabaciones: revisar permisos antes de publicar
+/data/
+/datasets/
+/recordings/
+/checkpoints/
+
+# Archivos locales
+*.log
+.DS_Store
+Thumbs.db
