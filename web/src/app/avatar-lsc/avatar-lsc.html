@@ -1,0 +1,225 @@
+@if (estado() === 'error') {
+  <p class="sin-avatar" role="alert">No se pudo cargar el avatar de esta seña.</p>
+} @else if (tieneContenido()) {
+    @if (vistaPrevia()) {
+      <div
+        class="vista-previa"
+        tabindex="0"
+        role="group"
+        [attr.aria-label]="'Vista previa de la seña ' + (nombre() || secuencia()?.nombre || '') + ': pasa el cursor o enfoca para reproducir'"
+        (mouseenter)="alEntrarCursor()"
+        (mouseleave)="alSalirCursor()"
+        (focusin)="alEntrarCursor()"
+        (focusout)="alSalirCursor()"
+      >
+        <canvas
+          #lienzoAvatar
+          class="lienzo-avatar"
+          width="640"
+          height="360"
+          role="img"
+          [attr.aria-label]="etiquetaCanvas()"
+        ></canvas>
+        @if (!modeloListo() && !sinWebgl()) {
+          <p class="sin-webgl" role="status">Cargando el modelo 3D del avatar…</p>
+        }
+        @if (sinWebgl()) {
+          <p class="sin-webgl" role="status">No se pudo cargar el avatar 3D en este navegador.</p>
+        }
+      </div>
+    } @else {
+    <canvas
+      #lienzoAvatar
+      class="lienzo-avatar"
+      width="640"
+      height="360"
+      role="img"
+      [attr.aria-label]="etiquetaCanvas()"
+    ></canvas>
+    @if (!modeloListo() && !sinWebgl()) {
+      <p class="sin-webgl" role="status">Cargando el modelo 3D del avatar…</p>
+    }
+    @if (sinWebgl()) {
+      <p class="sin-webgl" role="status">No se pudo cargar el avatar 3D en este navegador.</p>
+    }
+    <div class="panel-controles">
+      @if (!enVivo()) {
+        <div class="acciones" role="group" aria-label="Controles de reproducción">
+        <button
+          type="button"
+          class="primario"
+          (click)="alternarReproduccion()"
+          [disabled]="!hayFotogramas()"
+          [attr.aria-pressed]="reproduciendo()"
+          [attr.aria-label]="reproduciendo() ? 'Pausar avatar' : alFinal() ? 'Reproducir avatar desde el inicio' : 'Reproducir avatar'"
+          [title]="reproduciendo() ? 'Pausar (Espacio)' : 'Reproducir (Espacio)'"
+        >
+          @if (reproduciendo()) {
+            <i-lucide name="pause" [size]="18" aria-hidden="true"></i-lucide> Pausar
+          } @else {
+            <i-lucide name="play" [size]="18" aria-hidden="true"></i-lucide> Reproducir
+          }
+        </button>
+        <button
+          type="button"
+          (click)="repetir()"
+          [disabled]="!hayFotogramas()"
+          aria-label="Repetir avatar desde el inicio"
+          title="Repetir desde el inicio"
+        >
+          <i-lucide name="refresh-cw" [size]="18" aria-hidden="true"></i-lucide> Repetir
+        </button>
+        <div class="grupo-pasos" role="group" aria-label="Fotograma paso a paso">
+          <button
+            type="button"
+            class="solo-icono"
+            (click)="irAlInicio()"
+            [disabled]="!hayFotogramas()"
+            aria-label="Ir al primer fotograma"
+            title="Ir al primer fotograma (Inicio)"
+          >
+            <i-lucide name="skip-back" [size]="18" aria-hidden="true"></i-lucide>
+          </button>
+          <button
+            type="button"
+            class="solo-icono"
+            (click)="pasoAnterior()"
+            [disabled]="!hayFotogramas()"
+            aria-label="Fotograma anterior"
+            title="Fotograma anterior (←)"
+          >
+            <i-lucide name="step-back" [size]="18" aria-hidden="true"></i-lucide>
+          </button>
+          <button
+            type="button"
+            class="solo-icono"
+            (click)="pasoSiguiente()"
+            [disabled]="!hayFotogramas() || alFinal()"
+            aria-label="Fotograma siguiente"
+            title="Fotograma siguiente (→)"
+          >
+            <i-lucide name="step-forward" [size]="18" aria-hidden="true"></i-lucide>
+          </button>
+          <button
+            type="button"
+            class="solo-icono"
+            (click)="irAlFinal()"
+            [disabled]="!hayFotogramas() || alFinal()"
+            aria-label="Ir al último fotograma"
+            title="Ir al último fotograma (Fin)"
+          >
+            <i-lucide name="skip-forward" [size]="18" aria-hidden="true"></i-lucide>
+          </button>
+        </div>
+        <label class="velocidad" [attr.for]="idVelocidad">Velocidad
+          <select
+            [id]="idVelocidad"
+            [value]="velocidad()"
+            (change)="cambiarVelocidad($event)"
+            aria-label="Velocidad del avatar"
+          >
+            <option value="0.25">0,25×</option>
+            <option value="0.5">0,5×</option>
+            <option value="0.75">0,75×</option>
+            <option value="1">1×</option>
+            <option value="1.5">1,5×</option>
+            <option value="2">2×</option>
+          </select>
+        </label>
+      </div>
+      <div class="fila-fotograma">
+        <label [attr.for]="idSlider">Fotograma</label>
+        <input
+          [id]="idSlider"
+          type="range"
+          min="0"
+          step="1"
+          [max]="totalFotogramas() - 1"
+          [value]="fotogramaActual() - 1"
+          [disabled]="!hayFotogramas()"
+          [attr.aria-valuetext]="textoPosicion()"
+          [attr.aria-label]="textoPosicion()"
+          (input)="moverSlider($event)"
+        />
+        <output [attr.for]="idSlider" role="status">{{ fotogramaActual() }} / {{ totalFotogramas() }}</output>
+      </div>
+      }
+    </div>
+    <div class="acciones acciones-vista" role="group" aria-label="Controles de vista">
+      <button
+        type="button"
+        class="solo-icono"
+        (click)="acercar()"
+        [disabled]="!modeloListo()"
+        aria-label="Acercar la vista"
+        title="Acercar"
+      >
+        <i-lucide name="zoom-in" [size]="18" aria-hidden="true"></i-lucide>
+      </button>
+      <button
+        type="button"
+        class="solo-icono"
+        (click)="alejar()"
+        [disabled]="!modeloListo()"
+        aria-label="Alejar la vista"
+        title="Alejar"
+      >
+        <i-lucide name="zoom-out" [size]="18" aria-hidden="true"></i-lucide>
+      </button>
+      <button
+        type="button"
+        class="solo-icono"
+        (click)="girarIzquierda()"
+        [disabled]="!modeloListo()"
+        aria-label="Girar a la izquierda"
+        title="Girar a la izquierda"
+      >
+        <i-lucide name="rotate-ccw" [size]="18" aria-hidden="true"></i-lucide>
+      </button>
+      <button
+        type="button"
+        class="solo-icono"
+        (click)="girarDerecha()"
+        [disabled]="!modeloListo()"
+        aria-label="Girar a la derecha"
+        title="Girar a la derecha"
+      >
+        <i-lucide name="rotate-cw" [size]="18" aria-hidden="true"></i-lucide>
+      </button>
+      <button
+        type="button"
+        class="solo-icono"
+        (click)="subirVista()"
+        [disabled]="!modeloListo()"
+        aria-label="Subir la vista"
+        title="Subir la vista"
+      >
+        <i-lucide name="arrow-up" [size]="18" aria-hidden="true"></i-lucide>
+      </button>
+      <button
+        type="button"
+        class="solo-icono"
+        (click)="bajarVista()"
+        [disabled]="!modeloListo()"
+        aria-label="Bajar la vista"
+        title="Bajar la vista"
+      >
+        <i-lucide name="arrow-down" [size]="18" aria-hidden="true"></i-lucide>
+      </button>
+      <button
+        type="button"
+        class="restablecer"
+        (click)="restablecerVista()"
+        [disabled]="!modeloListo()"
+        title="Volver al encuadre inicial"
+      >
+        <i-lucide name="focus" [size]="18" aria-hidden="true"></i-lucide> Restablecer vista
+      </button>
+    </div>
+    <p class="nota-vista">Arrastra sobre el avatar para girarlo; usa la rueda o pellizca para acercar.</p>
+    }
+} @else if (estado() === 'cargando') {
+  <p class="sin-avatar" role="status">Cargando avatar…</p>
+} @else {
+  <p class="sin-avatar" role="status">Avatar aún no disponible</p>
+}

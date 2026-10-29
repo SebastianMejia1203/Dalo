@@ -1,0 +1,133 @@
+<h2>Expresiones</h2>
+<div class="buscador">
+  <label for="buscar-expresiones">Buscar expresión</label>
+  <input
+    id="buscar-expresiones"
+    type="search"
+    placeholder="Busca una expresión…"
+    autocomplete="off"
+    [value]="busqueda()"
+    (input)="buscar($event)"
+    aria-controls="lista-expresiones"
+  />
+</div>
+<p class="ayuda">Pasa el cursor para ver la seña o pulsa el avatar para ampliarla.</p>
+
+<div class="contenedor-lista">
+  <ul id="lista-expresiones" class="lista">
+    @for (entrada of catalogo(); track entrada.id) {
+      <li class="item">
+        @if (entrada.animacionUrl || entrada.avatarUrl) {
+          <button
+            type="button"
+            class="miniatura-avatar"
+            [attr.aria-label]="'Ver seña ' + entrada.nombre + ' en grande'"
+            aria-haspopup="dialog"
+            aria-controls="modal-animacion"
+            (click)="abrirModal(entrada)"
+            (mouseenter)="activarVistaPrevia(entrada, $event)"
+            (mouseleave)="desactivarVistaPrevia(entrada.id, $event)"
+            (focusin)="activarVistaPrevia(entrada, $event)"
+            (focusout)="desactivarVistaPrevia(entrada.id, $event)"
+            (keydown.escape)="cerrarVistaPrevia()"
+          >
+            <img
+              [ngSrc]="'avatar/miniaturas/' + entrada.id + '.webp?v=reposo-2'"
+              [alt]="'Avatar en reposo para la seña ' + entrada.nombre"
+              width="640"
+              height="360"
+            />
+          </button>
+        } @else if (entrada.videoUrl) {
+          <video [src]="entrada.videoUrl" controls playsinline class="miniatura"></video>
+        } @else {
+          <div class="video-falso">
+            <i-lucide name="video-off" [size]="24" aria-hidden="true"></i-lucide>
+            <span>Sin animación</span>
+          </div>
+        }
+        <div class="datos">
+          <strong>{{ entrada.nombre }}</strong>
+          <span class="estado">{{ entrada.estado }}</span>
+        </div>
+        <p class="disp">
+          Cámara: {{ entrada.reconocible ? 'Sí' : 'aún no' }} · Avatar:
+          {{ entrada.animacionUrl || entrada.avatarUrl ? 'Sí' : 'aún no' }}
+        </p>
+        <button type="button" (click)="elegir.emit(entrada.id)">Usar en Español → LSC</button>
+      </li>
+    } @empty {
+      <li class="sin-resultados" role="status">No se encontraron expresiones.</li>
+    }
+  </ul>
+  @if (entradaVistaPrevia(); as entrada) {
+    <div
+      class="reproductor-compartido"
+      [hidden]="!vistaPreviaVisible()"
+      [style.visibility]="vistaPreviaLista() ? 'visible' : 'hidden'"
+      aria-hidden="true"
+      inert
+      [style.left.px]="posicionVistaPrevia().izquierda"
+      [style.top.px]="posicionVistaPrevia().arriba"
+      [style.width.px]="posicionVistaPrevia().ancho"
+      [style.height.px]="posicionVistaPrevia().alto"
+    >
+      <app-avatar-lsc
+        [secuenciaUrl]="entrada.avatarUrl"
+        [animacionUrl]="entrada.animacionUrl"
+        [nombre]="entrada.nombre"
+        [vistaPrevia]="true"
+        [previsualizacionActiva]="vistaPreviaVisible()"
+        (vistaPreviaLista)="vistaPreviaLista.set($event)"
+      />
+    </div>
+  }
+</div>
+
+@if (totalExpresiones() > 0) {
+  <nav class="paginacion" aria-label="Páginas de expresiones">
+    <button
+      type="button"
+      aria-label="Página anterior"
+      [disabled]="pagina() === 0"
+      (click)="cambiarPagina(-1)"
+    >
+      Anterior
+    </button>
+    <span role="status" aria-live="polite"
+      >Página {{ pagina() + 1 }} de {{ totalPaginas() }} ·
+      {{ totalExpresiones() }} expresiones</span
+    >
+    <button
+      type="button"
+      aria-label="Página siguiente"
+      [disabled]="pagina() === totalPaginas() - 1"
+      (click)="cambiarPagina(1)"
+    >
+      Siguiente
+    </button>
+  </nav>
+}
+
+<dialog
+  #dialogoAnimacion
+  id="modal-animacion"
+  class="modal-animacion"
+  aria-labelledby="titulo-animacion"
+  (close)="alCerrarModal()"
+  (click)="alPulsarFondo($event)"
+>
+  <header class="cabecera-modal">
+    <h2 id="titulo-animacion">{{ entradaModal()?.nombre }}</h2>
+    <button type="button" aria-label="Cerrar animación" autofocus (click)="cerrarModal()">
+      Cerrar
+    </button>
+  </header>
+  @if (entradaModal(); as entrada) {
+    <app-avatar-lsc
+      [secuenciaUrl]="entrada.avatarUrl"
+      [animacionUrl]="entrada.animacionUrl"
+      [nombre]="entrada.nombre"
+    />
+  }
+</dialog>

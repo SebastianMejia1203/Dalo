@@ -1,4 +1,4 @@
-# Dalo: comunicación básica entre LSC y español
+# Daló: comunicación básica entre LSC y español
 
 **Propuesta para el Meta Global AI Developer Hackathon**  
 **Fecha:** 26 de octubre de 2026  
@@ -7,7 +7,7 @@
 
 ## 1. Resumen
 
-Dalo será una aplicación web para facilitar intercambios básicos entre personas sordas usuarias de Lengua de Señas Colombiana (LSC) y personas oyentes que se comunican en español. La demo se distribuirá mediante un enlace HTTPS y funcionará como herramienta de apoyo junto a aplicaciones de videollamada existentes.
+Daló será una aplicación web para facilitar intercambios básicos entre personas sordas usuarias de Lengua de Señas Colombiana (LSC) y personas oyentes que se comunican en español. La demo se distribuirá mediante un enlace HTTPS y funcionará como herramienta de apoyo junto a aplicaciones de videollamada existentes.
 
 El prototipo permitirá escribir o dictar una expresión en español y reproducir su representación mediante un video validado en LSC. En la dirección contraria, permitirá grabar una expresión breve frente a una cámara e intentará reconocerla dentro de un vocabulario limitado, mostrando su significado en español y ofreciendo reproducción por voz.
 
@@ -17,9 +17,9 @@ La aplicación solicitará confirmación o permitirá repetir cuando el resultad
 
 Los intercambios cotidianos entre personas que utilizan LSC y personas que no conocen esta lengua pueden presentar barreras de comunicación.
 
-La primera versión se enfocará en intercambios básicos de saludo, agradecimiento, solicitud de ayuda, repetición y despedida. Podrá utilizarse presencialmente o como apoyo durante una videollamada de otra plataforma. Dalo no incorporará su propio servicio de videoconferencia.
+La primera versión se enfocará en intercambios básicos de saludo, agradecimiento, solicitud de ayuda, repetición y despedida. Podrá utilizarse presencialmente o como apoyo durante una videollamada de otra plataforma. Daló no incorporará su propio servicio de videoconferencia.
 
-En la demo, cada persona podrá abrir Dalo junto a la reunión. Para comunicar resultados al participante remoto se podrá compartir la ventana con los videos y el texto, o copiar el texto confirmado al chat de la reunión. La aplicación no enviará automáticamente su voz generada al micrófono de la llamada.
+En la demo, cada persona podrá abrir Daló junto a la reunión. Para comunicar resultados al participante remoto se podrá compartir la ventana con los videos y el texto, o copiar el texto confirmado al chat de la reunión. La aplicación no enviará automáticamente su voz generada al micrófono de la llamada.
 
 La definición del vocabulario y la evaluación deberán contar con una persona competente en LSC y, preferentemente, con participación de personas sordas usuarias de la lengua.
 
@@ -50,7 +50,7 @@ Desarrollar y evaluar un prototipo web accesible mediante un enlace que facilite
 | Plataforma | Aplicación web publicada por HTTPS; Chrome y Edge de escritorio como primeros navegadores de prueba. |
 | Contexto | Intercambios básicos presenciales y apoyo a videollamadas externas. |
 | Distribución | Enlace público de demo e instrucciones breves de uso. |
-| Uso con reuniones | Compartir la ventana de Dalo o copiar manualmente texto confirmado al chat de la llamada. |
+| Uso con reuniones | Compartir la ventana de Daló o copiar manualmente texto confirmado al chat de la llamada. |
 
 Las cantidades son metas condicionadas a los datos disponibles. La aplicación mostrará por separado qué expresiones puede reproducir y cuáles puede reconocer.
 
@@ -59,14 +59,9 @@ Las cantidades son metas condicionadas a los datos disponibles. La aplicación m
 - Traducción universal de LSC.
 - Reconocimiento de conversaciones continuas sin pausas.
 - Traducción libre de cualquier oración en español.
-- Generación automática de señas mediante avatares o videos sintéticos.
 - Construcción de frases concatenando videos de palabras españolas.
 - Sustitución de intérpretes profesionales.
-- Videollamadas propias dentro de Dalo.
 - Integración automática con audio, video, chat o subtítulos de Zoom, Meet o Teams.
-- Instalación de cámaras o micrófonos virtuales como requisito de la demo web.
-
-La ampliación a entre 20 y 30 expresiones en ambas direcciones se considerará una fase posterior.
 
 ## 5. Experiencia de uso
 
@@ -92,7 +87,7 @@ Los estados de grabación, análisis y error deberán ser visibles sin depender 
 
 ### Apoyo durante una videollamada
 
-La demo mantendrá un flujo explícito: capturar una expresión local, confirmar su significado y compartir el texto o la ventana mediante los controles de la plataforma de reunión. Reproducir voz en Dalo no garantiza que los participantes remotos la escuchen.
+La demo mantendrá un flujo explícito: capturar una expresión local, confirmar su significado y compartir el texto o la ventana mediante los controles de la plataforma de reunión. Reproducir voz en Daló no garantiza que los participantes remotos la escuchen.
 
 La entrada por micrófono recogerá la fuente autorizada por el usuario; no se asumirá que incluye la voz del participante remoto. La captura opcional de una pestaña con audio se investigará después del flujo básico y dependerá del navegador, la fuente elegida y sus permisos. Si se necesita capturar la cámara mientras otra aplicación la utiliza, se comprobará la compatibilidad en el entorno de prueba y se explicará cualquier limitación.
 
@@ -100,11 +95,14 @@ La entrada por micrófono recogerá la fuente autorizada por el usuario; no se a
 
 Se propone explorar estas intenciones:
 
-- Saludar.
-- Agradecer.
-- Pedir ayuda.
-- Pedir que se repita.
-- Despedirse.
+- Hola.
+- Bienvenido.
+- Gracias.
+- Chao.
+- Perdón.
+- Perfecto.
+- Esperar.
+- Lo siento.
 
 La selección definitiva dependerá de la disponibilidad de ejemplos utilizables, las diferencias visuales entre categorías y la validación lingüística. Cada intención deberá vincularse a una expresión concreta en LSC; no se asumirá una equivalencia palabra por palabra.
 
@@ -126,7 +124,7 @@ Cada entrada del catálogo deberá registrar:
 ```text
 Texto o micrófono
     → transcripción, cuando corresponda
-    → identificación de intención con Meta
+    → identificación de intención
     → validación del identificador contra el catálogo
     → confirmación del usuario
     → reproducción de video validado
@@ -145,27 +143,8 @@ Cámara
 
 La extracción de puntos se propone en el navegador mediante MediaPipe. Se comprobará primero la viabilidad de ejecutar también el clasificador temporal en el navegador; Python se utilizará para preparar datos y entrenar cuando sea necesario. Si la inferencia requiere un servidor, se documentarán los datos enviados y se medirá su latencia antes de adoptar esa alternativa.
 
-Un backend realizará las llamadas a Meta y aplicará validación de entradas, límites de uso y control de costos. Las claves de Meta permanecerán en el servidor. Los servicios de Meta se utilizarán para las tareas de lenguaje y voz previstas. La interfaz deberá explicar cuándo se envía contenido a un servicio externo.
 
-## 8. Uso de modelos de Meta
-
-### Muse Voice Transcribe
-
-Se propone utilizarlo para convertir la voz de entrada en texto. La calidad para español y las condiciones reales de uso se comprobarán durante la integración.
-
-### Muse Spark
-
-Se utilizará para relacionar formulaciones cotidianas en español con las intenciones permitidas. Su respuesta deberá limitarse a un identificador del catálogo, una solicitud de aclaración o un resultado de «fuera de vocabulario».
-
-La aplicación validará la respuesta antes de reproducir contenido. El modelo no generará instrucciones de LSC ni inventará videos o expresiones.
-
-### Experimento opcional con video
-
-Se podrá comparar el reconocimiento directo de clips mediante Muse Spark con el clasificador local. La capacidad de recibir video no demuestra por sí misma competencia en LSC. Este experimento tendrá un presupuesto limitado y no sustituirá la evaluación con ejemplos independientes.
-
-No se incorporarán modelos adicionales de Meta únicamente para aumentar su cantidad: cada integración deberá resolver una necesidad del producto.
-
-## 9. Herramientas y recursos existentes
+## 8. Herramientas y recursos existentes
 
 | Recurso | Uso potencial | Verificación pendiente |
 | --- | --- | --- |
@@ -179,7 +158,7 @@ MediaPipe detecta posiciones corporales; no proporciona por sí solo un traducto
 
 La licencia de un artículo no necesariamente es la misma que la de sus datos, código o videos. Cada recurso se revisará por separado antes de incorporarlo al proyecto público.
 
-## 10. Estrategia de reconocimiento
+## 9. Estrategia de reconocimiento
 
 1. Seleccionar cinco categorías con ejemplos utilizables.
 2. Separar participantes entre entrenamiento, validación y prueba antes de realizar aumentos de datos.
@@ -278,7 +257,7 @@ Para contenido de participantes se propone el modo estándar. La documentación 
 | Fallos de cámara, iluminación u oclusión de manos. | Mostrar indicaciones de encuadre y permitir repetir. |
 | Dependencia de conectividad para Meta. | Informar el fallo; permitir consultar el contenido ya cargado cuando esté disponible, sin prometer funcionamiento sin conexión. |
 | Cámara ocupada por la plataforma de reunión. | Probar el uso simultáneo en el entorno de demo y documentar alternativas, sin prometer compatibilidad universal. |
-| El audio de la reunión no está disponible para Dalo. | Mantener entrada explícita por texto o micrófono; tratar captura de pestaña como experimento posterior. |
+| El audio de la reunión no está disponible para Daló. | Mantener entrada explícita por texto o micrófono; tratar captura de pestaña como experimento posterior. |
 | Consumo no previsto en la demo pública. | Aplicar límites en backend y monitorizar uso antes de distribuir el enlace. |
 | Alcance excesivo para un desarrollador. | Priorizar cinco expresiones y los dos flujos completos. |
 | Retrasos de publicación o entrega. | Preparar el despliegue HTTPS y la demo el 3 de noviembre. |
@@ -342,4 +321,4 @@ Debe permitir capturar una expresión, extraer sus puntos corporales, compararla
 
 ## 20. Decisión de plataforma
 
-Se acuerda una primera versión web para facilitar la distribución y evaluación mediante un enlace. Dalo seguirá siendo una herramienta de apoyo a videollamadas externas. La captura y el envío automático de audio o video de una reunión no son requisitos de esta primera demo y se evaluarán como integraciones posteriores.
+Se acuerda una primera versión web para facilitar la distribución y evaluación mediante un enlace. Daló seguirá siendo una herramienta de apoyo a videollamadas externas. La captura y el envío automático de audio o video de una reunión no son requisitos de esta primera demo y se evaluarán como integraciones posteriores.

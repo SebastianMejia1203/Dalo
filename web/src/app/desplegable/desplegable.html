@@ -1,0 +1,33 @@
+<div class="campo">
+  <span class="titulo">{{ etiqueta() }}</span>
+  <button
+    type="button"
+    class="boton"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="abierto()"
+    [attr.aria-label]="etiqueta() + ': ' + textoActual()"
+    (click)="alternar()"
+    (keydown)="alTeclado($event)"
+  >
+    <span class="actual">{{ textoActual() }}</span>
+    <i-lucide name="chevron-down" [size]="18" aria-hidden="true"></i-lucide>
+  </button>
+  @if (abierto()) {
+    <ul class="panel" role="listbox" [attr.aria-label]="etiqueta()">
+      @for (opcion of opciones(); track opcion.valor; let i = $index) {
+        <li
+          role="option"
+          [attr.aria-selected]="opcion.valor === valor()"
+          [class.activa]="i === indiceActivo()"
+          (click)="elegir(opcion.valor)"
+          (mouseenter)="indiceActivo.set(i)"
+        >
+          <span>{{ opcion.texto }}</span>
+          @if (opcion.valor === valor()) {
+            <i-lucide name="check" [size]="18" aria-hidden="true"></i-lucide>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

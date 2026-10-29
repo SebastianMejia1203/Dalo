@@ -1,0 +1,68 @@
+.campo {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.6rem 0;
+}
+
+.titulo {
+  font-size: 0.92rem;
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  background: #fff;
+  min-height: 44px;
+}
+
+.boton:hover {
+  border-color: var(--acento);
+}
+
+.actual {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0.25rem 0 0;
+  padding: 0.25rem;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(16 24 32 / 0.12);
+  max-height: 240px;
+  overflow: auto;
+}
+
+.panel li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.panel li:hover,
+.panel li.activa {
+  background: var(--pista);
+}
+
+.panel li[aria-selected='true'] {
+  font-weight: 700;
+  color: var(--acento-oscuro);
+}
