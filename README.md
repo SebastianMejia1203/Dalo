@@ -139,7 +139,7 @@ La galería utiliza miniaturas WebP y activa el 3D al interactuar. El modelo y l
 ### Requisitos
 
 - **Node.js 24** y **npm 11** para la aplicación web.
-- **Python** para las herramientas y pruebas del proyecto.
+- **Python 3.14** (probado con 3.14.5) y `requirements.txt` para las herramientas y pruebas del proyecto.
 - **Cámara y micrófono**, opcionales según la función que se quiera probar.
 - **Blender 5.2 con el complemento VRM**, únicamente para editar o regenerar animaciones.
 
@@ -156,6 +156,18 @@ npm start
 Abre **http://localhost:4200**. Concede permisos de cámara o micrófono cuando uses esas funciones. El reconocimiento de voz y las voces de salida dependen de las capacidades del navegador.
 
 Las animaciones y los modelos publicados en `web/public` permiten ejecutar la aplicación. El dataset local se necesita para extracción, entrenamiento o reconstrucción de referencias, y se mantiene fuera del repositorio.
+
+### Preparar Python
+
+Desde la raíz del repositorio:
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+`.venv/` es local y no se versiona. `bpy` y `mathutils` no se instalan con pip: solo existen dentro de Blender 5.2.
 
 ### Comprobar y compilar
 
@@ -174,7 +186,7 @@ python -m unittest discover -s tests -v
 
 La compilación queda en `web/dist/web/browser`. Para publicarla, utiliza HTTPS y configura el alojamiento para servir `.mjs` como JavaScript y `.wasm` como `application/wasm`.
 
-Las herramientas de reconocimiento requieren sus dependencias de Python; en el entorno local de desarrollo están instaladas en `.venv`. Su ejecución se describe en la guía técnica.
+Las herramientas de reconocimiento usan las dependencias declaradas en `requirements.txt`. Su ejecución se describe en la guía técnica.
 
 ## 7. Resultados, problemas y limitaciones
 
