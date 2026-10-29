@@ -1,0 +1,21 @@
+# Dependencias de Python del proyecto (verificadas con Python 3.14.5).
+#
+# Instalación en Windows (PowerShell), desde la raíz del repositorio:
+#   py -m venv .venv
+#   .\.venv\Scripts\Activate.ps1
+#   python -m pip install -r requirements.txt
+#
+# Notas:
+# - `.venv/` es local y no se versiona (ver `.gitignore`).
+# - `torch` con sufijo `+cpu` se instala desde PyPI; si falla, usa el
+#   índice de CPU de PyTorch: `pip install torch --index-url https://download.pytorch.org/whl/cpu`.
+# - `bpy` y `mathutils` no son paquetes pip: solo existen dentro de Blender 5.2
+#   y únicamente se necesitan para editar o regenerar animaciones.
+# - `onnxruntime` se incluye para verificar localmente el modelo exportado.
+
+mediapipe==1.1.1
+numpy==2.5.4
+onnx==1.23.2
+onnxruntime==1.31.1
+opencv-contrib-python==5.0.0.93
+torch==2.15.0+cpu
