@@ -1,0 +1,163 @@
+[
+  {
+    "id": "bano",
+    "nombre": "Baño",
+    "expresion": "Baño",
+    "intencion": "Pedir ir al baño",
+    "formulaciones": ["baño", "ir al baño"]
+  },
+  {
+    "id": "bien",
+    "nombre": "Bien",
+    "expresion": "Bien",
+    "intencion": "Expresar bienestar",
+    "formulaciones": ["bien", "estoy bien"]
+  },
+  {
+    "id": "buenasnoches",
+    "nombre": "Buenas noches",
+    "expresion": "Buenas Noches",
+    "intencion": "Saludar por la noche",
+    "formulaciones": ["buenas noches"]
+  },
+  {
+    "id": "buenastardes",
+    "nombre": "Buenas tardes",
+    "expresion": "Buenas tardes",
+    "intencion": "Saludar por la tarde",
+    "formulaciones": ["buenas tardes"]
+  },
+  {
+    "id": "buenosdias",
+    "nombre": "Buenos días",
+    "expresion": "Buenos dias",
+    "intencion": "Saludar por la mañana",
+    "formulaciones": ["buenos días"]
+  },
+  {
+    "id": "comoesta",
+    "nombre": "Cómo está",
+    "expresion": "Como esta",
+    "intencion": "Preguntar cómo está",
+    "formulaciones": ["cómo está", "cómo estás"]
+  },
+  {
+    "id": "congusto",
+    "nombre": "Con gusto",
+    "expresion": "Con gusto",
+    "intencion": "Responder con amabilidad",
+    "formulaciones": ["con gusto"]
+  },
+  {
+    "id": "denada",
+    "nombre": "De nada",
+    "expresion": "Denada",
+    "intencion": "Responder a un agradecimiento",
+    "formulaciones": ["de nada"]
+  },
+  {
+    "id": "excelente",
+    "nombre": "Excelente",
+    "expresion": "Excelente",
+    "intencion": "Expresar que algo es excelente",
+    "formulaciones": ["excelente"]
+  },
+  {
+    "id": "invitar",
+    "nombre": "Invitar",
+    "expresion": "Invitar",
+    "intencion": "Invitar",
+    "formulaciones": ["invitar", "te invito"]
+  },
+  {
+    "id": "mal",
+    "nombre": "Mal",
+    "expresion": "Mal",
+    "intencion": "Expresar malestar",
+    "formulaciones": ["mal", "estoy mal"]
+  },
+  {
+    "id": "masomenos",
+    "nombre": "Más o menos",
+    "expresion": "Maso Menos",
+    "intencion": "Expresar un estado intermedio",
+    "formulaciones": ["más o menos"]
+  },
+  {
+    "id": "muchasgracias",
+    "nombre": "Muchas gracias",
+    "expresion": "Muchas Gracias",
+    "intencion": "Agradecer especialmente",
+    "formulaciones": ["muchas gracias"]
+  },
+  {
+    "id": "muybien",
+    "nombre": "Muy bien",
+    "expresion": "Muy Bien",
+    "intencion": "Expresar mucho bienestar",
+    "formulaciones": ["muy bien", "estoy muy bien"]
+  },
+  {
+    "id": "muymal",
+    "nombre": "Muy mal",
+    "expresion": "Muy mal",
+    "intencion": "Expresar mucho malestar",
+    "formulaciones": ["muy mal", "estoy muy mal"]
+  },
+  {
+    "id": "necesitar",
+    "nombre": "Necesitar",
+    "expresion": "Necesitar",
+    "intencion": "Expresar una necesidad",
+    "formulaciones": ["necesitar", "necesito"]
+  },
+  {
+    "id": "no",
+    "nombre": "No",
+    "expresion": "No",
+    "intencion": "Negar",
+    "formulaciones": ["no"]
+  },
+  {
+    "id": "permiso",
+    "nombre": "Permiso",
+    "expresion": "Permiso",
+    "intencion": "Pedir permiso",
+    "formulaciones": ["permiso", "con permiso"]
+  },
+  {
+    "id": "porfavor",
+    "nombre": "Por favor",
+    "expresion": "Por favor",
+    "intencion": "Pedir algo con cortesía",
+    "formulaciones": ["por favor"]
+  },
+  {
+    "id": "presentar",
+    "nombre": "Presentar",
+    "expresion": "Presentar",
+    "intencion": "Presentar a alguien",
+    "formulaciones": ["presentar", "te presento"]
+  },
+  {
+    "id": "sentarse",
+    "nombre": "Sentarse",
+    "expresion": "Sentarse",
+    "intencion": "Invitar a sentarse",
+    "formulaciones": ["sentarse", "siéntate", "toma asiento"]
+  },
+  {
+    "id": "si",
+    "nombre": "Sí",
+    "expresion": "Si",
+    "intencion": "Afirmar",
+    "formulaciones": ["sí"]
+  },
+  {
+    "id": "tranquilo",
+    "nombre": "Tranquilo",
+    "expresion": "Tranquilo",
+    "intencion": "Pedir tranquilidad",
+    "formulaciones": ["tranquilo", "tranquila"]
+  }
+]

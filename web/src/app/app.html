@@ -1,0 +1,40 @@
+<div [class]="claseTexto()">
+  <header class="cabecera">
+    <p class="marca">Daló.</p>
+    <nav aria-label="Secciones">
+      @if (dalo.vista() === 'comunicar') {
+        <button id="nav-expresiones" type="button" class="pildora" (click)="dalo.mostrarExpresiones()">
+          <i-lucide name="book-open" [size]="18" aria-hidden="true"></i-lucide>
+          Expresiones
+        </button>
+      } @else {
+        <button id="nav-comunicar" type="button" class="pildora" (click)="dalo.mostrarComunicar()">
+          <i-lucide name="message-circle" [size]="18" aria-hidden="true"></i-lucide>
+          Comunicar
+        </button>
+      }
+      @if (dalo.vista() === 'ajustes') {
+        <button id="nav-expresiones-2" type="button" class="pildora" (click)="dalo.mostrarExpresiones()">
+          <i-lucide name="book-open" [size]="18" aria-hidden="true"></i-lucide>
+          Expresiones
+        </button>
+      } @else {
+        <button id="nav-ajustes" type="button" class="pildora" (click)="dalo.abrirAjustes()">
+          <i-lucide name="sliders-horizontal" [size]="18" aria-hidden="true"></i-lucide>
+          Ajustes
+        </button>
+      }
+    </nav>
+  </header>
+
+  <main>
+    @if (dalo.vista() === 'comunicar') {
+      <app-comunicador />
+    } @else if (dalo.vista() === 'ajustes') {
+      <app-ajustes />
+    }
+    <!-- Expresiones se monta una sola vez y se oculta: así los avatares no
+      se reconstruyen (ni muestran "Cargando") al entrar y salir. -->
+    <app-expresiones [hidden]="dalo.vista() !== 'expresiones'" (elegir)="dalo.usarEnBuscador($event)" />
+  </main>
+</div>

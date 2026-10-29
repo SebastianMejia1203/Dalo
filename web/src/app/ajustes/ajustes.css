@@ -1,0 +1,97 @@
+h2 {
+  margin: 1.25rem 0 1rem;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.tarjeta {
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.tarjeta-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--texto);
+  margin-bottom: 0.5rem;
+}
+
+.tarjeta-cabecera h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.tarjeta label {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.6rem 0;
+  font-size: 0.92rem;
+}
+
+.tarjeta input[type='range'] {
+  accent-color: var(--acento);
+  padding: 0;
+  min-height: 44px;
+}
+
+.nota {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  margin: 0.5rem 0 0;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  align-items: center;
+}
+
+.acciones button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.segmentado {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--pista);
+  border-radius: 12px;
+  padding: 0.25rem;
+  margin-top: 0.6rem;
+}
+
+.segmentado button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  color: var(--texto-suave);
+  min-height: 40px;
+}
+
+.segmentado button.activa {
+  background: #fff;
+  color: var(--texto);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgb(16 24 32 / 0.15);
+}
+
+@media (max-width: 720px) {
+  .rejilla {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,50 @@
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.marca {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #0d3b37;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+main {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 720px) {
+  .cabecera {
+    flex-wrap: wrap;
+  }
+
+  nav {
+    width: 100%;
+  }
+
+  .pildora {
+    flex: 1;
+    justify-content: center;
+  }
+}

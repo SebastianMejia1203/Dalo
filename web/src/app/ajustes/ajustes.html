@@ -1,0 +1,97 @@
+<h2>Ajustes</h2>
+
+<div class="rejilla">
+  <section class="tarjeta" aria-label="Dispositivos">
+    <div class="tarjeta-cabecera">
+      <i-lucide name="camera" [size]="20" aria-hidden="true"></i-lucide>
+      <h3>Dispositivos</h3>
+    </div>
+    <app-desplegable
+      etiqueta="Cámara"
+      [opciones]="opcionesCamaras()"
+      [valor]="dalo.ajustes().camaraId"
+      (cambio)="dalo.guardarCamara($event)"
+    />
+    <app-desplegable
+      etiqueta="Micrófono"
+      [opciones]="opcionesMicrofonos()"
+      [valor]="dalo.ajustes().microfonoId"
+      (cambio)="dalo.guardarMicrofono($event)"
+    />
+    <p class="nota">Los nombres aparecen después de conceder permiso de cámara o micrófono.</p>
+    <div class="acciones">
+      <button type="button" (click)="detectar()" [disabled]="detectando()">
+        <i-lucide name="refresh-cw" [size]="18" aria-hidden="true"></i-lucide>
+        {{ detectando() ? 'Detectando…' : 'Detectar dispositivos' }}
+      </button>
+    </div>
+    @if (mensajeDeteccion()) {
+      <p class="nota" role="status">{{ mensajeDeteccion() }}</p>
+    }
+  </section>
+
+  <section class="tarjeta" aria-label="Voz de salida">
+    <div class="tarjeta-cabecera">
+      <i-lucide name="volume-2" [size]="20" aria-hidden="true"></i-lucide>
+      <h3>Voz de salida</h3>
+    </div>
+    <app-desplegable
+      etiqueta="Voz"
+      [opciones]="opcionesVoces()"
+      [valor]="dalo.ajustes().voz"
+      (cambio)="dalo.guardarVoz($event)"
+    />
+    <label>Velocidad: {{ dalo.ajustes().velocidad.toFixed(1) }}×
+      <input
+        type="range"
+        min="0.5"
+        max="1.5"
+        step="0.1"
+        [value]="dalo.ajustes().velocidad"
+        (change)="elegirVelocidad($event)"
+      />
+    </label>
+    <div class="acciones">
+      <button type="button" (click)="probarVoz()">
+        <i-lucide name="play" [size]="18" aria-hidden="true"></i-lucide>
+        Probar voz
+      </button>
+    </div>
+    @if (mensajeVoz()) {
+      <p class="nota" role="status">{{ mensajeVoz() }}</p>
+    }
+  </section>
+
+  <section class="tarjeta" aria-label="Tamaño del texto">
+    <div class="tarjeta-cabecera">
+      <i-lucide name="type" [size]="20" aria-hidden="true"></i-lucide>
+      <h3>Tamaño del texto</h3>
+    </div>
+    <div class="segmentado" role="radiogroup" aria-label="Tamaño del texto">
+      <button type="button" [class.activa]="dalo.ajustes().tamanoTexto === 'normal'" (click)="elegirTamano('normal')">
+        Normal
+      </button>
+      <button type="button" [class.activa]="dalo.ajustes().tamanoTexto === 'grande'" (click)="elegirTamano('grande')">
+        Grande
+      </button>
+      <button
+        type="button"
+        [class.activa]="dalo.ajustes().tamanoTexto === 'muy-grande'"
+        (click)="elegirTamano('muy-grande')"
+      >
+        Muy grande
+      </button>
+    </div>
+  </section>
+
+  <section class="tarjeta" aria-label="Privacidad">
+    <div class="tarjeta-cabecera">
+      <i-lucide name="shield-check" [size]="20" aria-hidden="true"></i-lucide>
+      <h3>Privacidad</h3>
+    </div>
+    <p class="nota">
+      La cámara y el micrófono se solicitan solo al usar cada función y no se graba nada automáticamente.
+      La voz de salida suena en este equipo.
+    </p>
+  </section>
+</div>
