@@ -1,0 +1,10 @@
+{
+  "id": "no",
+  "nombre": "No",
+  "significado": "No",
+  "intencion": "Negar",
+  "descripcion": "Una mano delante del torso/cara con índice y medio extendidos o separados en V y el resto recogido; los dedos realizan un pequeño cierre/flexión o ajuste repetido. Debe verse la configuración de dos dedos; no es palma abierta de chao ni círculo de perfecto. Descripción visual provisional de muestras del dataset.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 9
+}

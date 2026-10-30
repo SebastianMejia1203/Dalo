@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agregar señas a Daló"
+
+  short_description: "Incorpora señas desde videos y evalúa su reconocimiento"
+
+  default_prompt: "Usa $dalo-agregar-senas para agregar una seña a Daló a partir de varios videos de LSC-54 y evaluar su identificación."

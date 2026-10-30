@@ -1,0 +1,536 @@
+<div class="fila-titulo">
+  <h1>Comunicar</h1>
+  <div class="segmentado" role="group" aria-label="Dirección de comunicación">
+    <button
+      id="tab-lsc-es"
+      type="button"
+      [attr.aria-pressed]="dalo.direccion() === 'lsc-es'"
+      [class.activa]="dalo.direccion() === 'lsc-es'"
+      (click)="cambiarDireccion('lsc-es')"
+    >
+      Señas → Español
+    </button>
+    <button
+      id="tab-es-lsc"
+      type="button"
+      [attr.aria-pressed]="dalo.direccion() === 'es-lsc'"
+      [class.activa]="dalo.direccion() === 'es-lsc'"
+      (click)="cambiarDireccion('es-lsc')"
+    >
+      Español → Señas
+    </button>
+  </div>
+</div>
+
+<div
+  class="paneles"
+  [class.paneles-captura]="dalo.direccion() === 'lsc-es'"
+  [class.paneles-espanol]="dalo.direccion() === 'es-lsc'"
+>
+  @if (dalo.direccion() === 'lsc-es') {
+  <section class="panel-camara" aria-label="Tu cámara">
+    <div class="cabecera-panel">
+      <h2 class="etiqueta">Tu cámara</h2>
+      <span
+        class="estado-camara"
+        [class.conectada]="dalo.camara() === 'activa'"
+      >
+        {{ dalo.camara() === 'activa' ? 'Cámara activa' : 'Cámara apagada' }}
+      </span>
+    </div>
+    <div class="marco">
+      <video
+        #vistaPrevia
+        class="espejo"
+        playsinline
+        muted
+        [hidden]="dalo.camara() !== 'activa'"
+        aria-label="Vista previa de cámara"
+      ></video>
+      @if (meta.preparandoCaptura()) {
+      <div class="preparacion-en-camara" role="status" aria-live="polite">
+        <span>Prepárate</span>
+        <strong>{{ meta.segundosRestantes() }}</strong>
+        <span>La grabación aún no ha comenzado</span>
+      </div>
+      } @else if (meta.grabando()) {
+      <div class="grabacion-en-camara" role="status" aria-live="polite">
+        <span class="punto-grabacion" aria-hidden="true"></span>
+        <span>Grabando</span>
+      </div>
+      <p class="instruccion-camara">Realiza tu seña ahora</p>
+      } @else if (meta.ocupado() && meta.videoCapturado()) {
+      <div class="captura-completa" role="status">
+        ✓ Video capturado · Ya puedes descansar
+      </div>
+      } @if (dalo.camara() !== 'activa') {
+      <div class="vacio">
+        <i-lucide name="video-off" [size]="32" aria-hidden="true" />
+        <p>Activa la cámara para comenzar</p>
+        <span>Encuadra el rostro, el torso y ambas manos.</span>
+      </div>
+      }
+    </div>
+    <div class="acciones acciones-principales">
+      @if (dalo.camara() !== 'activa') {
+      <button
+        class="primario solido"
+        type="button"
+        [disabled]="dalo.camara() === 'solicitando'"
+        (click)="dalo.activarCamara()"
+      >
+        {{ dalo.camara() === 'solicitando' ? 'Activando…' : 'Activar cámara' }}
+      </button>
+      } @else {
+      <button
+        class="primario solido"
+        type="button"
+        [disabled]="meta.ocupado() || !meta.configurada()"
+        (click)="capturar()"
+      >
+        {{ meta.preparandoCaptura() ? 'Prepárate…' : meta.grabando() ?
+        'Grabando…' : meta.ocupado() ? 'Interpretando…' : 'Capturar seña' }}
+      </button>
+      <button type="button" (click)="apagarCamara()">Apagar cámara</button>
+      }
+      <span class="duracion-captura">Una seña · 3 segundos</span>
+    </div>
+    <p class="ayuda privacidad">
+      Al capturar, enviarás el video a Meta para reconocer la seña. @if
+      (meta.contexto()?.model?.endsWith('-contributor')) { Meta puede usarlo
+      para entrenar modelos. }
+    </p>
+    @if (meta.error() || dalo.mensajeCamara()) {
+    <p class="aviso" role="alert">{{ meta.error() || dalo.mensajeCamara() }}</p>
+    } @else if (!meta.configurada()) {
+    <p class="ayuda" role="status">
+      {{ meta.estado() === 'Comprobando conexión…' ? 'Preparando el servicio de
+      reconocimiento…' : 'Servicio no disponible. Revisa Detalles técnicos para
+      conectarlo.' }}
+    </p>
+    }
+  </section>
+
+  <section class="panel-resultado" aria-label="En español" aria-live="polite">
+    <h2 class="etiqueta">En español</h2>
+    @if (meta.ocupado()) {
+    <div class="progreso-captura">
+      <span class="indicador-progreso" aria-hidden="true"></span>
+      <span role="status"
+        >{{ meta.preparandoCaptura() ? 'Preparación · Aún no se graba' :
+        meta.grabando() ? 'Paso 1 de 2 · Grabando tu seña' : 'Paso 2 de 2 ·
+        Interpretando el video' }}</span
+      >
+      <span class="tiempo-captura" aria-hidden="true"
+        >{{ meta.segundos() }} s</span
+      >
+    </div>
+    <p class="marcador">
+      {{ meta.preparandoCaptura() ? 'Espera a que termine la cuenta' :
+      meta.grabando() ? 'Realiza tu seña ahora' : 'Video capturado' }}
+    </p>
+    <p class="ayuda">
+      {{ meta.preparandoCaptura() ? 'Colócate en posición. Comienza cuando veas
+      el punto rojo y Grabando.' : meta.grabando() ? 'Realiza una sola seña
+      durante los tres segundos de grabación.' : 'La grabación terminó. Ya
+      puedes descansar mientras preparamos la propuesta.' }}
+    </p>
+    } @else { @switch (dalo.faseLsc()) { @case ('reposo') {
+    <p class="marcador">Tu mensaje aparecerá aquí.</p>
+    @if (dalo.camara() === 'activa') {
+    <p class="estado">
+      Pulsa Capturar, espera el 3, 2, 1 y realiza tu seña al ver el punto rojo.
+    </p>
+    } } @case ('analizando') {
+    <p class="marcador">Analizando…</p>
+    } @case ('candidata') {
+    <p class="pregunta">¿Quisiste decir…?</p>
+    <p class="significado">{{ dalo.significadoCandidato() }}</p>
+    <div class="acciones">
+      <button
+        id="btn-confirmar"
+        type="button"
+        class="primario"
+        (click)="dalo.confirmarCandidata()"
+      >
+        Confirmar
+      </button>
+      <button type="button" (click)="repetirCaptura()">
+        Descartar propuesta
+      </button>
+    </div>
+    } @case ('ambigua') {
+    <p>
+      No pude identificar la expresión con claridad. Intenta otra captura con
+      ambas manos visibles.
+    </p>
+    } @case ('desconocida') {
+    <p>
+      No pude reconocer esta expresión. Repite la captura con ambas manos
+      visibles.
+    </p>
+    <div class="acciones">
+      <button type="button" (click)="dalo.mostrarExpresiones()">
+        Ver expresiones
+      </button>
+    </div>
+    } @case ('confirmada') {
+    <p class="pregunta">Resultado confirmado.</p>
+    <p class="significado" tabindex="0">{{ dalo.significadoConfirmado() }}</p>
+    @if (dalo.mensajeCopiado()) {
+    <p class="aviso" role="status">{{ dalo.mensajeCopiado() }}</p>
+    } @if (avisoVoz()) {
+    <p class="aviso" role="status">{{ avisoVoz() }}</p>
+    }
+    <div class="acciones">
+      <button
+        id="btn-copiar"
+        type="button"
+        class="primario"
+        (click)="copiarConfirmado()"
+      >
+        Copiar texto
+      </button>
+      <button id="btn-escuchar" type="button" (click)="escucharConfirmado()">
+        Escuchar aquí
+      </button>
+      <button type="button" (click)="dalo.nuevaExpresion()">
+        Nueva expresión
+      </button>
+    </div>
+    <p class="nota">
+      «Escuchar aquí» suena en este equipo; no se envía a la reunión.
+    </p>
+    @if (dalo.turnos().length > 0) {
+    <details class="turnos">
+      <summary>Turnos de esta sesión ({{ dalo.turnos().length }})</summary>
+      <ul>
+        @for (turno of dalo.turnos(); track $index) {
+        <li>{{ turno }}</li>
+        }
+      </ul>
+    </details>
+    } } } }
+  </section>
+
+  <details class="detalles-tecnicos">
+    <summary>Detalles técnicos <span>Diagnóstico y evaluación</span></summary>
+    <div class="contenido-tecnico">
+      <section class="conexion-tecnica" aria-label="Conexión del servicio">
+        <h3>Conexión</h3>
+        <p>{{ meta.estado() }}</p>
+        <button
+          type="button"
+          [disabled]="meta.ocupado()"
+          (click)="meta.comprobar()"
+        >
+          Comprobar conexión
+        </button>
+      </section>
+      @if (meta.resultado(); as resultado) {
+      <section
+        class="respuesta-tecnica turnos"
+        aria-label="Detalle del resultado"
+      >
+        <h3>Respuesta del modelo</h3>
+        <dl>
+          <div>
+            <dt>Modelo</dt>
+            <dd>{{ resultado.model }}</dd>
+          </div>
+          <div>
+            <dt>Latencia</dt>
+            <dd>{{ resultado.latencyMs }} ms</dd>
+          </div>
+          <div>
+            <dt>Confianza</dt>
+            <dd>{{ resultado.confianza }} · sin calibrar</dd>
+          </div>
+        </dl>
+        <p>{{ resultado.motivo }}</p>
+      </section>
+      } @if (meta.videoCapturado(); as videoUrl) {
+      <details class="turnos">
+        <summary>Revisar video de esta captura</summary>
+        <video
+          class="video-lsc"
+          [src]="videoUrl"
+          controls
+          playsinline
+          aria-label="Video capturado para reconocimiento"
+        ></video>
+      </details>
+      } @if (meta.pasos().length) {
+      <section
+        class="proceso-meta"
+        aria-label="Actividad del análisis"
+        [attr.aria-busy]="meta.ocupado()"
+      >
+        <div class="proceso-cabecera">
+          <h3>Actividad del análisis</h3>
+          <span>{{ meta.segundos() }} s</span>
+        </div>
+        <ol>
+          @for (paso of meta.pasos(); track $index) {
+          <li>
+            <span>{{ (paso.ms / 1000).toFixed(1) }} s</span> {{ paso.mensaje }}
+          </li>
+          }
+        </ol>
+        <h4>Resumen de Meta</h4>
+        @if (meta.resumenModelo()) {
+        <p class="resumen-meta">{{ meta.resumenModelo() }}</p>
+        } @else {
+        <p class="nota">
+          Todavía no se ha recibido un resumen del modelo. La API puede
+          completar el análisis sin emitirlo.
+        </p>
+        }
+        <p class="nota">
+          Se muestran etapas reales de la aplicación y resúmenes públicos
+          enviados por Meta; no el pensamiento interno completo.
+        </p>
+      </section>
+      } @if (meta.fotogramas().length) {
+      <details class="turnos">
+        <summary>
+          Fotogramas de esta captura ({{ meta.fotogramas().length }}/12)
+        </summary>
+        <div class="fotogramas-meta">
+          @for (fotograma of meta.fotogramas(); track $index) {
+          <figure>
+            <img [src]="fotograma" [alt]="'Fotograma ' + ($index + 1)" />
+            <figcaption>{{ $index + 1 }}</figcaption>
+          </figure>
+          }
+        </div>
+        <p class="nota">
+          Orden cronológico, sin el efecto espejo de la vista previa.
+        </p>
+      </details>
+      }
+      <details class="turnos contexto-meta">
+        <summary>Contexto que recibe Meta</summary>
+        @if (meta.contexto(); as contexto) {
+        <p>
+          Modelo: {{ contexto.model }} · Contexto: {{ contexto.promptVersion }}
+        </p>
+        @if (contexto.model.endsWith('-contributor')) {
+        <p class="nota">
+          Modo Contributor: Meta puede usar el contenido enviado para entrenar
+          modelos futuros.
+        </p>
+        }
+        <p>
+          Recibe estas instrucciones y el video de cada captura. No tiene acceso
+          al repositorio, a los avatares ni a la etiqueta esperada.
+        </p>
+        <pre>{{ contexto.instructions }}</pre>
+        <p class="nota">
+          El contexto incluye descripciones visuales provisionales. Aún no
+          cuenta con validación lingüística ni ejemplos visuales etiquetados.
+        </p>
+        } @if (meta.errorContexto()) {
+        <p role="status">{{ meta.errorContexto() }}</p>
+        }
+        <button type="button" (click)="meta.cargarContexto()">
+          Actualizar contexto
+        </button>
+      </details>
+      <details class="turnos">
+        <summary>Evaluación de reconocimiento</summary>
+        <label for="esperada"
+          >Etiqueta esperada (opcional, no se envía a Meta)</label
+        >
+        <select id="esperada" [formControl]="esperada">
+          <option value="">Sin etiqueta</option>
+          @for (id of clases(); track id) {
+          <option [value]="id">{{ id }}</option>
+          }
+        </select>
+        <p>Pruebas: {{ meta.ensayos().length }} · {{ meta.resumen() }}</p>
+        <button
+          type="button"
+          [disabled]="!meta.ensayos().length"
+          (click)="meta.exportar()"
+        >
+          Descargar resultados JSON
+        </button>
+        <p class="nota">
+          El registro vive en esta sesión; descárgalo antes de cerrar. No
+          incluye imágenes.
+        </p>
+      </details>
+    </div>
+  </details>
+  } @else {
+  <section class="panel-mensaje" aria-label="Tu mensaje">
+    <h2 class="etiqueta">¿Qué quieres comunicar?</h2>
+    <p class="ayuda">Escribe o dicta una expresión del catálogo.</p>
+    <textarea
+      id="texto-es"
+      [formControl]="texto"
+      rows="2"
+      placeholder="Por ejemplo: hola o gracias"
+      (input)="buscarTexto($event)"
+      aria-label="¿Qué quieres comunicar?"
+    ></textarea>
+    @if (sugerencias().length) {
+    <div
+      class="chips"
+      role="group"
+      [attr.aria-label]="textoEscrito().trim() ? 'Expresiones coincidentes' : 'Accesos rápidos'"
+    >
+      @for (entrada of sugerencias().slice(0, 6); track entrada.id) {
+      <button type="button" class="chip" (click)="accesoRapido(entrada.id)">
+        {{ entrada.nombre }}
+      </button>
+      }
+    </div>
+    } @else {
+    <p class="ayuda" role="status">
+      No se encontraron expresiones coincidentes.
+    </p>
+    }
+    <div class="fila-buscar">
+      <button
+        type="button"
+        id="btn-microfono"
+        (click)="usarMicrofono()"
+        [disabled]="voz.estado() === 'preparando' || voz.estado() === 'transcribiendo'"
+        [attr.aria-pressed]="voz.estado() === 'grabando'"
+      >
+        {{ voz.estado() === 'grabando' ? 'Terminar dictado' : voz.estado() ===
+        'transcribiendo' ? 'Transcribiendo…' : 'Dictar' }}
+      </button>
+      @if (voz.estado() !== 'reposo') {
+      <button type="button" (click)="voz.cancelar()">Cancelar dictado</button> }
+    </div>
+    <p class="ayuda privacidad">
+      Al terminar el dictado, el audio se envía a Meta.
+    </p>
+    <p role="status">
+      {{ voz.estado() === 'grabando' ? 'Micrófono activo. Habla ahora.' :
+      voz.estado() === 'transcribiendo' ? 'Transcribiendo tu mensaje…' :
+      voz.estado() === 'preparando' ? 'Preparando micrófono…' : '' }}
+    </p>
+    @if (voz.error()) {
+    <p class="aviso" role="alert">{{ voz.error() }}</p>
+    }
+  </section>
+
+  <section class="panel-sena" aria-label="En LSC" aria-live="polite">
+    <h2 class="etiqueta">En LSC</h2>
+    @switch (dalo.resultadoEsl().estado) { @case ('reposo') {
+    <p class="marcador">Aquí verás la seña.</p>
+    } @case ('vacio') {
+    <p class="marcador">Aquí verás la seña.</p>
+    <p class="estado">{{ dalo.avisoEsl() }}</p>
+    } @case ('directa') { @if (entradaEsl(); as entrada) {
+    <p class="nombre">{{ entrada.nombre }}</p>
+    @if (entrada.videoUrl) {
+    <video
+      #videoLsc
+      [src]="entrada.videoUrl"
+      controls
+      playsinline
+      class="video-lsc"
+    ></video>
+    <div class="acciones">
+      <button type="button" (click)="videoLsc.currentTime = 0; videoLsc.play()">
+        Repetir
+      </button>
+      <label class="velocidad"
+        >Velocidad
+        <select (change)="cambiarVelocidad(videoLsc, $event)">
+          <option value="0.5">0,5×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.5">1,5×</option>
+        </select>
+      </label>
+    </div>
+    } @else if (entrada.avatarUrl || entrada.animacionUrl) {
+    <app-avatar-lsc
+      [secuenciaUrl]="entrada.avatarUrl"
+      [animacionUrl]="entrada.animacionUrl"
+      [nombre]="entrada.nombre"
+    />
+    <p class="ayuda">
+      Animación de referencia · pendiente de validación en LSC.
+    </p>
+    } @else {
+    <p class="sin-video" role="status">Video aún no disponible</p>
+    } } } @case ('ambigua') {
+    <p>Esa frase puede corresponder a varias expresiones. Elige una:</p>
+    <div class="acciones">
+      @for (opcion of opcionesAmbiguas(); track opcion.id) {
+      <button type="button" (click)="dalo.elegirOpcionAmbigua(opcion.id)">
+        {{ opcion.nombre }}
+      </button>
+      }
+    </div>
+    } @case ('fuera') {
+    <p>
+      Esa expresión está fuera del catálogo. Revisa las expresiones disponibles.
+    </p>
+    <div class="acciones">
+      <button
+        type="button"
+        class="primario"
+        (click)="dalo.mostrarExpresiones()"
+      >
+        Revisar expresiones disponibles
+      </button>
+    </div>
+    } }
+  </section>
+  <details class="detalles-tecnicos detalles-espanol">
+    <summary>Detalles técnicos <span>Avatar, fuentes y dictado</span></summary>
+    <div class="contenido-tecnico">
+      <h3>Dictado</h3>
+      <p>
+        Muse Voice Transcribe · muse-voice-transcribe-1.0. Audio WAV mono a 24
+        kHz, máximo 15 segundos por turno. El audio se envía al terminar;
+        cancelar lo descarta.
+      </p>
+      <h3>Conversión de texto</h3>
+      <p>
+        Se buscan coincidencias en el catálogo local. No se traducen frases
+        libres ni se genera una secuencia de señas para cada palabra.
+      </p>
+      @if (entradaEsl(); as entrada) {
+      <h3>Seña: {{ entrada.nombre }}</h3>
+      <p class="nota-avatar" role="note">
+        Avatar 3D (modelo AvatarSample_1 de VRoid, CC0) con animaciones basadas
+        en LSC-54, en validación: no es un video, no reproduce la expresión
+        facial y aún no está validado por personas usuarias de LSC.
+      </p>
+
+      <dl>
+        <div>
+          <dt>Intención</dt>
+          <dd>{{ entrada.intencion }}</dd>
+        </div>
+        <div>
+          <dt>Estado</dt>
+          <dd>{{ entrada.estado }}</dd>
+        </div>
+        <div>
+          <dt>Fuente</dt>
+          <dd>{{ entrada.fuente }}</dd>
+        </div>
+        <div>
+          <dt>Variante</dt>
+          <dd>{{ entrada.variante }}</dd>
+        </div>
+        <div>
+          <dt>Validación</dt>
+          <dd>{{ entrada.validacion }}</dd>
+        </div>
+      </dl>
+
+      }
+    </div>
+  </details>
+  }
+</div>

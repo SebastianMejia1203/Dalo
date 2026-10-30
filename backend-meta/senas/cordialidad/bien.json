@@ -1,0 +1,10 @@
+{
+  "id": "bien",
+  "nombre": "Bien",
+  "significado": "Bien",
+  "intencion": "Expresar bienestar o aprobación",
+  "descripcion": "Una mano con cuatro dedos cerrados y PULGAR extendido hacia ARRIBA, mantenida brevemente delante del torso/hombro. El pulgar es el único dedo extendido; no círculo pulgar-índice de perfecto ni puño completamente cerrado de si. Descripción visual provisional de muestras del dataset.",
+  "activa": true,
+  "orden": 8,
+  "ordenDescripcion": 10
+}

@@ -1,0 +1,10 @@
+{
+  "id": "losiento",
+  "nombre": "Lo siento",
+  "significado": "Lo siento",
+  "intencion": "Lamentar",
+  "descripcion": "Una mano abierta se apoya y se mueve suavemente sobre la parte alta del pecho propio, sin salir desde la boca y sin frotar la palma de la otra mano. El contacto decisivo es mano-pecho, no mano-mano. Descripción visual provisional de muestras del dataset.",
+  "activa": true,
+  "orden": 5,
+  "ordenDescripcion": 6
+}

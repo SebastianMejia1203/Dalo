@@ -1,0 +1,10 @@
+{
+  "id": "perfecto",
+  "nombre": "Perfecto",
+  "significado": "Perfecto",
+  "intencion": "Expresar que algo está perfecto",
+  "descripcion": "Una o ambas manos se elevan con pulgar e índice unidos formando un círculo o pinza tipo OK y los otros dedos extendidos. Debe verse la configuración de dedos; no basta una mano levantada borrosa. Descripción visual provisional de una muestra del dataset.",
+  "activa": true,
+  "orden": 1,
+  "ordenDescripcion": 7
+}

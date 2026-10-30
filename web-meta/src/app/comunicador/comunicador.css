@@ -1,0 +1,500 @@
+.fila-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.25rem 0 1.5rem;
+}
+
+.fila-titulo h1 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.segmentado {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--pista);
+  border-radius: 12px;
+  padding: 0.25rem;
+}
+
+.segmentado button {
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  color: var(--texto-suave);
+  min-height: 40px;
+}
+
+.segmentado button.activa {
+  background: #fff;
+  color: var(--texto);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgb(16 24 32 / 0.15);
+}
+
+.paneles {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.paneles-captura {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.panel-camara,
+.panel-resultado {
+  min-width: 0;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.1rem;
+}
+
+.panel-resultado {
+  align-self: stretch;
+  background: #f8faf9;
+}
+
+.cabecera-panel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.cabecera-panel .etiqueta {
+  margin: 0;
+}
+
+.estado-camara {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.estado-camara.conectada {
+  color: var(--acento-oscuro);
+}
+
+.panel-camara .marco {
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+}
+
+.grabacion-en-camara,
+.captura-completa,
+.instruccion-camara {
+  position: absolute;
+  color: #fff;
+  background: #17222eef;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  font-size: 0.85rem;
+}
+.grabacion-en-camara {
+  top: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.punto-grabacion {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: #ff5959;
+}
+.instruccion-camara {
+  bottom: 0.75rem;
+  left: 0.75rem;
+}
+.captura-completa {
+  bottom: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  background: #0a5c2ef2;
+  text-align: center;
+}
+
+.panel-camara .marco video {
+  object-fit: contain;
+  background: #17222e;
+}
+
+.vacio span,
+.duracion-captura {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.acciones-principales {
+  gap: 0.5rem;
+}
+
+.duracion-captura {
+  margin-left: auto;
+}
+
+.privacidad {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+}
+
+.panel-resultado .marcador {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  color: var(--texto-suave);
+}
+
+.panel-resultado .pregunta {
+  margin-top: 1.5rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+}
+
+.panel-resultado .significado {
+  font-size: 2.5rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.progreso-captura {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  color: var(--acento-oscuro);
+  font-size: 0.85rem;
+}
+
+.tiempo-captura {
+  margin-left: auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.indicador-progreso {
+  width: 0.6rem;
+  height: 0.6rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--acento);
+  animation: pulso 1.5s ease-in-out infinite;
+}
+
+@keyframes pulso {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicador-progreso {
+    animation: none;
+  }
+}
+
+.detalles-tecnicos {
+  grid-column: 1 / -1;
+  min-width: 0;
+  border-top: 1px solid var(--borde);
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.detalles-tecnicos > summary {
+  padding: 0.8rem 0;
+  font-weight: 600;
+}
+
+.detalles-tecnicos > summary span {
+  margin-left: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.contenido-tecnico {
+  padding: 0 1rem 1rem;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+.contenido-tecnico h3 {
+  font-size: 0.95rem;
+}
+
+.contenido-tecnico .contexto-meta pre {
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.contenido-tecnico .video-lsc {
+  max-width: 30rem;
+}
+
+.etiqueta {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--texto);
+  margin: 0 0 0.6rem;
+}
+
+.marco {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--pista);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--texto-suave);
+}
+
+.marco video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.espejo {
+  transform: scaleX(-1);
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.vacio p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.ayuda {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0;
+}
+
+summary {
+  cursor: pointer;
+  padding: 0.5rem 0;
+  min-height: 44px;
+}
+
+button.primario {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.aviso {
+  color: #6b4a00;
+  background: #fff6e0;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.92rem;
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.marcador {
+  font-size: 1.6rem;
+  line-height: 1.35;
+  color: #8a94a0;
+  margin: 0;
+  max-width: 16ch;
+}
+
+.pregunta {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.significado {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0.25rem 0 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.nota {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.nombre {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  align-items: center;
+}
+
+.video-lsc {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #101418;
+  border-radius: 14px;
+}
+
+.nota-avatar {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  margin: 0.5rem 0 0;
+}
+
+.sin-video {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pista);
+  border-radius: 14px;
+  color: var(--texto-suave);
+  font-weight: 600;
+  margin: 0;
+}
+
+.velocidad {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.velocidad select {
+  width: auto;
+}
+
+.turnos {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.turnos summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.turnos dl div {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+
+.turnos dt {
+  font-weight: 700;
+}
+
+.turnos dd {
+  margin: 0;
+}
+
+textarea#texto-es {
+  width: 100%;
+  min-height: 110px;
+  background: var(--pista);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  font: inherit;
+  font-size: 1.2rem;
+  color: var(--texto);
+  resize: vertical;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+button.chip {
+  background: #e7f2eb;
+  border: none;
+  border-radius: 8px;
+  color: #0f4a43;
+  font-weight: 500;
+  min-height: 44px;
+  padding: 0.4rem 0.9rem;
+}
+
+button.chip:hover {
+  border: none;
+  background: #d9ebe0;
+}
+
+.fila-buscar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.9rem;
+}
+
+button.solido {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: #fff;
+}
+
+@media (max-width: 720px) {
+  .paneles {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .fila-titulo {
+    margin: 1rem 0;
+  }
+
+  .segmentado {
+    width: 100%;
+  }
+
+  .segmentado button {
+    flex: 1;
+  }
+
+  .marcador {
+    font-size: 1.4rem;
+  }
+
+  .significado {
+    font-size: 1.6rem;
+  }
+}

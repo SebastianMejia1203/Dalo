@@ -1,0 +1,10 @@
+{
+  "id": "perdon",
+  "nombre": "Perdón",
+  "significado": "Perdón",
+  "intencion": "Disculparse",
+  "descripcion": "Durante el núcleo de la seña, una mano abierta sirve de base delante del torso y la otra, encima de su palma, realiza pequeños roces/golpes o desplazamientos repetidos. Debe verse contacto activo entre ambas manos. Las manos juntas en reposo al inicio/final NO cuentan. No es una mano sobre el pecho ni una mano que sale de la boca. Descripción del usuario precisada con una muestra, pendiente de validación lingüística.",
+  "activa": true,
+  "orden": 7,
+  "ordenDescripcion": 0
+}
