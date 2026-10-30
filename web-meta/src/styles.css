@@ -1,0 +1,236 @@
+:root {
+  color-scheme: light;
+  --fondo: #fff;
+  --superficie: #f4f6f8;
+  --pista: #edf0f3;
+  --texto: #17222e;
+  --texto-suave: #4c5b6b;
+  --acento: #0e7c3e;
+  --acento-oscuro: #0a5c2e;
+  --borde: #d5dce3;
+}
+
+app-comunicador .paneles.paneles-espanol {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 1rem;
+}
+app-comunicador .panel-mensaje,
+app-comunicador .panel-sena {
+  min-width: 0;
+  padding: 1.1rem;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+}
+app-comunicador .panel-mensaje .ayuda {
+  margin-bottom: 0.75rem;
+}
+app-comunicador .panel-sena {
+  background: #f8faf9;
+}
+app-comunicador .panel-mensaje .fila-buscar {
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+app-comunicador .detalles-espanol dl {
+  font-size: 0.85rem;
+}
+app-comunicador .detalles-espanol dd {
+  margin: 0 0 0.75rem;
+}
+app-comunicador .detalles-espanol dt {
+  font-weight: 600;
+}
+@media (max-width: 720px) {
+  app-comunicador .paneles.paneles-espanol {
+    grid-template-columns: 1fr;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+.texto-grande {
+  font-size: 18px;
+}
+
+.texto-muy-grande {
+  font-size: 20px;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  line-height: 1.5;
+  padding: 0 1rem 2rem;
+}
+
+button,
+input[type="text"],
+select {
+  font: inherit;
+  color: var(--texto);
+}
+
+button {
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--acento);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+button.primario {
+  border-color: #b9c4cf;
+  font-weight: 600;
+}
+
+input[type="text"],
+select {
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  min-height: 44px;
+  background: #fff;
+  width: 100%;
+}
+
+input[type="range"] {
+  width: 100%;
+  min-height: 44px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+
+i-lucide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  line-height: 0;
+}
+
+i-lucide svg {
+  display: block;
+}
+
+/* Vistas que se ocultan sin destruirse (p. ej. Expresiones): fuera del
+   flujo y del orden de tabulación. */
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: 0 0.6rem 1.5rem;
+  }
+}
+
+/* Panel de actividad de Meta. */
+.proceso-meta {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ccd4da;
+  border-radius: 12px;
+}
+.proceso-cabecera {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+.proceso-cabecera h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.proceso-cabecera span {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.proceso-meta ol {
+  padding-left: 1.3rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.proceso-meta li span {
+  color: #495b66;
+  font-variant-numeric: tabular-nums;
+}
+.proceso-meta h4 {
+  margin-bottom: 0.4rem;
+}
+.resumen-meta {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+.contexto-meta pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  line-height: 1.6;
+  background: var(--pista);
+  padding: 0.8rem;
+  border-radius: 8px;
+}
+.fotogramas-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.fotogramas-meta figure {
+  margin: 0;
+}
+.fotogramas-meta img {
+  width: 100%;
+  border-radius: 6px;
+}
+.fotogramas-meta figcaption {
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+app-comunicador .preparacion-en-camara {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: #17222ebf;
+  text-align: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+app-comunicador .preparacion-en-camara strong {
+  font-size: 4rem;
+  line-height: 1.2;
+}
+app-comunicador .preparacion-en-camara span {
+  font-size: 0.85rem;
+}

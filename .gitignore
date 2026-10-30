@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.*.example
 *.pem
 *.key
 
@@ -34,3 +35,16 @@ Thumbs.db
 # Respaldos automáticos de Blender y comprobaciones locales
 *.blend[0-9]*
 /.validation/
+
+# Versión anterior conservada únicamente en este equipo
+/web/
+/*.md
+!/README.md
+/requirements.txt
+/.opencode/
+/skills/*
+!/skills/dalo-agregar-senas/
+/tests/*
+!/tests/test_meta_keyframes.py
+/tools/*
+!/tools/meta-evaluation/

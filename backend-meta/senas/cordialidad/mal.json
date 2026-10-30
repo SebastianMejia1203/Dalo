@@ -1,0 +1,10 @@
+{
+  "id": "mal",
+  "nombre": "Mal",
+  "significado": "Mal",
+  "intencion": "Expresar malestar o desaprobación",
+  "descripcion": "Una mano con cuatro dedos cerrados y PULGAR extendido hacia ABAJO o girando desde una orientación lateral hacia abajo. Se eleva delante del hombro/cara y orienta el pulgar en sentido descendente. Contraste con bien: pulgar arriba. Descripción visual provisional de muestras del dataset.",
+  "activa": true,
+  "orden": 9,
+  "ordenDescripcion": 11
+}

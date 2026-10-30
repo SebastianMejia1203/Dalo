@@ -1,0 +1,10 @@
+{
+  "id": "esperar",
+  "nombre": "Esperar",
+  "significado": "Esperar",
+  "intencion": "Pedir espera",
+  "descripcion": "En las muestras de desarrollo se elevan ambas manos separadas delante del torso, palmas orientadas hacia arriba, dedos algo curvados y pequeños movimientos sostenidos de dedos/manos. Permanecen aproximadamente frente al cuerpo, sin el barrido lateral amplio de bienvenida. Es una descripción visual provisional, no una regla lingüística validada.",
+  "activa": true,
+  "orden": 4,
+  "ordenDescripcion": 2
+}

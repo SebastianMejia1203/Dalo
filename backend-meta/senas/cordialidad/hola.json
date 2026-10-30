@@ -1,0 +1,10 @@
+{
+  "id": "hola",
+  "nombre": "Hola",
+  "significado": "Hola",
+  "intencion": "Saludar",
+  "descripcion": "No asignar solo por ver una palma levantada. En las muestras del catálogo, la mano sube hacia la frente/cabeza y se presenta como saludo. Si hay una oscilación lateral repetida, comparar primero con la descripción de chao. Esta distinción es una hipótesis de desarrollo, no una definición universal de LSC.",
+  "activa": true,
+  "orden": 2,
+  "ordenDescripcion": 4
+}

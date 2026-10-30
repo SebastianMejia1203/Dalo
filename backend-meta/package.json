@@ -1,0 +1,26 @@
+{
+  "name": "dalo-meta-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --use-system-ca --env-file-if-exists=.env --env-file-if-exists=.env.development --import tsx --watch src/server.ts --development",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "prestart": "npm run build",
+    "start": "node --use-system-ca --env-file-if-exists=.env --env-file-if-exists=.env.production dist/server.js",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "dependencies": {
+    "express": "5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

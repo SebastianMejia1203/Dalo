@@ -1,0 +1,10 @@
+{
+  "id": "bienvenido",
+  "nombre": "Bienvenido",
+  "significado": "Bienvenido",
+  "intencion": "Dar la bienvenida",
+  "descripcion": "Secuencia de presentación o invitación coordinada con DOS manos abiertas: se elevan juntas hacia un lado o delante del torso alto (una palma puede estar vertical/oblicua y la otra hacia arriba) y se desplazan juntas en arco hacia delante, abajo o al lado opuesto. Lo distintivo es esa trayectoria conjunta de presentación y descenso; NO se exige un barrido grande ni giro de torso. Se admite gesto breve, manos cercanas o parcialmente superpuestas y ejecución de cualquier lado. No confundir paso cercano a la cara con origen en boca de gracias; ni manos cercanas en el recorrido con roces cortos repetidos sobre una palma fija de perdon. A diferencia de esperar hay traslado coordinado de las manos en el espacio, no solo sostén frontal con dedos curvados. Descripción visual provisional precisada al revisar variantes del dataset.",
+  "activa": true,
+  "orden": 6,
+  "ordenDescripcion": 3
+}

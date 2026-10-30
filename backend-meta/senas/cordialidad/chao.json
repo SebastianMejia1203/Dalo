@@ -1,0 +1,10 @@
+{
+  "id": "chao",
+  "nombre": "Chao",
+  "significado": "Chao",
+  "intencion": "Despedirse",
+  "descripcion": "Un brazo levantado y una mano abierta/extendida que oscila lateralmente de un lado al otro, izquierda-derecha, durante la despedida. Identifica la oscilación de la trayectoria, no solo que hay una palma levantada. Descripción aportada por el usuario.",
+  "activa": true,
+  "orden": 0,
+  "ordenDescripcion": 1
+}

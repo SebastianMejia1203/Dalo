@@ -1,0 +1,10 @@
+{
+  "id": "gracias",
+  "nombre": "Gracias",
+  "significado": "Gracias",
+  "intencion": "Agradecer",
+  "descripcion": "Una o ambas manos abiertas se acercan a la boca o mentón y salen hacia delante/abajo. Puede repetirse. El punto decisivo es origen cerca de boca/mentón y salida, no contacto activo de una mano sobre la palma de la otra. Descripción visual provisional de muestras del dataset.",
+  "activa": true,
+  "orden": 3,
+  "ordenDescripcion": 5
+}

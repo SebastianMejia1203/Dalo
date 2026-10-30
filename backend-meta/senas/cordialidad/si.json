@@ -1,0 +1,10 @@
+{
+  "id": "si",
+  "nombre": "Sí",
+  "significado": "Sí",
+  "intencion": "Afirmar",
+  "descripcion": "Una mano en PUÑO CERRADO, sin índice ni pulgar extendidos, se presenta delante del hombro/cara y hace un pequeño cabeceo o flexión vertical de muñeca arriba-abajo. No es palma abierta ni pulgar arriba. Descripción visual provisional de muestras del dataset.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 8
+}
