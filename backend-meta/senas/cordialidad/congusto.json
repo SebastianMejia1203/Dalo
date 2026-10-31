@@ -1,0 +1,10 @@
+{
+  "id": "congusto",
+  "nombre": "Con gusto",
+  "significado": "Con gusto",
+  "intencion": "Responder con amabilidad",
+  "descripcion": "Secuencia UNIMANUAL de dos tiempos enlazados: (1) la mano abierta y plana, con los cuatro dedos largos juntos, cruza hacia la parte alta del pecho y apoya allí la PALMA; (2) se despega, cruza de vuelta hacia su propio lado y gira para presentar la PALMA OBLICUA HACIA ARRIBA junto al hombro. Después baja. La otra mano permanece baja y no sirve de apoyo. Reconocer el recorrido completo PECHO → SALIDA LATERAL, no una mano aislada cerca de la cara. El trayecto puede pasar frente al mentón sin que ese sea su origen. Frente a losiento, la mano abandona el pecho; frente a gracias, nace del contacto con pecho y termina al lado, no se proyecta desde la boca hacia delante. Admite lateralidad inversa y amplitud variable. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 19
+}

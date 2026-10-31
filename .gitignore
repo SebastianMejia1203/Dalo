@@ -21,11 +21,15 @@ dist/
 build/
 coverage/
 
-# Datos y grabaciones: revisar permisos antes de publicar
+# Datos privados y resultados: no publicar
 /data/
 /datasets/
 /recordings/
 /checkpoints/
+/evaluation-results/
+/quality-reports/
+/reports/
+/.local-authoring/
 
 # Archivos locales
 *.log
@@ -33,6 +37,7 @@ coverage/
 Thumbs.db
 
 # Respaldos automáticos de Blender y comprobaciones locales
+*.blend
 *.blend[0-9]*
 /.validation/
 
@@ -40,11 +45,10 @@ Thumbs.db
 /web/
 /*.md
 !/README.md
+!/README.en.md
 /requirements.txt
 /.opencode/
 /skills/*
 !/skills/dalo-agregar-senas/
 /tests/*
-!/tests/test_meta_keyframes.py
-/tools/*
-!/tools/meta-evaluation/
+/tools/

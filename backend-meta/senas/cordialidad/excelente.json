@@ -1,0 +1,10 @@
+{
+  "id": "excelente",
+  "nombre": "Excelente",
+  "significado": "Excelente",
+  "intencion": "Expresar que algo es excelente",
+  "descripcion": "Una mano activa presenta pulgar e índice próximos/unidos en PINZA o círculo y los otros dedos extendidos o parcialmente recogidos. Se acerca a boca/mentón y después dibuja una salida marcada hacia ARRIBA Y AL LADO, terminando cerca o por encima del hombro, donde hace una pausa. La otra mano queda baja. La secuencia desde zona de boca hacia una posición lateral alta, manteniendo pinza/círculo, distingue esta ejecución de perfecto, que presenta la configuración OK al frente sin esa salida desde el rostro. La altura y amplitud admiten variación. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 21
+}

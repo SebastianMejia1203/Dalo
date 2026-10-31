@@ -1,0 +1,10 @@
+{
+  "id": "masomenos",
+  "nombre": "Más o menos",
+  "significado": "Más o menos",
+  "intencion": "Expresar un estado intermedio",
+  "descripcion": "Una sola mano ABIERTA, con los dedos separados en abanico, bascula mediante GIRO de muñeca/antebrazo. Alterna mostrar la PALMA y quedar DE CANTO, mientras el centro de la mano conserva aproximadamente su lugar ante pecho/hombro. La otra mano queda baja y no hay contacto corporal. Puede haber pequeños desplazamientos acompañantes: la marca es el CAMBIO DE ORIENTACIÓN de la misma mano, no una altura fija ni una lateralidad obligatoria. Para distinguirla de chao, comparar en el tiempo dónde está el CENTRO de la palma: chao lo desplaza de un lado a otro con el brazo; pasar de palma visible a canto, por sí solo, NO demuestra ese barrido. Baño suele agrupar los dedos y presentar la mano más vertical junto a la cabeza. Si no se ve la diferencia entre giro y traslado, no inventarla. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 23
+}

@@ -1,0 +1,10 @@
+{
+  "id": "muybien",
+  "nombre": "Muy bien",
+  "significado": "Muy bien",
+  "intencion": "Expresar mucho bienestar",
+  "descripcion": "Dos manos separadas se elevan simultáneamente delante del torso y muestran AMBOS PULGARES HACIA ARRIBA, con los otros cuatro dedos flexionados en puño. Se mantienen un momento, pueden avanzar o elevarse ligeramente y vuelven abajo. El número de manos y los dos pulgares expuestos durante el núcleo son decisivos: bien usa una mano; muymal orienta los pulgares hacia abajo/dentro. No hay contacto entre manos. La altura no es obligatoria: varía entre pecho y cara. Hipótesis visual provisional.",
+  "activa": true,
+  "orden": 10,
+  "ordenDescripcion": 25
+}

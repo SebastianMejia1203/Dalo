@@ -13,7 +13,12 @@ Las rutas de código de esta guía se expresan desde la raíz del repositorio. P
 
 Daló necesita conexión a Internet y acceso a los modelos. **Contributor permite que Meta use el contenido enviado para entrenamiento**; `store: false` no elimina esa condición. Los avisos de envío de video/audio permanecen visibles en la interfaz.
 
-El navegador graba tres segundos; FFmpeg normaliza a MP4 sin audio, ancho máximo de 640 px y 12 fps. El dictado usa WAV mono PCM16 a 24 kHz. El backend elimina los archivos temporales de conversión y no conserva las capturas como historial. La evaluación por lotes sí guarda sus artefactos locales expresamente.
+El navegador muestra **3, 2, 1 antes de grabar**. El punto rojo aparece únicamente
+durante los tres segundos de captura; después se interpreta el video automáticamente.
+FFmpeg normaliza a MP4 sin audio, ancho máximo de 640 px, duración máxima de cinco
+segundos y 12 fps. El dictado usa WAV mono PCM16 a 24 kHz. El backend elimina los
+archivos temporales de conversión y no conserva las capturas como historial.
+Los evaluadores por lotes y sus artefactos privados no se distribuyen.
 
 El streaming muestra etapas reales de la aplicación y resúmenes públicos que la API envíe. **No expone el pensamiento interno completo**. El modelo recibe el contexto y la captura de cada petición; no tiene acceso al repositorio, los avatares ni la etiqueta esperada de evaluación.
 
@@ -39,12 +44,15 @@ backend-meta/
     numeros/                  Sin señas por ahora
     colores/                  Sin señas por ahora
   tests/                      Contratos y fixtures en TypeScript
-tools/meta-evaluation/        Preparación, ejecución e informes de evaluación
 ```
 
 Todo el código fuente y las pruebas del backend están en **TypeScript estricto**. `dist/` contiene únicamente la salida compilada para Node y no se edita. Rutas y controladores HTTP están separados de los clientes de Meta y del procesamiento de medios.
 
-Las explicaciones visuales se editan en **`backend-meta/senas/cordialidad/<id>.json`**, campo `descripcion`. Cada archivo incluye nombre, intención, `activa` y los órdenes del catálogo/contexto. Diez señas están activas; Sí y No se conservan como candidatas deshabilitadas. El repositorio valida las definiciones al iniciar y el constructor de contexto genera las instrucciones desde ellas.
+Las explicaciones visuales se editan en **`backend-meta/senas/cordialidad/<id>.json`**, campo `descripcion`. Cada archivo incluye nombre, intención, `activa` y los órdenes del catálogo/contexto. Once señas están activas, incluida Muy bien; las otras 22 definiciones se conservan como candidatas deshabilitadas. El repositorio valida las definiciones al iniciar y el constructor de contexto genera las instrucciones desde ellas.
+
+El contexto de uso normal es **`lsc-motion-v4-11`**. Incluye chao, perfecto, hola,
+gracias, esperar, losiento, bienvenido, perdon, bien, mal y muybien, además de la
+salida de rechazo `otra`. La etiqueta esperada permanece fuera de la petición.
 
 `numeros/` y `colores/` están preparadas pero vacías. Añadir una definición al backend no crea su animación: los recursos y metadatos visuales siguen en `web-meta/src/app/catalog.ts` y `web-meta/public/`.
 
@@ -60,20 +68,39 @@ Cámara → cuenta previa → video → backend/FFmpeg → Spark Contributor
 
 La conversión Español → Señas busca expresiones del catálogo; no traduce libremente frases ni concatena una seña por cada palabra. Python y Blender se utilizan para autoría, datos y evaluación, no para arrancar Daló.
 
-## Resultados y limitaciones
+## Estado y limitaciones
 
-La evaluación de desarrollo con **Spark Contributor**, videos completos a **12 fps** y contexto **`lsc-motion-v4-10`** obtuvo **359/402 aciertos (89,3 %)**, contando un fallo técnico como error. Bienvenido obtuvo 27/28, Bien 51/54 y Mal 42/51.
+El contexto de uso normal es `lsc-motion-v4-11`, con once señas activas, incluida
+Muy bien. Las otras 22 definiciones permanecen deshabilitadas. El catálogo visual
+incluye 33 expresiones animadas; disponer de avatar no habilita reconocimiento
+por cámara ni acredita corrección lingüística.
 
-**No es validación independiente:** las mismas muestras ayudaron a ajustar descripciones y seleccionar palabras. No permite afirmar esa precisión con personas nuevas ni en webcam.
+Las descripciones son hipótesis visuales provisionales. El prototipo no tiene
+validación independiente que garantice precisión con personas nuevas o en webcam.
+La confianza del proveedor es subjetiva, no está calibrada y puede ser alta en
+una respuesta equivocada. La aplicación requiere confirmación del usuario.
 
-Los artefactos locales están en `data/meta-evaluation/2026-10-29-welcome-plus-two/`: `REPORT.md`, `summary.json`, `results.json` y `events.jsonl`, con un índice por prueba. Se conservaron 499 tareas entre selección, controles, pruebas dirigidas y lote final. Estos archivos locales están excluidos de Git.
+El criterio acordado para incorporar candidatas exige muestras correctamente
+identificadas con confianza estrictamente mayor que 0,85, además de revisar
+confusiones, regresiones y rechazo. No es un filtro automático de cada respuesta
+ni una garantía de precisión poblacional.
 
-- El rechazo de señas externas **sigue fallando**: el video de Necesitar produjo Perfecto en catálogo cerrado y no se identificó en vocabulario abierto. Un solo clip no estima una tasa general de falsos positivos.
-- La confianza es subjetiva, no está calibrada y no sustituye la confirmación del usuario.
-- El vocabulario es acotado; Perdón y Mal siguen teniendo errores apreciables.
-- Las animaciones no representan todos los componentes faciales y no manuales de LSC y siguen pendientes de validación lingüística y revisión de permisos.
-- La cámara, el micrófono, la iluminación, la nitidez y la disponibilidad del servicio condicionan el uso.
-- Daló no hace seguimiento corporal en vivo ni usa SAM; el modo open-weight sin conexión sigue pendiente.
+Limitaciones pendientes:
+
+- Se confunden señas con configuraciones o contactos similares; hay que revisar
+  variantes con personas competentes en LSC y usar ejemplos de contraste.
+- La lectura del movimiento puede ser inconsistente. Comparar video y fotogramas
+  de forma controlada es una posible investigación, no una solución demostrada.
+- Las palabras externas pueden clasificarse como señas del catálogo. Su rechazo
+  debe medirse por separado de la identificación abierta, con varios términos.
+- Las animaciones no representan todos los componentes faciales y no manuales
+  de LSC y requieren revisión lingüística y de permisos.
+- Cámara, iluminación, nitidez, red y disponibilidad de la API condicionan el uso.
+- No hay seguimiento corporal en vivo, uso de SAM ni reconocimiento sin conexión.
+
+Los evaluadores por lotes, los datasets, las grabaciones y los resultados privados
+no forman parte de la distribución. Para ejecutar Daló bastan el código, sus
+recursos de avatar, las dependencias y la configuración descrita en los README.
 
 ## Guía técnica
 
@@ -95,7 +122,6 @@ Consulta [backend-meta/README.md](../backend-meta/README.md) para la arquitectur
 | `web-meta/src/app/expresiones/`           | Galería, búsqueda, filtros y vista previa.                       |
 | `web-meta/src/app/avatar-lsc/`            | Renderizado y controles del avatar.                              |
 | `web-meta/public/avatar/`                 | Recursos de animación y miniaturas.                              |
-| `tools/meta-evaluation/`                  | Preparación de medios, ejecución e informes de pruebas.          |
 
 ### Editar o incorporar una seña
 
@@ -116,11 +142,17 @@ por separado contexto, logs y resultados.
 4. Ejecuta las comprobaciones del backend y frontend, reinicia el backend y revisa el contexto expuesto en Detalles técnicos.
 5. Evalúa con capturas nuevas y conserva por separado contexto, logs y resultados. No presentes como validación independiente las muestras usadas para ajustar la descripción.
 
+Mantén la candidata en `activa: false` durante el experimento. Usa un contexto
+explícito con versión nueva y un control sin candidata. Solo después de evaluar
+y justificar la activación actualiza backend, disponibilidad de cámara del
+frontend y expectativas de catálogo en las pruebas. Una animación existente no
+justifica por sí sola habilitar reconocimiento.
+
 ### Recursos, evaluación y mantenimiento
 
 Las animaciones usan VRM Animation y secuencias JSON preparadas. La galería utiliza miniaturas WebP y carga el avatar al interactuar. Las fuentes y permisos de cada expresión se consultan en sus metadatos; una animación disponible no equivale a una seña validada.
 
-El backend elimina sus archivos temporales de conversión. `backend-meta/dist/`, `web-meta/dist/` y las cachés de compilación son salidas regenerables. Los artefactos de evaluación que justifican resultados —manifiestos, contexto, logs y respuestas— se conservan en `data/meta-evaluation/`, excluidos de Git.
+El backend elimina sus archivos temporales de conversión. `backend-meta/dist/`, `web-meta/dist/` y las cachés de compilación son salidas regenerables y están excluidas de Git. La carpeta pública contiene los recursos necesarios para reproducir el avatar, no archivos de autoría, grabaciones ni informes privados.
 
 No publiques `.env`, claves, grabaciones privadas ni datasets. Revisa permisos y validación con personas competentes en LSC antes de distribuir materiales como contenido validado.
 
@@ -130,5 +162,9 @@ No publiques `.env`, claves, grabaciones privadas ni datasets. Revisa permisos y
 - Confirmación de permisos de publicación de los recursos derivados.
 - Evaluación con personas y condiciones de captura nuevas.
 - Mejora del rechazo de señas fuera del catálogo y calibración de confianza.
+- Refinamiento de las veinte candidatas pendientes sin reutilizar resultados de
+  evaluación para presentar después la misma partición como independiente.
+- Comparación controlada de video y fotogramas para investigar los fallos de
+  lectura del movimiento; todavía no hay una corrección demostrada.
 - Incorporación de contenido en números y colores.
 - Evaluación del modo open-weight y del funcionamiento sin conexión.

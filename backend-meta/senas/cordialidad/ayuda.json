@@ -1,0 +1,10 @@
+{
+  "id": "ayuda",
+  "nombre": "Ayuda",
+  "significado": "Necesito ayuda",
+  "intencion": "Pedir ayuda",
+  "descripcion": "Una mano ABIERTA con palma hacia arriba constituye una plataforma horizontal delante del pecho. Sobre esa palma se coloca la base de la otra mano CERRADA con PULGAR ARRIBA. Ambas avanzan y se elevan juntas hacia delante, manteniendo ese apoyo puño-sobre-palma; luego bajan. La mano superior no se desliza repetidamente como en perdon ni forma un corte con todos los dedos extendidos como en permiso. La plataforma abierta es el contraste con los dos puños de apoyar. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 13
+}

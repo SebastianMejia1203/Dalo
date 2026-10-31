@@ -1,0 +1,10 @@
+{
+  "id": "presentar",
+  "nombre": "Presentar",
+  "significado": "Presentar",
+  "intencion": "Presentar a alguien",
+  "descripcion": "DOS manos ABIERTAS Y PLANAS, dedos largos juntos y dirigidos lateralmente, se disponen ante el torso en DOS NIVELES: una a altura de pecho y la otra más alta, próxima al mentón/cuello. Las palmas miran hacia el cuerpo y los dorsos quedan expuestos al frente. Ambas manos salen hacia delante MANTENIENDO SU SEPARACIÓN VERTICAL, como dos superficies horizontales paralelas. Después bajan. El recorrido puede ser breve y no requiere tocar el esternón. El rasgo conjunto es manos planas en dos niveles + proyección frontal, no un cruce perpendicular ni dedos enganchados. Bienvenido desplaza ambas manos en un arco de apertura/descenso; esperar sostiene las palmas arriba. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 30
+}

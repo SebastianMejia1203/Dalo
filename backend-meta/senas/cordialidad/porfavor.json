@@ -1,0 +1,10 @@
+{
+  "id": "porfavor",
+  "nombre": "Por favor",
+  "significado": "Por favor",
+  "intencion": "Pedir algo con cortesía",
+  "descripcion": "Una mano CERRADA EN PUÑO, sin pulgar sobresaliente, se apoya sobre la parte ALTA del PECHO hacia el centro o lado opuesto. Hace un roce corto circular/ovalado o permanece apoyada con pequeños ajustes; después baja. La otra mano queda baja. El contacto es PUÑO-PECHO, no mano-mano. En losiento se ve palma/mano abierta sobre el pecho, y en congusto la mano se abre y sale claramente al lado. No exigir inmovilidad absoluta ni una ubicación exacta en la clavícula. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 29
+}

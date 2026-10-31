@@ -1,0 +1,10 @@
+{
+  "id": "comoesta",
+  "nombre": "Cómo está",
+  "significado": "Cómo está",
+  "intencion": "Preguntar cómo está",
+  "descripcion": "Dos manos separadas delante del pecho, dedos extendidos, realizan un giro de muñecas desde orientación hacia abajo/dentro hacia PALMAS ARRIBA, abriendo algo los brazos a los lados. Puede haber flexión previa, subida/bajada corta o una segunda rotación antes de quedar abiertas como pregunta. No hay contacto entre manos ni con el torso. El GIRO de ambas palmas y apertura lateral durante el núcleo aporta más información que la posición final de palmas arriba, compartida con esperar. No exige bombeo repetido ni llegar a la cabeza. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 18
+}

@@ -10,6 +10,17 @@ Reconocemos el trabajo de **Juan E. Mora-Zarate, Claudia L. Garzón-Castro y Jor
 
 El dataset y sus grabaciones son recursos de sus autores; la preparación y adaptación realizadas para Daló no transfieren su autoría al proyecto. Los permisos de redistribución de datos derivados deben revisarse por separado.
 
+En el estado actual, LSC-54 se usa como referencia para descripciones visuales,
+animaciones y evaluaciones de cordialidad. El catálogo contiene **33 expresiones
+animadas** y **11 señas habilitadas para cámara**, incluida Muy bien. Las otras
+22 definiciones del backend están deshabilitadas; números y colores todavía no
+tienen contenido. Disponibilidad técnica no equivale a validación lingüística
+ni a autorización de publicación.
+
+Los datasets, las grabaciones y los resultados privados de evaluación no se
+distribuyen con el código. Daló no está certificado por los autores de LSC-54;
+consulta el [estado y las limitaciones](GUIA-TECNICA.md#estado-y-limitaciones).
+
 ### Avatar: VRoid Project / pixiv
 
 El personaje base es **Sendagaya Shibu / β Ver AvatarSample_1**, publicado por **VRoid Project (pixiv)**. Daló adapta su malla y sus pesos para la reproducción de señas y crea las animaciones sobre ese personaje.
@@ -31,3 +42,12 @@ La metadata del archivo original utilizado declara **CC0**. `madjin/vrm-samples`
 | [Blender](https://www.blender.org/) y [VRM Add-on for Blender](https://github.com/saturday06/VRM-Addon-for-Blender) | Edición y exportación del personaje y sus animaciones.                               |
 
 El trabajo de Daló incluye la interfaz, integración del catálogo, herramientas de autoría y comprobación, adaptación de las animaciones, integración del reconocimiento remoto y optimización de las vistas 3D.
+
+Las descripciones del catálogo son hipótesis visuales provisionales. Los aciertos
+o la confianza de un modelo no sustituyen la revisión con personas competentes
+en LSC. Las animaciones y los permisos de publicación siguen pendientes de revisión.
+
+El uso de APIs tampoco concede derechos sobre las grabaciones. Los avisos de
+envío a Meta se mantienen en la interfaz: el video utiliza Muse Spark 1.3
+Contributor y el dictado Muse Voice Transcribe. Contributor permite a Meta usar
+el contenido enviado para entrenamiento; `store: false` no elimina esa condición.

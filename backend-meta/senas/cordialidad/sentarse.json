@@ -1,0 +1,10 @@
+{
+  "id": "sentarse",
+  "nombre": "Sentarse",
+  "significado": "Sentarse",
+  "intencion": "Invitar a sentarse",
+  "descripcion": "Dos manos delante del pecho: en varias ejecuciones se distinguen ÍNDICE Y MEDIO extendidos/flexionados en cada mano mientras anular y meñique quedan recogidos. Los dos dedos de la mano superior descienden y se colocan/enganchan sobre los dedos de la otra mano, con un pequeño ajuste o toque. No es un agarre simétrico con todos los dedos en garra. Otra ejecución muestra una base más plana y es ambigua frente a permiso: la forma de dos dedos es el rasgo a verificar, no inventarlo si queda oculta. Hipótesis visual provisional; variantes y límite con permiso requieren revisión lingüística.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 31
+}

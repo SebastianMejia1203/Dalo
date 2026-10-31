@@ -1,13 +1,17 @@
 # Desarrollo y producción
 
-La aplicación activa usa `backend-meta/` y `web-meta/`. `web/` conserva la versión anterior.
+Daló usa `backend-meta/` y `web-meta/`. El entorno recomendado es **Node.js 24**,
+**npm 11** y **FFmpeg** en PATH; el backend declara un mínimo de Node.js 22.19.
+El reconocimiento y el dictado requieren Internet y acceso a los modelos Meta.
 
 ## Desarrollo
 
 Instala dependencias con `npm ci` dentro de cada aplicación en una copia independiente.
-Si `web-meta/node_modules` es un enlace a `web/node_modules`, conserva ese enlace y no ejecutes `npm ci` sobre él.
+Si `web-meta/node_modules` es un enlace a un directorio compartido, conserva ese enlace
+y no ejecutes `npm install` ni `npm ci` sobre él.
 
-Copia `backend-meta/.env.example` a `backend-meta/.env` y completa `META_API_KEY`.
+Crea `backend-meta/.env` desde `.env.example` solo si todavía no existe y completa
+`META_API_KEY`; conserva las claves ya configuradas.
 Opcionalmente copia `.env.development.example` a `.env.development` para personalizar host y puerto.
 
 Desde la raíz, en dos terminales:
@@ -17,11 +21,24 @@ npm run dev:backend
 npm run dev:frontend
 ```
 
-Abre http://localhost:4201. Angular usa `/api` y su proxy lee automáticamente `HOST` y `PORT` de la configuración de desarrollo del backend. Reinicia ambos procesos al modificar los archivos de entorno. Para un backend de desarrollo remoto, define `API_PROXY_TARGET` en el proceso que ejecuta Angular.
+Abre [Daló](http://localhost:4201). Angular usa `/api` y su proxy lee automáticamente `HOST` y `PORT` de la configuración de desarrollo del backend. Reinicia ambos procesos al modificar los archivos de entorno. Para un backend de desarrollo remoto, define `API_PROXY_TARGET` en el proceso que ejecuta Angular.
+
+## Comprobar la configuración activa
+
+- `GET /api/health`: informa si hay clave configurada y qué modelo se usa; no
+  comprueba autenticación con Meta ni devuelve la clave.
+- `GET /api/catalog`: debe devolver **11 señas**, incluida Muy bien.
+- `GET /api/context`: debe mostrar **`lsc-motion-v4-11`**, las once señas y las
+  instrucciones. El rechazo `otra` no es una expresión del catálogo.
+
+En desarrollo puedes comprobar estas rutas tanto en `http://127.0.0.1:3001`
+como a través del proxy en `http://localhost:4201`. Reinicia el backend después
+de editar los JSON de `backend-meta/senas/`. Una candidata deshabilitada no
+entra en el contexto del servicio; se evalúa con un contexto experimental explícito.
 
 ## Producción
 
-1. Copia `backend-meta/.env.production.example` a `backend-meta/.env.production`.
+1. Si todavía no existe, copia `backend-meta/.env.production.example` a `backend-meta/.env.production`.
 2. Completa `APP_ORIGIN` con el origen público exacto, por ejemplo `https://dalo.midominio.com`, y `META_API_KEY` con la clave de producción. No incluyas rutas en el origen.
 3. Compila y arranca desde la raíz:
 
@@ -66,3 +83,15 @@ npm --prefix web-meta run build:development
 ```
 
 `GET /api/health` indica si hay una clave configurada, sin publicarla; la autenticación con Meta se comprueba al usar el proveedor. Las pruebas usan respuestas controladas y no consumen la API real.
+
+## Privacidad y contenido del repositorio
+
+Los comandos anteriores verifican código y compilación; no miden la precisión
+de los modelos reales. El repositorio no distribuye herramientas por lotes,
+datasets, grabaciones ni resultados privados de evaluación. No son necesarios
+para arrancar la aplicación.
+
+`data/`, los archivos locales de entorno y las salidas `dist/` están excluidos de Git.
+El servicio elimina sus temporales de conversión. La carpeta pública del frontend
+debe contener únicamente los recursos de ejecución. No incluyas grabaciones,
+archivos de autoría Blender, informes privados ni claves en la imagen pública.

@@ -88,7 +88,8 @@ test("expone el contexto real sin claves ni etiqueta esperada", async () => {
     const response = await fetch(url + "/api/context");
     assert.equal(response.status, 200);
     const context = await response.json();
-    assert.equal(context.catalog.length, 10);
+    assert.equal(context.catalog.length, 11);
+    assert.ok(context.catalog.some((sign: { id: string }) => sign.id === "muybien"));
     assert.match(context.instructions, /Colombiana/);
     assert.match(context.instructions, /otra/);
     assert.equal(JSON.stringify(context).includes("SECRETO"), false);

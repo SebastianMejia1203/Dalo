@@ -11,7 +11,7 @@ El resultado es una definición respaldada por videos, integrada en el catálogo
 
 ## Fuente y evidencia
 
-- Debe existir una fuente identificable con videos etiquetados de la seña. En este proyecto se usa **LSC-54**, habitualmente en `data/LSC-54/RawVideos/Videos Courtesy/<participante>/<categoria>/<palabra>/<clip>.avi`. Revisa la estructura real antes de asumir nombres.
+- Debe existir una fuente identificable con videos etiquetados de la seña. Daló usa **LSC-54** como referencia, pero el dataset no se distribuye con el proyecto. Utiliza la ruta externa proporcionada por el usuario y revisa su estructura antes de asumir nombres.
 - Confirma palabra, ID y categoría objetivo: `cordialidad`, `numeros` o `colores`. Distingue el nombre de la carpeta del dataset del identificador del producto. No uses una palabra en español para inventar la forma de una seña.
 - Inventaría todos los clips de la palabra, participantes, hashes, fuente y permisos conocidos. Usa [el inventario](scripts/inventory.py) según [el flujo de datos y evaluación](references/evaluacion.md). Para otras estructuras o datasets adapta el inventario de forma explícita; no adivines etiquetas desde nombres ambiguos.
 - Inspecciona videos completos de varias personas y repeticiones, con el movimiento activo y sus variantes. Selecciona una muestra diversa para redactar la descripción; después evalúa el conjunto disponible. Una imagen, una ejecución o un acierto aislado no bastan para habilitar reconocimiento. No hay un número de clips que garantice calidad: informa cuántos clips **únicos** y participantes existen y si la cobertura es insuficiente.
@@ -25,7 +25,7 @@ Lee [la integración del proyecto](references/integracion.md) y los archivos rea
 
 1. Describe manos, configuración de dedos, orientación, ubicación, contacto y trayectoria durante el núcleo activo. Distingue reposo de gesto. Indica variantes observadas, lateralidad y límites de visibilidad; separa hechos de hipótesis visuales provisionales.
 2. Compara con las clases más parecidas. Evita restricciones no respaldadas por todos los ejemplos: amplitud grande, giro de torso o un lado obligatorio pueden excluir ejecuciones válidas, como ocurrió con Bienvenido.
-3. Crea `backend-meta/senas/<categoria>/<id>.json` inicialmente con `activa: false`, sin modificar el dataset. Conserva pruebas y procedencia en `data/meta-evaluation/<experimento-nuevo>/`, no en los videos originales ni en el prompt.
+3. Crea `backend-meta/senas/<categoria>/<id>.json` inicialmente con `activa: false`, sin modificar el dataset. Guarda pruebas y procedencia en un directorio privado fuera del repositorio y de los recursos públicos; nunca en los videos originales ni en el prompt.
 4. Construye un contexto **experimental explícito** que añada la candidata al catálogo activo. Una seña deshabilitada no entra en `motionSpec` automáticamente. No actives producción solo para poder probarla.
 
 ## Evaluación y decisión
