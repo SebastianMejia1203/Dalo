@@ -1,0 +1,10 @@
+{
+  "id": "necesitar",
+  "nombre": "Necesitar",
+  "significado": "Necesitar",
+  "intencion": "Expresar una necesidad",
+  "descripcion": "Una mano se eleva al lado de la sien/ojo con el ÍNDICE extendido hacia arriba y los demás dedos recogidos. El índice o la muñeca flexiona hacia delante/abajo y vuelve a orientarse arriba, una o varias veces, junto al lateral de la cabeza. Puede rozar o aproximarse a la sien, pero el contacto no se ve siempre. La otra mano queda baja. El dedo que sobresale es el ÍNDICE, no el pulgar de mal/bien; tampoco hay la mano plana de hola. Identificar configuración de índice y flexión localizada, no asignar por ver solo una mano junto a la cara. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 27
+}

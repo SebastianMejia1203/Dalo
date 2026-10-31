@@ -1,6 +1,7 @@
-# Backend de la prueba Meta
+# Daló · backend
 
-Requiere Node.js 22.19 o superior y Express 5. El arranque utiliza
+Entorno recomendado: **Node.js 24**, **npm 11** y **FFmpeg** en PATH. El mínimo
+declarado por el backend es Node.js 22.19. La API usa Express 5. El arranque utiliza
 también los certificados de confianza del sistema, manteniendo la verificación TLS.
 
 Configura la clave solamente en el archivo local `.env`; `.env.example` la deja vacía:
@@ -86,10 +87,6 @@ un dictado simultáneos; conversiones y proveedor comparten plazo/cancelación.
 La política de origen se aplica antes de leer cuerpos. Los errores no exponen
 claves ni detalles privados del proveedor. El host y el origen permitido dependen del entorno.
 
-Se eliminaron los archivos puente `.mjs` y las carpetas anteriores `routes/`,
-`services/` y `signs/` sueltas. Las herramientas externas de evaluación importan
-los módulos compilados de `dist/`; ejecuta `npm run build` antes de usarlas.
-
 ## Definiciones de señas
 
 La fuente del catálogo del backend es `senas/`, con un JSON por seña:
@@ -108,8 +105,10 @@ Cada archivo contiene `id`, `nombre`, `significado`, `intencion`, `descripcion`,
 `activa`, `orden` y `ordenDescripcion`. La explicación visual se edita en
 `descripcion`. `activa` controla su inclusión en las clases, el esquema y el prompt;
 `orden` y `ordenDescripcion` conservan el orden del contexto evaluado.
-Sí y No se conservan como candidatas con `activa: false`; las diez clases actuales
-siguen activas. No hay señas ficticias en números o colores.
+Hay **33 definiciones**: **11 activas** y **22 deshabilitadas**. Las activas son
+chao, perfecto, hola, gracias, esperar, losiento, bienvenido, perdon, bien, mal y
+muybien. Las deshabilitadas incluyen Sí, No y veinte candidatas de cordialidad.
+No hay señas ficticias en números o colores.
 
 `src/modules/signs/sign.repository.ts` carga y valida los archivos al iniciar. Un archivo
 incompleto, con ID duplicado o cuyo nombre no coincida con su ID detiene el arranque.
@@ -123,7 +122,8 @@ En desarrollo escucha en `127.0.0.1:3001`; en producción el host predeterminado
 ni límites por usuario en un despliegue público.
 
 - `GET /api/health`: estado de configuración y modelo, nunca la clave.
-- `GET /api/catalog`: diez clases experimentales.
+- `GET /api/catalog`: once señas experimentales activas. `otra` es una salida de
+  rechazo, no una entrada del catálogo.
 - `GET /api/context`: modelo, versión e instrucciones exactas del clasificador,
   incluido el catálogo. No incluye claves ni la etiqueta esperada.
 - `POST /api/recognize/stream`: `{ "videoDataUrl": "data:video/webm;base64,..." }`
@@ -144,15 +144,32 @@ ni límites por usuario en un despliegue público.
 - `POST /api/transcribe`: WAV canónico mono PCM16 a 16 o 24 kHz; el backend lo
   envía como multipart a `muse-voice-transcribe-1.0`, modo `PUSH_TO_TALK`, con
   preferencia de idioma español y vocabulario del catálogo. Devuelve la transcripción.
-- No conserva videos, imágenes, audio, respuestas ni credenciales en disco. El frontend guarda
-  sus resultados en memoria y permite descargarlos sin imágenes.
+- El servicio de uso normal no conserva un historial de capturas ni respuestas;
+  elimina los temporales de conversión. La clave permanece en la configuración
+  privada del backend. El frontend guarda resultados en memoria y permite
+  descargarlos sin imágenes. Los evaluadores por lotes y sus datos privados no
+  forman parte del repositorio distribuido.
 
-El contexto actual `lsc-motion-v4-10` añade descripciones visuales provisionales a
-las diez clases. Fue desarrollado sobre muestras del dataset, por lo que los
+El contexto actual `lsc-motion-v4-11` añade descripciones visuales provisionales a
+las once señas. Fue desarrollado sobre muestras del dataset, por lo que los
 resultados sobre esos mismos clips son métricas de desarrollo, no de generalización.
 No hay validación lingüística ni ejemplos visuales etiquetados en cada petición.
 Contributor permite a Meta usar contenido para entrenamiento; `store: false`
 no elimina esa condición del modo Contributor.
+
+## Estado del reconocimiento
+
+Muy bien está activa. Las veinte candidatas restantes de la incorporación de
+cordialidad siguen deshabilitadas; Sí y No también permanecen fuera del catálogo.
+
+El criterio acordado para incorporar candidatas exige aciertos y confianza
+**estrictamente mayor que 0,85 en ambas muestras**, además de revisar confusiones
+y regresiones. No es un filtro automático de cada respuesta de la API ni una
+estimación calibrada de precisión. No se modifican las cifras devueltas por Meta.
+
+Consulta el [estado y las limitaciones](../docs/GUIA-TECNICA.md#estado-y-limitaciones).
+No se garantiza precisión con personas nuevas ni validación lingüística de las
+descripciones.
 
 ```powershell
 npm test

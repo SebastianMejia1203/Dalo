@@ -1,0 +1,10 @@
+{
+  "id": "buenastardes",
+  "nombre": "Buenas tardes",
+  "significado": "Buenas tardes",
+  "intencion": "Saludar por la tarde",
+  "descripcion": "Saludo compuesto: una mano abierta sale desde boca/mentón hacia una palma de apoyo; a continuación un antebrazo se mantiene aproximadamente horizontal ante el torso mientras la otra mano sube de canto y desciende/cruza por encima de él hacia el lado opuesto. El FINAL muestra antebrazos cruzados o una diagonal sobre el antebrazo horizontal, a altura pecho. No se decide por el inicio común desde la boca: hay que ver el CRUCE posterior. Buenosdias abre las dos manos hacia arriba/afuera; buenasnoches las reúne bajo el mentón tras abrirlas junto a la cara. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 16
+}

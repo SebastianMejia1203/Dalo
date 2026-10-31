@@ -1,0 +1,10 @@
+{
+  "id": "buenasnoches",
+  "nombre": "Buenas noches",
+  "significado": "Buenas noches",
+  "intencion": "Saludar por la noche",
+  "descripcion": "Saludo compuesto en DOS PARTES. Inicio: una mano abierta sale de boca/mentón hacia la otra palma situada delante del torso. Después ambas manos se abren a los LADOS del rostro y se acercan/cerran hacia el centro por debajo de la cara, quedando juntas bajo el mentón antes de bajar. La parte nocturna es la CONVERGENCIA/CERRADO tras una apertura lateral alta. En buenosdias sucede una APERTURA hacia arriba y hacia fuera desde el centro; en buenastardes los antebrazos se cruzan delante del torso. El primer movimiento desde boca no basta para distinguirlos de gracias. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 15
+}

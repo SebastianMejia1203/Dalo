@@ -224,7 +224,7 @@ export const DALO_CATALOG: Expresion[] = [
     videoDisponible: false,
     avatarUrl: `avatar/${entrada.id}.json`,
     animacionUrl: `avatar/${entrada.id}.vrma`,
-    reconocible: ["bien", "mal"].includes(entrada.id),
+    reconocible: ["bien", "mal", "muybien"].includes(entrada.id),
     estado: "En preparación",
     fuente: `Primera animación con trayectorias de LSC-54 · participante 1 · Cordialidad/${entrada.expresion}/0.avi y poses de manos reconstruidas; pendiente de revisión, permisos de publicación y validación lingüística`,
     variante: "Pendiente de validación",

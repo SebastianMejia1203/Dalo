@@ -1,0 +1,10 @@
+{
+  "id": "muchasgracias",
+  "nombre": "Muchas gracias",
+  "significado": "Muchas gracias",
+  "intencion": "Agradecer especialmente",
+  "descripcion": "En las muestras etiquetadas muchasgracias, AMBAS manos abiertas se acercan simultáneamente a ambos lados de la boca/mentón y salen hacia delante y abajo, con separación lateral. Algunas grabaciones repiten esta realización y añaden otra con dedos agrupados hacia el centro antes de la salida; no exigir número fijo de repeticiones ni duración. No hay un segundo gesto de cruce de antebrazos (buenastardes), reunión bajo el mentón tras apertura lateral (buenasnoches) ni apertura elevada desde puños centrales (buenosdias). Existe solapamiento visual con las variantes bimanuales de gracias: bilateralidad o amplitud por sí solas no garantizan distinguirlas. Hipótesis visual provisional, requiere validación del límite gracias/muchasgracias.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 24
+}

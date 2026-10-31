@@ -1,0 +1,10 @@
+{
+  "id": "denada",
+  "nombre": "De nada",
+  "significado": "De nada",
+  "intencion": "Responder a un agradecimiento",
+  "descripcion": "Una mano abierta se mantiene VERTICAL delante del pecho/cara con palma expuesta y dedos hacia arriba. La otra forma una configuración de PINZA o CÍRCULO entre pulgar e índice, con los otros dedos levantados, y realiza pequeños toques o pasadas junto a la BASE de la palma vertical. La palma base mantiene su orientación mientras la pinza se mueve cerca de ella. No son dos palmas abiertas horizontales ni el puño sobre plataforma de ayuda. Verificar la pinza y el lugar del contacto; la altura exacta varía. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 20
+}

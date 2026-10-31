@@ -1,0 +1,10 @@
+{
+  "id": "apoyar",
+  "nombre": "Apoyar",
+  "significado": "Apoyar",
+  "intencion": "Ofrecer apoyo",
+  "descripcion": "Dos manos en puño, con pulgares sobresalientes. Primero asciende una mano al lado de la cabeza con antebrazo vertical; después la otra sube desde el lado opuesto y llega a la BASE del primer puño, junto a su muñeca. Permanecen juntas brevemente y bajan. Es una disposición escalonada: un puño alto y el otro por debajo, no dos puños simétricos enfrentados. Admite lateralidad inversa. En ayuda, en cambio, se ve una PALMA abierta horizontal debajo del puño y el conjunto avanza al frente. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 12
+}

@@ -1,0 +1,10 @@
+{
+  "id": "permiso",
+  "nombre": "Permiso",
+  "significado": "Permiso",
+  "intencion": "Pedir permiso",
+  "descripcion": "Una mano abierta se mantiene aproximadamente horizontal ante el pecho con los dedos hacia el lado opuesto. La otra mano ABIERTA Y PLANA, dedos agrupados hacia arriba, se coloca de CANTO por encima; su borde baja/toca y se separa de la mano horizontal, una o varias veces. Es un cruce asimétrico tipo T con movimiento corto de la mano vertical. No exigir inmovilidad ni un único toque. No es una pinza circular que toca una palma vertical (denada), ni un puño con pulgar arriba sobre una palma hacia arriba (ayuda). Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 28
+}

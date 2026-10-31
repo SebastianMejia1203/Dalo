@@ -1,0 +1,10 @@
+{
+  "id": "buenosdias",
+  "nombre": "Buenos días",
+  "significado": "Buenos días",
+  "intencion": "Saludar por la mañana",
+  "descripcion": "Saludo compuesto: primero una mano abierta va de boca/mentón hacia la otra palma. Después ambas manos se reúnen o recogen delante del pecho y se ABREN Y SEPARAN hacia arriba y a los lados, con dedos desplegados y palmas expuestas. La apertura puede ser breve, compacta o asimétrica; no exige superar la cabeza. La marca distintiva es el segundo tiempo de APERTURA desde el centro. Buenasnoches hace el recorrido inverso de abrir junto al rostro y luego reunir bajo el mentón; buenastardes termina con cruce de antebrazos. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 17
+}

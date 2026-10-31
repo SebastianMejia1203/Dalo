@@ -1,0 +1,10 @@
+{
+  "id": "bano",
+  "nombre": "Baño",
+  "significado": "Baño",
+  "intencion": "Pedir ir al baño",
+  "descripcion": "Una mano levantada al lado de la cabeza, dedos largos EXTENDIDOS Y AGRUPADOS, puntas hacia arriba; antebrazo casi vertical. Durante el núcleo la muñeca GIRA varias veces: la mano alterna entre presentar la palma al frente y quedar de canto, sin tocar la cara. La otra mano permanece baja. No es una palma inmóvil: hay cambio de orientación con poco desplazamiento del brazo. En masomenos los dedos se abren en abanico y la mano suele estar más al frente y baja; en chao predomina el desplazamiento lateral del brazo. Si el detalle de dedos o trayectoria no se resuelve, estas clases pueden ser ambiguas. Hipótesis visual provisional.",
+  "activa": false,
+  "orden": -1,
+  "ordenDescripcion": 14
+}
