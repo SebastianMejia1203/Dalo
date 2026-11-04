@@ -19,7 +19,7 @@ npm ci
 npm run dev
 ```
 
-Consulta [la guía de desarrollo y producción](../docs/ENTORNOS.md). `npm run dev` carga
+Consulta la sección de producción del [README principal](../README.md#producción). `npm run dev` carga
 `.env` y `.env.development`; `npm start` carga `.env` y `.env.production` e inicia
 producción por defecto. Las variables del proceso tienen prioridad. Producción requiere
 `APP_ORIGIN` y sirve también el frontend compilado, salvo `SERVE_FRONTEND=false`.
@@ -183,7 +183,7 @@ El criterio acordado para incorporar candidatas exige aciertos y confianza
 y regresiones. No es un filtro automático de cada respuesta de la API ni una
 estimación calibrada de precisión. No se modifican las cifras devueltas por Meta.
 
-Consulta el [estado y las limitaciones](../docs/GUIA-TECNICA.md#estado-y-limitaciones).
+Consulta las [limitaciones del prototipo](../README.md#problemas-limitaciones-y-posibles-soluciones).
 No se garantiza precisión con personas nuevas ni validación lingüística de las
 descripciones.
 

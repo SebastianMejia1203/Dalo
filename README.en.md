@@ -61,7 +61,12 @@ npm run dev:frontend
 
 Open [Daló in your browser](http://localhost:4201). The interface connects to the local backend through `/api`.
 
-For environment variables and deployment instructions, see [Development and production](docs/ENTORNOS.md) (in Spanish).
+### Production
+
+1. Copy `backend-meta/.env.production.example` to `backend-meta/.env.production` and set `APP_ORIGIN` (the exact public origin, no path), `META_API_KEY`, and a random `ADMIN_TOKEN` (`openssl rand -hex 32`). That token only guards sign definitions, imports, and deletions through the API; sign validation is public.
+2. From the root: `npm run build`, then `npm start`. The backend serves the `/api` API and the built frontend from the same server; `GET /api/health` reports whether a key is configured, without exposing it.
+3. Terminate HTTPS at a reverse proxy forwarding to `127.0.0.1:3001`, with unbuffered streaming and a timeout above 75 seconds. Camera and microphone require HTTPS outside localhost.
+4. Point `ADMIN_DB_PATH` at a persistent path outside the deployment directory so validations survive updates. Never publish `.env` files, keys, recordings, or datasets.
 
 ## Project structure
 
@@ -74,6 +79,14 @@ For environment variables and deployment instructions, see [Development and prod
 Signs are grouped into **courtesy expressions**, **numbers**, and **colors**. Only courtesy expressions currently contain data. Their directory names are `cordialidad`, `numeros`, and `colores`.
 
 To add a sign using multiple LSC-54 videos, use the [dalo-agregar-senas](skills/dalo-agregar-senas/SKILL.md) skill (instructions in Spanish).
+
+## How it works inside
+
+- **Text:** exact catalog matches resolve in the browser without waiting for Meta. Free-form language goes to `POST /api/intent` (context `lsc-intent-v1`), which picks an existing expression or none. There is no word-by-word translation.
+- **Camera:** after the 3, 2, 1 countdown it records 3 seconds; FFmpeg normalizes to silent MP4 (max 640 px, 5 s, 12 fps) and Muse Spark returns a class, subjective confidence, and rationale. The backend deletes temporary files and keeps no captures. The user always confirms or rejects the proposal.
+- **Dictation:** mono WAV at 24 kHz to Muse Voice Transcribe; the resulting text follows the same path as typed text.
+- **Signs:** each definition lives in `backend-meta/senas/<category>/<id>.json` (field `descripcion`: hand shape and orientation, location, contact, and trajectory). Eleven are active in context `lsc-motion-v4-11`, with an `otra` rejection output, and 22 candidates stay disabled. Adding a definition does not create its animation: visual assets live in `web-meta/src/app/catalog.ts` and `web-meta/public/`. Keep candidates at `activa: false` until evaluated with new captures.
+- **Validation:** the Validation page is public; each person saves a verdict in SQLite and a sign can hold many records, visible under Records. Descriptions are provisional hypotheses until review by people proficient in LSC.
 
 ## Problems, limitations, and possible solutions
 
@@ -88,7 +101,7 @@ The following solutions are proposed work; their effectiveness must be tested be
 | Limited vocabulary and animations | There are **11 recognizable signs** and **33 animated expressions**. Spanish → Signs searches the catalog; it does not translate unrestricted sentences. Animations need linguistic and permissions review. | Add signs gradually, check for regressions, and review animations and rights before publication. |
 | API dependency | Recognition and dictation require Internet. Responses can be slow or fail. | Measure latency and availability, communicate failures, and evaluate bounded retries for transient errors. |
 
-The prototype **has no independent validation guaranteeing accuracy with new participants**. See the [current status and limitations](docs/GUIA-TECNICA.md#estado-y-limitaciones) (in Spanish). The repository contains application code and runtime resources; it does not distribute datasets, recordings, or private evaluation results.
+The prototype **has no independent validation guaranteeing accuracy with new participants**. The repository contains application code and runtime resources; it does not distribute datasets, recordings, or private evaluation results.
 
 **Data use:** video is sent to **Muse Spark 1.3 Contributor**, and dictation audio to **Muse Voice Transcribe**. Contributor allows Meta to use submitted content for training. Consider this before submitting personal recordings.
 
@@ -105,8 +118,6 @@ Further documentation is available in Spanish:
 
 - [Backend: architecture, endpoints, and tests](backend-meta/README.md)
 - [Frontend: behavior and checks](web-meta/README.md)
-- [Technical guide: models, signs, and evaluation](docs/GUIA-TECNICA.md)
-- [Environments and deployment](docs/ENTORNOS.md)
 
 ## Runtime models
 
@@ -117,8 +128,6 @@ Under the event rules, no non-Meta model runs at runtime. Recognition uses `muse
 The original idea is what the prototype does today: basic, bidirectional LSC ↔ Spanish exchanges from a bounded catalog, with user confirmation when a result is ambiguous, plus support alongside video calls by sharing the Daló window or copying confirmed text into the call chat. Universal or continuous LSC translation, free-form Spanish sentence translation, and replacing professional interpreters remain out of scope.
 
 Still missing, in order: validation of signs and animations with people proficient in LSC and participation of Deaf users; an independent evaluation with new people, cameras, and recordings kept separate from development data; gradual vocabulary growth (only courtesy expressions exist today; numbers and colors are empty and 22 definitions stay disabled), measuring confusions and rejection of unknown signs before enabling each candidate; verifying use alongside a specific video-call platform before offering it as a tested feature; and evaluating a Meta open-weight model and offline operation, plus per-interaction cost and latency in the public demo.
-
-Detailed tracking lives in [Mejoras para el hackathon](docs/MEJORAS-HACKATHON.md) (in Spanish).
 
 ## Credits
 

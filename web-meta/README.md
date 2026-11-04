@@ -20,7 +20,7 @@ backend local, por lo que la clave nunca se incorpora al frontend.
 El proxy lee el host y puerto de `.env` y `.env.development` del backend.
 En producción, `npm run build` genera el frontend optimizado y el backend lo sirve
 junto con `/api`, usando automáticamente el dominio de la página.
-Consulta [la guía de entornos](../docs/ENTORNOS.md) para los comandos y variables.
+Consulta la sección de producción del [README principal](../README.md#producción) para los comandos y variables.
 
 En este equipo las dependencias se reutilizan mediante un enlace a un directorio
 compartido. **No ejecutes `npm install` ni `npm ci` sobre ese enlace**:
@@ -119,7 +119,7 @@ de recursos visuales se mantienen por separado en `src/app/catalog.ts`.
   para reconocer señas. Las animaciones siguen pendientes de validación lingüística.
 
 El catálogo de cámara contiene once señas, incluida Muy bien; las otras 22
-definiciones siguen deshabilitadas. Consulta el [estado y las limitaciones](../docs/GUIA-TECNICA.md#estado-y-limitaciones):
+definiciones siguen deshabilitadas. Consulta las [limitaciones del prototipo](../README.md#problemas-limitaciones-y-posibles-soluciones):
 el prototipo no garantiza precisión con personas nuevas ni en webcam. Los datos
 y resultados privados de evaluación no se distribuyen con la aplicación.
 

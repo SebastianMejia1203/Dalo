@@ -19,7 +19,7 @@ ni a autorización de publicación.
 
 Los datasets, las grabaciones y los resultados privados de evaluación no se
 distribuyen con el código. Daló no está certificado por los autores de LSC-54;
-consulta el [estado y las limitaciones](GUIA-TECNICA.md#estado-y-limitaciones).
+consulta las [limitaciones del prototipo](../README.md#problemas-limitaciones-y-posibles-soluciones).
 
 ### Avatar: VRoid Project / pixiv
 

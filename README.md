@@ -61,7 +61,12 @@ npm run dev:frontend
 
 Abre [Daló en el navegador](http://localhost:4201). La interfaz se conecta al backend local por `/api`.
 
-Para configurar variables o publicar la aplicación, consulta [Desarrollo y producción](docs/ENTORNOS.md).
+### Producción
+
+1. Copia `backend-meta/.env.production.example` a `backend-meta/.env.production` y completa `APP_ORIGIN` (el origen público exacto, sin ruta), `META_API_KEY` y un `ADMIN_TOKEN` aleatorio (`openssl rand -hex 32`). Ese token solo protege por API las definiciones, importaciones y borrados; la validación de señas es pública.
+2. Desde la raíz: `npm run build` y `npm start`. El backend sirve la API `/api` y el frontend compilado desde el mismo servidor; `GET /api/health` confirma si hay clave configurada, sin publicarla.
+3. Termina HTTPS en un proxy inverso hacia `127.0.0.1:3001`, con streaming sin buffering y timeout superior a 75 segundos. Cámara y micrófono requieren HTTPS fuera de localhost.
+4. Apunta `ADMIN_DB_PATH` a una ruta persistente fuera del directorio de despliegue para no perder las validaciones al actualizar. Nunca publiques `.env`, claves, grabaciones ni datasets.
 
 ## Cómo está organizado
 
@@ -74,6 +79,14 @@ Para configurar variables o publicar la aplicación, consulta [Desarrollo y prod
 Las señas se agrupan en **cordialidad**, **números** y **colores**. Por ahora, solo cordialidad tiene contenido.
 
 Para agregar una seña a partir de varios videos de LSC-54, usa la skill [dalo-agregar-senas](skills/dalo-agregar-senas/SKILL.md).
+
+## Cómo funciona por dentro
+
+- **Texto:** la coincidencia exacta con el catálogo se resuelve en el navegador, sin esperar a Meta. Si es lenguaje libre, `POST /api/intent` (contexto `lsc-intent-v1`) elige una expresión existente o ninguna. No se traduce palabra por palabra.
+- **Cámara:** tras el 3, 2, 1 se graban 3 segundos; FFmpeg normaliza a MP4 sin audio (máx. 640 px, 5 s, 12 fps) y Muse Spark responde con clase, confianza subjetiva y motivo. El backend elimina los temporales y no guarda las capturas. La persona siempre confirma o descarta la propuesta.
+- **Dictado:** WAV mono a 24 kHz hacia Muse Voice Transcribe; el texto resultante sigue la misma ruta que el texto escrito.
+- **Señas:** cada definición vive en `backend-meta/senas/<categoría>/<id>.json` (campo `descripcion`: forma y orientación de las manos, ubicación, contacto y trayectoria). Hay 11 activas en el contexto `lsc-motion-v4-11`, con salida de rechazo `otra`, y 22 candidatas desactivadas. Añadir la definición no crea la animación: los recursos visuales van en `web-meta/src/app/catalog.ts` y `web-meta/public/`. Mantén la candidata en `activa: false` hasta evaluarla con capturas nuevas.
+- **Validación:** la página Validación es pública; cada persona guarda su veredicto en SQLite y puede haber varios registros por seña, visibles en Registros. Las descripciones son hipótesis provisionales hasta su revisión con personas competentes en LSC.
 
 ## Problemas, limitaciones y posibles soluciones
 
@@ -88,7 +101,7 @@ Las siguientes soluciones son líneas de trabajo pendientes; su eficacia debe co
 | Vocabulario y animaciones limitados | Hay **11 señas reconocibles** y **33 expresiones animadas**. Español → Señas relaciona la intención con el catálogo cerrado; no traduce libremente frases. Las animaciones requieren revisión lingüística y de permisos. | Incorporar señas gradualmente, comprobar regresiones y revisar animaciones y derechos antes de publicarlas. |
 | Dependencia de la API | El reconocimiento y el dictado necesitan Internet. Las respuestas pueden tardar o fallar. | Medir latencia y disponibilidad, comunicar los fallos y evaluar reintentos acotados para errores transitorios. |
 
-El prototipo **no dispone de validación independiente que garantice precisión con personas nuevas**. Consulta el [estado y las limitaciones](docs/GUIA-TECNICA.md#estado-y-limitaciones). El repositorio contiene el código y los recursos de ejecución; no distribuye datasets, grabaciones ni resultados privados de evaluación.
+El prototipo **no dispone de validación independiente que garantice precisión con personas nuevas**. El repositorio contiene el código y los recursos de ejecución; no distribuye datasets, grabaciones ni resultados privados de evaluación.
 
 **Uso de datos:** el video se envía a **Muse Spark 1.3 Contributor** y el dictado a **Muse Voice Transcribe**. Contributor permite a Meta usar el contenido enviado para entrenamiento. Tenlo en cuenta antes de enviar grabaciones personales.
 
@@ -103,8 +116,6 @@ npm run build
 
 - [Backend: arquitectura, endpoints y pruebas](backend-meta/README.md)
 - [Frontend: funcionamiento y comprobaciones](web-meta/README.md)
-- [Guía técnica: modelos, señas y evaluación](docs/GUIA-TECNICA.md)
-- [Entornos y publicación](docs/ENTORNOS.md)
 
 ## Modelos en tiempo de ejecución
 
@@ -121,8 +132,6 @@ Para llegar a esa idea completa falta, en este orden:
 - Ampliar el vocabulario de forma gradual (hoy solo hay cordialidad; números y colores están vacíos y 22 definiciones siguen desactivadas), midiendo confusiones y rechazo de señas ajenas antes de activar cada candidata.
 - Comprobar el uso junto a una videollamada concreta (cámara compartida, qué ve y oye la otra persona) antes de ofrecerlo como función verificada.
 - Evaluar un modelo open-weight de Meta y el funcionamiento sin conexión, y medir costo y latencia por interacción en la demo pública.
-
-El seguimiento detallado de estas mejoras está en [Mejoras para el hackathon](docs/MEJORAS-HACKATHON.md).
 
 ## Créditos
 

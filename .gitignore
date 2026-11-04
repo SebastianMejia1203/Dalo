@@ -21,6 +21,12 @@ dist/
 build/
 coverage/
 
+# Documentos locales: no publicar
+/docs/ENTORNOS.md
+/docs/EVALUACION-AMIGOS.md
+/docs/MEJORAS-HACKATHON.md
+/docs/GUIA-TECNICA.md
+
 # Datos privados y resultados: no publicar
 /data/
 /datasets/
