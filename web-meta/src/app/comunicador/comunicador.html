@@ -217,17 +217,34 @@
   </section>
 
   <details class="detalles-tecnicos">
-    <summary>Detalles técnicos <span>Diagnóstico y evaluación</span></summary>
+    <summary>Detalles técnicos <span>Diagnóstico</span></summary>
     <div class="contenido-tecnico">
       <section class="conexion-tecnica" aria-label="Conexión del servicio">
-        <h3>Conexión</h3>
-        <p>{{ meta.estado() }}</p>
+        <span
+          class="punto-conexion"
+          [class.punto-comprobando]="meta.comprobando()"
+          [class.punto-ok]="meta.configurada() && !meta.comprobando()"
+          [class.punto-error]="
+            !meta.configurada() &&
+            !meta.comprobando() &&
+            meta.ultimaComprobacion()
+          "
+          aria-hidden="true"
+        ></span>
+        <div class="conexion-datos">
+          <strong>{{ meta.estado() }}</strong>
+          @if (meta.ultimaComprobacion()) {
+          <span class="conexion-hora"
+            >Última comprobación: {{ meta.ultimaComprobacion() }}</span
+          >
+          }
+        </div>
         <button
           type="button"
-          [disabled]="meta.ocupado()"
+          [disabled]="meta.ocupado() || meta.comprobando()"
           (click)="meta.comprobar()"
         >
-          Comprobar conexión
+          {{ meta.comprobando() ? 'Comprobando…' : 'Comprobar conexión' }}
         </button>
       </section>
       @if (meta.resultado(); as resultado) {
@@ -315,54 +332,39 @@
       <details class="turnos contexto-meta">
         <summary>Contexto que recibe Meta</summary>
         @if (meta.contexto(); as contexto) {
-        <p>
-          Modelo: {{ contexto.model }} · Contexto: {{ contexto.promptVersion }}
-        </p>
-        @if (contexto.model.endsWith('-contributor')) {
-        <p class="nota">
-          Modo Contributor: Meta puede usar el contenido enviado para entrenar
-          modelos futuros.
-        </p>
-        }
-        <p>
-          Recibe estas instrucciones y el video de cada captura. No tiene acceso
-          al repositorio, a los avatares ni a la etiqueta esperada.
-        </p>
-        <pre>{{ contexto.instructions }}</pre>
-        <p class="nota">
-          El contexto incluye descripciones visuales provisionales. Aún no
-          cuenta con validación lingüística ni ejemplos visuales etiquetados.
-        </p>
+        <div class="contexto-ficha">
+          <div class="contexto-dato">
+            <span>Modelo</span>
+            <strong>{{ contexto.model }}</strong>
+          </div>
+          <div class="contexto-dato">
+            <span>Contexto</span>
+            <strong>{{ contexto.promptVersion }}</strong>
+          </div>
+          <div class="contexto-dato">
+            <span>Señas</span>
+            <strong>{{ contexto.catalog.length }} + «otra»</strong>
+          </div>
+          @if (contexto.model.endsWith('-contributor')) {
+          <span class="contexto-aviso">Contributor</span>
+          }
+        </div>
+        <ul class="contexto-senas" aria-label="Señas del contexto">
+          @for (entrada of contexto.catalog; track entrada.id) {
+          <li>{{ entrada.nombre }}</li>
+          }
+          <li class="contexto-otra">otra (rechazo)</li>
+        </ul>
+        <details class="contexto-instrucciones">
+          <summary>Ver instrucciones completas</summary>
+          <pre>{{ contexto.instructions }}</pre>
+        </details>
         } @if (meta.errorContexto()) {
         <p role="status">{{ meta.errorContexto() }}</p>
         }
         <button type="button" (click)="meta.cargarContexto()">
           Actualizar contexto
         </button>
-      </details>
-      <details class="turnos">
-        <summary>Evaluación de reconocimiento</summary>
-        <label for="esperada"
-          >Etiqueta esperada (opcional, no se envía a Meta)</label
-        >
-        <select id="esperada" [formControl]="esperada">
-          <option value="">Sin etiqueta</option>
-          @for (id of clases(); track id) {
-          <option [value]="id">{{ id }}</option>
-          }
-        </select>
-        <p>Pruebas: {{ meta.ensayos().length }} · {{ meta.resumen() }}</p>
-        <button
-          type="button"
-          [disabled]="!meta.ensayos().length"
-          (click)="meta.exportar()"
-        >
-          Descargar resultados JSON
-        </button>
-        <p class="nota">
-          El registro vive en esta sesión; descárgalo antes de cerrar. No
-          incluye imágenes.
-        </p>
       </details>
     </div>
   </details>

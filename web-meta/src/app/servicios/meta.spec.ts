@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { MetaService, ResultadoMeta } from "./meta";
+import { MetaService } from "./meta";
 import { API_URL } from "./api-url";
 describe("MetaService", () => {
   afterEach(() => vi.unstubAllGlobals());
@@ -14,7 +14,7 @@ describe("MetaService", () => {
     const service = TestBed.inject(MetaService);
     await service.comprobar();
     await service.cargarContexto();
-    await service.enviar(['jpeg'], '', new AbortController().signal);
+    await service.enviar(['jpeg'], new AbortController().signal);
     expect(urls).toContain('/servicios/api/health');
     expect(urls).toContain('/servicios/api/context');
     expect(urls).toContain('/servicios/api/recognize/stream');
@@ -24,7 +24,7 @@ describe("MetaService", () => {
     vi.stubGlobal("fetch", fetchSpy);
     const service = TestBed.inject(MetaService);
     service.configurada.set(true);
-    const pending = service.capturar({ readyState: 2, videoWidth: 640, videoHeight: 480 } as HTMLVideoElement, "");
+    const pending = service.capturar({ readyState: 2, videoWidth: 640, videoHeight: 480 } as HTMLVideoElement);
     expect(service.preparandoCaptura()).toBe(true);
     expect(service.grabando()).toBe(false);
     service.cancelar();
@@ -34,7 +34,7 @@ describe("MetaService", () => {
     expect(service.ocupado()).toBe(false);
     expect(fetchSpy).not.toHaveBeenCalled();
   });
-  it("envía solo el video, sin adjuntar fotogramas ni etiqueta esperada", async () => {
+  it("envía solo el video, sin adjuntar fotogramas", async () => {
     vi.stubGlobal("fetch", async (_url: string, options: RequestInit) => {
       expect(JSON.parse(options.body as string)).toEqual({
         videoDataUrl: "data:video/webm;base64,AAAA",
@@ -55,7 +55,6 @@ describe("MetaService", () => {
     });
     await TestBed.inject(MetaService).enviar(
       [],
-      "perdon",
       new AbortController().signal,
       "data:video/webm;base64,AAAA",
     );
@@ -68,7 +67,7 @@ describe("MetaService", () => {
     await service.comprobar();
     expect(service.configurada()).toBe(false);
     expect(service.resultado()).toBeNull();
-    expect(service.estado()).toContain("pendiente");
+    expect(service.estado()).toContain("Sin clave");
   });
   it("no confunde un backend caído con clave pendiente", async () => {
     vi.stubGlobal("fetch", async () => {
@@ -79,24 +78,7 @@ describe("MetaService", () => {
     expect(service.configurada()).toBe(false);
     expect(service.error()).toContain("backend");
   });
-  it("calcula aciertos solo sobre capturas etiquetadas", () => {
-    const service = TestBed.inject(MetaService);
-    const resultado: ResultadoMeta = {
-      clase: "hola",
-      confianza: 0.8,
-      motivo: "Movimiento",
-      model: "muse-spark-1.3",
-      latencyMs: 123,
-      promptVersion: "v1",
-    };
-    service.ensayos.set([
-      { ...resultado, esperada: "hola", fecha: "2026-10-29" },
-      { ...resultado, esperada: "gracias", clase: "otra", fecha: "2026-10-29" },
-      { ...resultado, esperada: "", fecha: "2026-10-29" },
-    ]);
-    expect(service.resumen()).toBe("1/2 aciertos en capturas etiquetadas");
-  });
-  it("registra resultado y latencia sin filtrar la etiqueta al backend", async () => {
+  it("registra el resultado de la captura", async () => {
     vi.stubGlobal("fetch", async (_url: string, options: RequestInit) => {
       expect(JSON.parse(options.body as string)).toEqual({ frames: ["jpeg"] });
       const result = {
@@ -112,20 +94,17 @@ describe("MetaService", () => {
       });
     });
     const service = TestBed.inject(MetaService);
-    await service.enviar(["jpeg"], "gracias", new AbortController().signal);
+    await service.enviar(["jpeg"], new AbortController().signal);
     expect(service.resultado()?.clase).toBe("hola");
-    expect(service.ensayos()[0].esperada).toBe("gracias");
-    expect(service.resumen()).toBe("0/1 aciertos en capturas etiquetadas");
   });
-  it("un error de Meta no crea un ensayo exitoso ni reutiliza una propuesta", async () => {
+  it("un error de Meta no reutiliza una propuesta anterior", async () => {
     vi.stubGlobal("fetch", async () =>
       Response.json({ error: "Clave pendiente" }, { status: 503 }),
     );
     const service = TestBed.inject(MetaService);
     await expect(
-      service.enviar(["jpeg"], "hola", new AbortController().signal),
+      service.enviar(["jpeg"], new AbortController().signal),
     ).rejects.toThrow("Clave pendiente");
-    expect(service.ensayos()).toEqual([]);
     expect(service.resultado()).toBeNull();
   });
   it("muestra el resumen público antes de terminar y conserva eventos partidos entre bytes", async () => {
@@ -179,13 +158,12 @@ describe("MetaService", () => {
         ),
     );
     const service = TestBed.inject(MetaService);
-    const pending = service.enviar(["jpeg"], "", new AbortController().signal);
+    const pending = service.enviar(["jpeg"], new AbortController().signal);
     try {
       await vi.waitFor(() =>
         expect(service.resumenModelo()).toBe("Mano y orientación visibles."),
       );
       expect(service.resultado()).toBeNull();
-      expect(service.ensayos()).toEqual([]);
       finish();
       await pending;
       expect(service.resultado()?.clase).toBe("otra");
@@ -201,9 +179,8 @@ describe("MetaService", () => {
     );
     const service = TestBed.inject(MetaService);
     await expect(
-      service.enviar(["jpeg"], "", new AbortController().signal),
+      service.enviar(["jpeg"], new AbortController().signal),
     ).rejects.toThrow();
     expect(service.resultado()).toBeNull();
-    expect(service.ensayos()).toEqual([]);
   });
 });

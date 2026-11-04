@@ -74,7 +74,7 @@ describe("navegación de captura", () => {
     meta.videoCapturado.set(null);
     fixture.destroy();
   });
-  it("las etiquetas de evaluación siguen el catálogo del backend al añadir palabras", async () => {
+  it("el contexto muestra las señas del catálogo del backend", async () => {
     vi.stubGlobal("fetch", async () =>
       Response.json({ configured: false, model: "muse-spark-1.3-contributor" }),
     );
@@ -100,14 +100,13 @@ describe("navegación de captura", () => {
       ],
     });
     fixture.detectChanges();
-    const options = Array.from(
-      (fixture.nativeElement.querySelector("#esperada") as HTMLSelectElement)
-        .options,
-    ).map((option) => option.value);
-    expect(options).toContain("bien");
-    expect(options).toContain("si");
-    expect(options).toContain("otra");
-    expect(options).not.toContain("perdon");
+    const senas = Array.from(
+      fixture.nativeElement.querySelectorAll(".contexto-senas li") as NodeListOf<Element>,
+    ).map((item) => item.textContent?.trim());
+    expect(senas).toContain("Bien");
+    expect(senas).toContain("Sí");
+    expect(senas?.some((texto) => texto?.includes("otra"))).toBe(true);
+    expect(senas).not.toContain("Perdón");
     fixture.destroy();
   });
   it("apaga la cámara al cambiar a Español → Señas", async () => {

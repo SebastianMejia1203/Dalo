@@ -7,14 +7,8 @@ import {
 } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { findById, matchSpanishText } from "../adapters";
-import {
-  AdminService,
-  analizarEnsayos,
-  type AnalisisEnsayos,
-  type Veredicto,
-} from "../servicios/admin";
+import { AdminService, type Veredicto } from "../servicios/admin";
 import { IntencionService } from "../servicios/intencion";
-import type { Ensayo } from "../servicios/meta";
 import { AvatarLsc } from "../avatar-lsc/avatar-lsc";
 
 export const ETIQUETAS_VEREDICTO: Record<Veredicto, string> = {
@@ -51,7 +45,7 @@ const FRASES_PRUEBA = [
   "de nada, con gusto",
 ].join("\n");
 
-export type PestanaAdmin = "senas" | "registros" | "intencion" | "ensayos";
+export type PestanaAdmin = "senas" | "registros" | "intencion";
 
 @Component({
   selector: "app-admin",
@@ -85,12 +79,6 @@ export class Admin {
   protected readonly frasesLote = signal(FRASES_PRUEBA);
   protected readonly filas = signal<FilaIntencion[]>([]);
   protected readonly probandoLote = signal(false);
-  protected readonly analisis = signal<AnalisisEnsayos | null>(null);
-  protected readonly sesionesElegidas = signal<number[]>([]);
-  protected readonly codigoSesion = signal("");
-  protected readonly notasSesion = signal("");
-  protected readonly archivoEnsayos = signal("");
-  protected readonly analizando = signal(false);
 
   protected readonly signosFiltrados = computed(() => {
     const filtro = this.filtro();
@@ -145,7 +133,6 @@ export class Admin {
 
   constructor() {
     void this.admin.cargar();
-    void this.admin.cargarSesiones();
   }
 
   protected elegir(id: string): void {
@@ -154,7 +141,6 @@ export class Admin {
 
   protected irAPestana(pestana: PestanaAdmin): void {
     this.pestana.set(pestana);
-    if (pestana === "ensayos") void this.admin.cargarSesiones();
   }
 
   protected veredictoDe(id: string): Veredicto {
@@ -294,77 +280,6 @@ export class Admin {
     } finally {
       this.probandoLote.set(false);
     }
-  }
-
-  protected async guardarSesionEnsayos(evento: Event): Promise<void> {
-    const entrada = evento.target as HTMLInputElement;
-    const archivo = entrada.files?.[0];
-    const codigo = this.codigoSesion().trim();
-    if (!archivo || !codigo) {
-      this.admin.aviso.set("");
-      this.admin.error.set(
-        !archivo
-          ? "Elige el JSON de ensayos descargado de Comunicar."
-          : "La sesión necesita un código (p. ej. P1).",
-      );
-      return;
-    }
-    let ensayos: Ensayo[];
-    try {
-      const datos = JSON.parse(await archivo.text()) as Ensayo[];
-      if (!Array.isArray(datos)) throw new Error("formato");
-      ensayos = datos;
-    } catch {
-      this.admin.error.set("El archivo de ensayos no es válido.");
-      return;
-    }
-    this.archivoEnsayos.set(archivo.name);
-    const ok = await this.admin.crearSesion(
-      codigo,
-      this.notasSesion().trim(),
-      ensayos,
-    );
-    if (ok) {
-      this.codigoSesion.set("");
-      this.notasSesion.set("");
-      entrada.value = "";
-    }
-  }
-
-  protected alternarSesion(id: number, evento: Event): void {
-    const marcada = (evento.target as HTMLInputElement).checked;
-    this.sesionesElegidas.update((actuales) =>
-      marcada
-        ? [...actuales, id]
-        : actuales.filter((elegida) => elegida !== id),
-    );
-  }
-
-  protected async analizarSesiones(): Promise<void> {
-    const ids = this.sesionesElegidas();
-    if (!ids.length) return;
-    this.analizando.set(true);
-    try {
-      const ensayos: Ensayo[] = [];
-      for (const id of ids) ensayos.push(...(await this.admin.ensayosDeSesion(id)));
-      this.analisis.set(analizarEnsayos(ensayos));
-    } catch (error) {
-      this.admin.error.set(
-        error instanceof Error ? error.message : "No se pudo analizar.",
-      );
-    } finally {
-      this.analizando.set(false);
-    }
-  }
-
-  protected borrarSesion(id: number): void {
-    void this.admin
-      .borrarSesion(id)
-      .then(() =>
-        this.sesionesElegidas.update((actuales) =>
-          actuales.filter((elegida) => elegida !== id),
-        ),
-      );
   }
 
 }

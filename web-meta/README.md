@@ -33,28 +33,23 @@ ese enlace, instala primero las dependencias con `npm ci` y después `npm start`
 2. En **Señas → Español**, abre **Detalles técnicos** y pulsa **Comprobar conexión**.
    Esto comprueba configuración, no validez de la
    clave: la autenticación se comprueba en la primera inferencia.
-3. Para evaluar, abre **Evaluación de reconocimiento** dentro de esos detalles
-   y elige la etiqueta esperada si la conoces. Este paso es opcional para el uso
-   normal. La etiqueta no se envía al backend ni al modelo.
-4. Activa la cámara. Encuadra rostro, torso y ambas manos. Pulsa **Capturar seña**
+3. Activa la cámara. Encuadra rostro, torso y ambas manos. Pulsa **Capturar seña**
    y espera la cuenta **3, 2, 1**, durante la cual todavía no se graba. Realiza
    una única seña al aparecer el punto rojo y **Grabando**, durante tres segundos.
    Al terminar desaparece el punto y comienza la interpretación automáticamente.
-5. Revisa y confirma la propuesta únicamente si coincide. Motivo, latencia,
+4. Revisa y confirma la propuesta únicamente si coincide. Motivo, latencia,
    confianza y actividad del modelo están en **Detalles técnicos**. También se
    admite `otra`; incluye señas ajenas al catálogo y ejemplos sin seña para
    comprobar falsas detecciones como condiciones distintas.
-6. Descarga el JSON antes de cerrar la página. Contiene todas las inferencias
-   completadas, incluso propuestas descartadas. No contiene imágenes. Los errores
-   de transporte se muestran y no se cuentan como aciertos ni rechazos del modelo.
 
 Durante la captura y el análisis se muestran el tiempo transcurrido, las etapas
 reales de la aplicación y los resúmenes públicos que Meta envía por streaming.
 No son el pensamiento interno completo. Si Meta no emite un resumen, se indica
 expresamente; los latidos del backend mantienen visible el estado de la conexión.
 El panel **Revisar video de esta captura** permite comprobar el clip grabado.
-El panel **Contexto que recibe Meta** muestra las instrucciones exactas enviadas,
-el modelo y la versión del contexto. La etiqueta esperada permanece fuera del prompt.
+El panel **Contexto que recibe Meta** muestra el modelo, la versión del
+contexto y las señas que lo componen; las instrucciones exactas enviadas se
+despliegan dentro del propio panel.
 
 Catálogo de cámara: **11 señas** — chao, perfecto, hola, gracias, esperar,
 losiento, bienvenido, perdon, bien, mal y muybien. `otra` indica rechazo.
@@ -86,8 +81,7 @@ guardado crea un registro nuevo en SQLite —varias personas pueden validar
 la misma seña sin sobrescribirse— y todos los registros se consultan y
 filtran en la pestaña **Registros**, además del historial por seña.
 También concentra un banco de pruebas de intención que compara búsqueda
-local y Meta frase a frase o por lote, y el análisis de los JSON de
-ensayos descargados (aciertos, confusiones, rechazo y latencia).
+local y Meta frase a frase o por lote.
 
 En **Expresiones**, los filtros iniciales son **Cámara: Sí** y **Avatar: Sí**.
 Selecciona Todas/Todos para explorar también las entradas sin reconocimiento.

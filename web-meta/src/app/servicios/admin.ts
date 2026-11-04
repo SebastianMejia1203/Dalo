@@ -1,7 +1,6 @@
 import { Injectable, computed, inject, signal } from "@angular/core";
 import { API_URL } from "./api-url";
 import { findById } from "../adapters";
-import type { Ensayo } from "./meta";
 
 export interface SignoAdmin {
   id: string;
@@ -30,78 +29,7 @@ export interface RevisionGuardada extends Revision {
   updatedAt?: string;
 }
 
-export interface SesionEvaluacion {
-  id: number;
-  codigo: string;
-  notas: string;
-  createdAt: string;
-  total: number;
-  correctos: number;
-}
-
-export interface AnalisisEnsayos {
-  total: number;
-  correctos: number;
-  porClase: { esperada: string; intentos: number; aciertos: number }[];
-  confusion: { real: string; predicha: string; veces: number }[];
-  rechazo: { correctos: number; intentos: number } | null;
-  erroresConfianzaAlta: Ensayo[];
-  latenciaMedianaMs: number | null;
-}
-
-/** Estadística de los ensayos descargados de la app (sin imágenes). */
-export function analizarEnsayos(ensayos: Ensayo[]): AnalisisEnsayos {
-  const etiquetados = ensayos.filter((ensayo) => ensayo.esperada);
-  const porEsperada = new Map<string, { intentos: number; aciertos: number }>();
-  const confusion = new Map<string, number>();
-  for (const ensayo of etiquetados) {
-    const fila =
-      porEsperada.get(ensayo.esperada) ?? { intentos: 0, aciertos: 0 };
-    fila.intentos += 1;
-    if (ensayo.clase === ensayo.esperada) fila.aciertos += 1;
-    porEsperada.set(ensayo.esperada, fila);
-    if (ensayo.clase !== ensayo.esperada) {
-      const clave = `${ensayo.esperada}→${ensayo.clase}`;
-      confusion.set(clave, (confusion.get(clave) ?? 0) + 1);
-    }
-  }
-  const otra = etiquetados.filter((ensayo) => ensayo.esperada === "otra");
-  const latencias = etiquetados
-    .map((ensayo) => ensayo.latencyMs)
-    .sort((a, b) => a - b);
-  return {
-    total: etiquetados.length,
-    correctos: etiquetados.filter(
-      (ensayo) => ensayo.clase === ensayo.esperada,
-    ).length,
-    porClase: [...porEsperada.entries()]
-      .map(([esperada, fila]) => ({ esperada, ...fila }))
-      .sort((a, b) => a.esperada.localeCompare(b.esperada)),
-    confusion: [...confusion.entries()]
-      .map(([clave, veces]) => {
-        const [real, predicha] = clave.split("→");
-        return { real, predicha, veces };
-      })
-      .sort((a, b) => b.veces - a.veces),
-    rechazo: otra.length
-      ? {
-          correctos: otra.filter((ensayo) => ensayo.clase === "otra").length,
-          intentos: otra.length,
-        }
-      : null,
-    erroresConfianzaAlta: etiquetados.filter(
-      (ensayo) => ensayo.clase !== ensayo.esperada && ensayo.confianza >= 0.8,
-    ),
-    latenciaMedianaMs: latencias.length
-      ? latencias[Math.floor(latencias.length / 2)]
-      : null,
-  };
-}
-
-/**
- * Validación local: definiciones de señas del backend, registro de
- * validación y sesiones de evaluación en SQLite, y análisis de ensayos.
- */
+/** Validación pública: señas del backend y registros en SQLite. */
 @Injectable({ providedIn: "root" })
 export class AdminService {
   private readonly apiUrl = inject(API_URL);
@@ -120,9 +48,6 @@ export class AdminService {
           .map((revision) => revision.signId),
       ).size,
   );
-  readonly sesiones = signal<SesionEvaluacion[]>([]);
-  readonly cargandoSesiones = signal(false);
-
   private cabeceras(incluirJson = false): Record<string, string> {
     return incluirJson
       ? { "Content-Type": "application/json" }
@@ -218,83 +143,6 @@ export class AdminService {
         fecha: "",
       }
     );
-  }
-
-  async cargarSesiones(): Promise<void> {
-    this.cargandoSesiones.set(true);
-    try {
-      const response = await fetch(`${this.apiUrl}/admin/eval-sessions`, {
-        headers: this.cabeceras(),
-        signal: AbortSignal.timeout(8000),
-      });
-      const data = (await this.respuestaOk(response)) as {
-        sessions: SesionEvaluacion[];
-      };
-      this.sesiones.set(data.sessions);
-    } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : "No se pudo cargar.",
-      );
-    } finally {
-      this.cargandoSesiones.set(false);
-    }
-  }
-
-  async crearSesion(
-    codigo: string,
-    notas: string,
-    ensayos: Ensayo[],
-  ): Promise<boolean> {
-    this.error.set("");
-    try {
-      const response = await fetch(`${this.apiUrl}/admin/eval-sessions`, {
-        method: "POST",
-        headers: this.cabeceras(true),
-        body: JSON.stringify({ codigo, notas, ensayos }),
-        signal: AbortSignal.timeout(15000),
-      });
-      await this.respuestaOk(response);
-      await this.cargarSesiones();
-      this.aviso.set(`Sesión ${codigo} guardada en la base de validación.`);
-      return true;
-    } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : "No se pudo guardar.",
-      );
-      return false;
-    }
-  }
-
-  async ensayosDeSesion(id: number): Promise<Ensayo[]> {
-    const response = await fetch(
-      `${this.apiUrl}/admin/eval-sessions/${id}/trials`,
-      {
-        headers: this.cabeceras(),
-        signal: AbortSignal.timeout(15000),
-      },
-    );
-    const data = (await this.respuestaOk(response)) as { trials: Ensayo[] };
-    return data.trials;
-  }
-
-  async borrarSesion(id: number): Promise<void> {
-    this.error.set("");
-    try {
-      const response = await fetch(
-        `${this.apiUrl}/admin/eval-sessions/${id}`,
-        {
-          method: "DELETE",
-          headers: this.cabeceras(),
-          signal: AbortSignal.timeout(8000),
-        },
-      );
-      await this.respuestaOk(response);
-      await this.cargarSesiones();
-    } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : "No se pudo borrar.",
-      );
-    }
   }
 
   private async respuestaOk(response: Response): Promise<unknown> {

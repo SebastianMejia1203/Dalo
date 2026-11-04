@@ -21,11 +21,6 @@ interface ContextoMeta {
     intencion: string;
   }[];
 }
-export interface Ensayo extends ResultadoMeta {
-  esperada: string;
-  fecha: string;
-}
-
 @Injectable({ providedIn: "root" })
 export class MetaService {
   private readonly apiUrl = inject(API_URL);
@@ -45,11 +40,9 @@ export class MetaService {
   readonly videoCapturado = signal<string | null>(null);
   readonly transcurrido = signal(0);
   readonly segundos = computed(() => (this.transcurrido() / 1000).toFixed(1));
-  readonly ensayos = signal<Ensayo[]>([]);
-  readonly resumen = computed(() => {
-    const etiquetados = this.ensayos().filter((x) => x.esperada);
-    return `${etiquetados.filter((x) => x.esperada === x.clase).length}/${etiquetados.length} aciertos en capturas etiquetadas`;
-  });
+  /** Estado de la última comprobación de conexión, para la UI. */
+  readonly comprobando = signal(false);
+  readonly ultimaComprobacion = signal("");
   private abortador: AbortController | null = null;
   private inicio = 0;
 
@@ -82,6 +75,8 @@ export class MetaService {
 
   async comprobar(): Promise<void> {
     this.error.set("");
+    this.comprobando.set(true);
+    this.estado.set("Comprobando conexión…");
     try {
       const response = await fetch(`${this.apiUrl}/health`, {
         signal: AbortSignal.timeout(5000),
@@ -94,8 +89,8 @@ export class MetaService {
       this.configurada.set(health.configured === true);
       this.estado.set(
         health.configured
-          ? `Listo · ${health.model}`
-          : "Clave API pendiente en backend-meta/.env.",
+          ? `Conectado · ${health.model}`
+          : "Sin clave API en el backend",
       );
     } catch {
       this.configurada.set(false);
@@ -103,12 +98,20 @@ export class MetaService {
       this.error.set(
         "No se pudo conectar al backend. Inícialo y comprueba la conexión.",
       );
+    } finally {
+      this.comprobando.set(false);
+      this.ultimaComprobacion.set(
+        new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }),
+      );
     }
   }
 
   async enviar(
     frames: string[],
-    esperada: string,
     signal: AbortSignal,
     videoDataUrl?: string,
   ): Promise<ResultadoMeta> {
@@ -177,10 +180,6 @@ export class MetaService {
           "La conexión se interrumpió antes del resultado final.",
         );
       this.resultado.set(result);
-      this.ensayos.update((items) => [
-        ...items,
-        { ...result, esperada, fecha: new Date().toISOString() },
-      ]);
       this.registrar("Respuesta validada. Revisa la propuesta.");
       return result;
     } finally {
@@ -284,7 +283,6 @@ export class MetaService {
 
   async capturar(
     video: HTMLVideoElement,
-    esperada: string,
   ): Promise<ResultadoMeta | null> {
     if (this.ocupado() || !this.configurada()) return null;
     const controller = new AbortController();
@@ -325,7 +323,7 @@ export class MetaService {
       });
       signal.throwIfAborted();
       this.estado.set("Analizando video con Meta…");
-      const result = await this.enviar([], esperada, signal, dataUrl);
+      const result = await this.enviar([], signal, dataUrl);
       this.estado.set(
         result.clase === "otra"
           ? "Seña no reconocida."
@@ -354,17 +352,5 @@ export class MetaService {
     this.estado.set("Captura cancelada.");
     if (this.videoCapturado()) URL.revokeObjectURL(this.videoCapturado()!);
     this.videoCapturado.set(null);
-  }
-  exportar(): void {
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(this.ensayos(), null, 2)], {
-        type: "application/json",
-      }),
-    );
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `dalo-meta-ensayos-${Date.now()}.json`;
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 }

@@ -63,14 +63,6 @@ export class Comunicador implements OnDestroy {
     );
   });
   protected readonly avisoVoz = signal("");
-  protected readonly esperada = new FormControl("", { nonNullable: true });
-  protected readonly clases = computed(() => [
-    ...(
-      this.meta.contexto()?.catalog ??
-      this.catalogo.filter((entrada) => entrada.reconocible)
-    ).map((entrada) => entrada.id),
-    "otra",
-  ]);
   protected readonly entradaEsl = computed(() => {
     const id = this.dalo.resultadoEsl().id;
     return id ? findById(id) : null;
@@ -138,7 +130,7 @@ export class Comunicador implements OnDestroy {
     const video = this.videoRef()?.nativeElement;
     if (!video) return;
     this.dalo.repetirCaptura();
-    const resultado = await this.meta.capturar(video, this.esperada.value);
+    const resultado = await this.meta.capturar(video);
     if (!resultado) return;
     this.dalo.candidataId.set(
       resultado.clase === "otra" ? null : resultado.clase,
