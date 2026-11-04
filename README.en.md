@@ -108,6 +108,18 @@ Further documentation is available in Spanish:
 - [Technical guide: models, signs, and evaluation](docs/GUIA-TECNICA.md)
 - [Environments and deployment](docs/ENTORNOS.md)
 
+## Runtime models
+
+Under the event rules, no non-Meta model runs at runtime. Recognition uses `muse-spark-1.3-contributor` and dictation uses `muse-voice-transcribe-1.0`, both through the backend. The earlier MediaPipe + local GRU (ONNX) version was removed under that rule. `speechSynthesis` is a browser feature, not a model; Three.js and FFmpeg handle graphics and media without inference. No Meta open-weight model runs yet; evaluating one is pending work (below).
+
+## Original plan and what is missing
+
+The original idea is what the prototype does today: basic, bidirectional LSC ↔ Spanish exchanges from a bounded catalog, with user confirmation when a result is ambiguous, plus support alongside video calls by sharing the Daló window or copying confirmed text into the call chat. Universal or continuous LSC translation, free-form Spanish sentence translation, and replacing professional interpreters remain out of scope.
+
+Still missing, in order: validation of signs and animations with people proficient in LSC and participation of Deaf users; an independent evaluation with new people, cameras, and recordings kept separate from development data; gradual vocabulary growth (only courtesy expressions exist today; numbers and colors are empty and 22 definitions stay disabled), measuring confusions and rejection of unknown signs before enabling each candidate; verifying use alongside a specific video-call platform before offering it as a tested feature; and evaluating a Meta open-weight model and offline operation, plus per-interaction cost and latency in the public demo.
+
+Detailed tracking lives in [Mejoras para el hackathon](docs/MEJORAS-HACKATHON.md) (in Spanish).
+
 ## Credits
 
 A project for the **Meta Global AI Developer Hackathon 2026**. It uses **LSC-54** reference data and the **Sendagaya Shibu / AvatarSample_1** avatar by VRoid Project / pixiv.

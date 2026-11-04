@@ -3,22 +3,36 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 0;
+  padding: 0.7rem 0;
   max-width: 64rem;
   margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgb(255 255 255 / 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--borde);
 }
 
-.marca {
+button.marca {
   font-size: 1.9rem;
   font-weight: 800;
   letter-spacing: -0.04em;
   color: #0d3b37;
   margin: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 0;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.2;
 }
 
 nav {
   display: flex;
   gap: 0.6rem;
+  align-items: center;
 }
 
 .pildora {
@@ -27,11 +41,20 @@ nav {
   gap: 0.5rem;
   border-radius: 10px;
   font-weight: 500;
+  white-space: nowrap;
+}
+
+.pildora.activa {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: #fff;
+  font-weight: 700;
 }
 
 main {
   max-width: 64rem;
   margin: 0 auto;
+  padding-top: 1rem;
 }
 
 @media (max-width: 720px) {
@@ -41,10 +64,11 @@ main {
 
   nav {
     width: 100%;
+    flex-wrap: wrap;
   }
 
   .pildora {
-    flex: 1;
+    flex: 1 1 8rem;
     justify-content: center;
   }
 }

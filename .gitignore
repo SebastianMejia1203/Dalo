@@ -30,6 +30,7 @@ coverage/
 /quality-reports/
 /reports/
 /.local-authoring/
+/backend-meta/data/
 
 # Archivos locales
 *.log

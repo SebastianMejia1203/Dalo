@@ -1,0 +1,659 @@
+<div class="admin">
+  <div class="fila-titulo">
+    <h1>Validación</h1>
+    <div class="admin-stats" aria-label="Resumen">
+      <span><strong>{{ admin.signos().length }}</strong> señas</span>
+      <span><strong>{{ activas() }}</strong> en cámara</span>
+      <span
+        ><strong>{{ admin.revisadas() }}/{{ admin.signos().length }}</strong>
+        señas con validación</span
+      >
+      <span
+        ><strong>{{ admin.listaRevisiones().length }}</strong> registros
+        guardados</span
+      >
+      <button type="button" (click)="admin.cargar()">Actualizar</button>
+    </div>
+  </div>
+  <p class="intro">
+    Cualquier persona puede validar: escribe tu nombre, mira la animación de
+    cada seña, elige si se entiende y pulsa <strong>Guardar validación</strong>.
+    Cada guardado crea un registro nuevo (no sobrescribe el de otras personas)
+    y queda visible en la pestaña <strong>Registros</strong>.
+  </p>
+
+  @if (admin.restartRequired()) {
+  <p class="aviso aviso-fuerte" role="alert">
+    Cambios guardados: reinicia el backend para que apliquen al
+    reconocimiento.
+  </p>
+  } @if (admin.error()) {
+  <p class="aviso" role="alert">{{ admin.error() }}</p>
+  } @if (admin.aviso()) {
+  <p class="aviso aviso-ok" role="status">{{ admin.aviso() }}</p>
+  }
+
+  <div class="tabs" role="tablist" aria-label="Secciones de validación">
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="pestana() === 'senas'"
+      [class.activa]="pestana() === 'senas'"
+      (click)="irAPestana('senas')"
+    >
+      Señas ({{ admin.signos().length }})
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="pestana() === 'registros'"
+      [class.activa]="pestana() === 'registros'"
+      (click)="irAPestana('registros')"
+    >
+      Registros ({{ admin.listaRevisiones().length }})
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="pestana() === 'intencion'"
+      [class.activa]="pestana() === 'intencion'"
+      (click)="irAPestana('intencion')"
+    >
+      Intención
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="pestana() === 'ensayos'"
+      [class.activa]="pestana() === 'ensayos'"
+      (click)="irAPestana('ensayos')"
+    >
+      Ensayos
+    </button>
+    @if (admin.tokenRequired() || admin.token()) {
+    <label class="token">
+      Token admin (solo borrados y definiciones)
+      <input
+        type="password"
+        [ngModel]="admin.token()"
+        (ngModelChange)="admin.guardarToken($event)"
+        placeholder="No lo necesitas para validar"
+        aria-label="Token de administración (opcional, no necesario para validar)"
+      />
+    </label>
+    }
+  </div>
+
+  @if (pestana() === 'senas') {
+  <section class="panel" aria-label="Validación de señas">
+    <div class="fila filtros">
+      <label>
+        Buscar
+        <input
+          type="text"
+          [ngModel]="busqueda()"
+          (ngModelChange)="busqueda.set($event); seleccionada.set(null)"
+          placeholder="Nombre o id…"
+        />
+      </label>
+      <label>
+        Mostrar
+        <select
+          [ngModel]="filtro()"
+          (ngModelChange)="filtro.set($event); seleccionada.set(null)"
+          aria-label="Filtro de señas"
+        >
+          <option value="todas">Todas</option>
+          <option value="activas">Activas en cámara</option>
+          <option value="candidatas">Candidatas</option>
+          <option value="sin-revisar">Sin revisar</option>
+        </select>
+      </label>
+      <label>
+        Tu nombre (obligatorio para guardar)
+        <input
+          type="text"
+          [ngModel]="validador()"
+          (ngModelChange)="guardarValidador($event)"
+          placeholder="Ej.: Ana Pérez"
+          autocomplete="name"
+          aria-describedby="ayuda-validador"
+        />
+        <span id="ayuda-validador" class="ayuda">
+          Se guarda en este equipo y firma tus registros.
+        </span>
+      </label>
+      <button type="button" (click)="exportarRevisiones()">Exportar</button>
+      <label class="boton-archivo">
+        Importar
+        <input type="file" accept=".json" (change)="importarRevisiones($event)" hidden />
+      </label>
+    </div>
+
+    @if (admin.cargando()) {
+    <p role="status">Cargando definiciones…</p>
+    } @else {
+    <div class="senas">
+      <ol class="lista-senas">
+        @for (signo of signosFiltrados(); track signo.id) {
+        <li>
+          <button
+            type="button"
+            class="item-sena"
+            [class.activo]="signoSeleccionado()?.id === signo.id"
+            (click)="elegir(signo.id)"
+          >
+            <span
+              class="punto"
+              [class.punto-activo]="signo.activa"
+              aria-hidden="true"
+            ></span>
+            <span class="item-nombre">{{ signo.nombre }}</span>
+            @if (admin.conteoRevisiones(signo.id)) {
+            <span
+              class="visto"
+              [attr.aria-label]="
+                admin.conteoRevisiones(signo.id) + ' validaciones guardadas'
+              "
+              >✓ {{ admin.conteoRevisiones(signo.id) }}</span
+            >
+            }
+          </button>
+        </li>
+        }
+      </ol>
+      @if (signoSeleccionado(); as signo) {
+      <article class="detalle-sena" aria-label="Detalle de la seña">
+        <div class="detalle-cabecera">
+          <div>
+            <h2>{{ signo.nombre }}</h2>
+            <p class="ayuda">
+              {{ signo.id }} · {{ signo.categoria }} · Avatar:
+              {{ signo.conAvatar ? 'sí' : 'no' }} ·
+              {{ signo.reconocibleEnCatalogo ? 'reconocible' : 'solo
+              animación' }}
+            </p>
+          </div>
+          <span
+            class="insignia"
+            [class.insignia-activa]="signo.activa"
+          >
+            {{ signo.activa ? 'Activa' : 'Candidata' }}
+          </span>
+        </div>
+        @if (entradaCatalogo(signo.id); as entrada) { @if
+        (entrada.animacionUrl || entrada.avatarUrl) {
+        <div class="vista-sena">
+          <app-avatar-lsc
+            [secuenciaUrl]="entrada.avatarUrl"
+            [animacionUrl]="entrada.animacionUrl"
+            [nombre]="entrada.nombre"
+          />
+          <p class="ayuda">
+            Mira la animación completa y luego registra tu veredicto.
+          </p>
+        </div>
+        } } @else {
+        <p class="ayuda">Esta seña aún no tiene animación para revisar.</p>
+        }
+
+        <h3>Tu validación</h3>
+        <div class="fila">
+          <label>
+            Veredicto *
+            <select
+              [value]="veredictoDe(signo.id)"
+              (change)="elegirVeredicto(signo.id, $event)"
+              [attr.aria-label]="'Veredicto de ' + signo.nombre"
+            >
+              <option value="sin-revisar">Elige un veredicto…</option>
+              <option value="se-entiende">Se entiende</option>
+              <option value="corregir">Hay que corregir</option>
+              <option value="no-valida">No es válida</option>
+            </select>
+          </label>
+          <label class="crece">
+            Notas (opcional)
+            <input
+              type="text"
+              [value]="notaDe(signo.id)"
+              (input)="editarNota(signo.id, $event)"
+              placeholder="Qué se ve bien o qué habría que corregir"
+              [attr.aria-label]="'Notas de ' + signo.nombre"
+            />
+          </label>
+          <button
+            type="button"
+            class="primario"
+            [disabled]="!puedeGuardarRevision(signo.id)"
+            (click)="guardarRevision(signo.id)"
+          >
+            {{ admin.guardandoRevision() === signo.id ? 'Guardando…' :
+            'Guardar validación' }}
+          </button>
+        </div>
+        @if (motivoNoGuardar(signo.id)) {
+        <p class="ayuda" role="status">{{ motivoNoGuardar(signo.id) }}</p>
+        }
+
+        <h3>
+          Registros guardados de esta seña ({{
+          admin.conteoRevisiones(signo.id) }})
+        </h3>
+        @if (admin.revisionesDe(signo.id).length) {
+        <ul class="historial">
+          @for (registro of admin.revisionesDe(signo.id); track registro.id)
+          {
+          <li>
+            <strong>{{ etiquetaVeredicto(registro.veredicto) }}</strong>
+            · {{ registro.validador || 'sin nombre' }} · {{ registro.fecha }}
+            @if (registro.notas) {
+            <span class="historial-notas">— {{ registro.notas }}</span>
+            }
+          </li>
+          }
+        </ul>
+        } @else {
+        <p class="ayuda">
+          Todavía nadie ha validado esta seña. Tu registro será el primero.
+        </p>
+        }
+
+        <details class="admin-avanzado">
+          <summary>Administración: descripción y activación en cámara</summary>
+          <p class="ayuda">
+            Solo para administración (puede requerir token). Cambiar esto no
+            es validar: la validación es el formulario anterior.
+          </p>
+          <label [attr.for]="'desc-' + signo.id">
+            Descripción visual que recibe el modelo
+          </label>
+          <textarea
+            [id]="'desc-' + signo.id"
+            rows="6"
+            [value]="descripcionDe(signo.id, signo.descripcion)"
+            (input)="editarDescripcion(signo.id, $event)"
+          ></textarea>
+          <div class="fila">
+            <button
+              type="button"
+              [disabled]="admin.guardando() === signo.id"
+              (click)="guardarDescripcion(signo.id, signo.descripcion)"
+            >
+              Guardar descripción
+            </button>
+            <button
+              type="button"
+              [disabled]="admin.guardando() === signo.id"
+              (click)="alternarActiva(signo.id, signo.activa)"
+            >
+              {{ signo.activa ? 'Desactivar cámara' : 'Activar en cámara' }}
+            </button>
+          </div>
+        </details>
+
+      </article>
+      } @else {
+      <p class="ayuda">Sin señas para este filtro.</p>
+      }
+    </div>
+    }
+  </section>
+  } @else if (pestana() === 'registros') {
+  <section class="panel" aria-label="Registros de validación guardados">
+    <p class="ayuda">
+      Cada fila es una validación guardada por una persona. Si validas la
+      misma seña otra vez, se crea un registro nuevo sin borrar los demás.
+    </p>
+    <div class="resumen-registros" aria-label="Resumen por veredicto">
+      <span
+        ><strong>{{ admin.listaRevisiones().length }}</strong> registros</span
+      >
+      <span
+        >Se entiende:
+        <strong>{{ conteoVeredicto()['se-entiende'] ?? 0 }}</strong></span
+      >
+      <span
+        >Corregir:
+        <strong>{{ conteoVeredicto()['corregir'] ?? 0 }}</strong></span
+      >
+      <span
+        >No válida:
+        <strong>{{ conteoVeredicto()['no-valida'] ?? 0 }}</strong></span
+      >
+      <button type="button" (click)="exportarRevisiones()">
+        Exportar JSON
+      </button>
+      @if (admin.tokenRequired() || admin.token()) {
+      <label class="boton-archivo">
+        Importar (admin)
+        <input
+          type="file"
+          accept=".json"
+          (change)="importarRevisiones($event)"
+          hidden
+        />
+      </label>
+      }
+    </div>
+    <div class="fila filtros">
+      <label>
+        Buscar
+        <input
+          type="text"
+          [ngModel]="busquedaRegistro()"
+          (ngModelChange)="busquedaRegistro.set($event)"
+          placeholder="Seña, persona o nota…"
+        />
+      </label>
+      <label>
+        Veredicto
+        <select
+          [ngModel]="filtroRegistro()"
+          (ngModelChange)="filtroRegistro.set($event)"
+          aria-label="Filtrar registros por veredicto"
+        >
+          <option value="todos">Todos</option>
+          <option value="se-entiende">Se entiende</option>
+          <option value="corregir">Hay que corregir</option>
+          <option value="no-valida">No es válida</option>
+        </select>
+      </label>
+    </div>
+    @if (admin.cargando()) {
+    <p role="status">Cargando registros…</p>
+    } @else if (registrosFiltrados().length) {
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Seña</th>
+            <th>Veredicto</th>
+            <th>Persona</th>
+            <th>Notas</th>
+            @if (admin.tokenRequired() || admin.token()) {
+            <th><span class="solo-lectura">Borrar</span></th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (registro of registrosFiltrados(); track registro.id) {
+          <tr>
+            <td>{{ registro.fecha }}</td>
+            <td>
+              <button
+                type="button"
+                class="enlace-sena"
+                (click)="verSena(registro.signId)"
+              >
+                {{ nombreSena(registro.signId) }}
+              </button>
+            </td>
+            <td>
+              <span
+                class="insignia"
+                [class.insignia-activa]="registro.veredicto === 'se-entiende'"
+                >{{ etiquetaVeredicto(registro.veredicto) }}</span
+              >
+            </td>
+            <td>{{ registro.validador || '—' }}</td>
+            <td>{{ registro.notas || '—' }}</td>
+            @if (admin.tokenRequired() || admin.token()) {
+            <td>
+              <button
+                type="button"
+                (click)="admin.borrarRevision(registro.id)"
+                [attr.aria-label]="'Borrar registro de ' + registro.validador"
+              >
+                Borrar
+              </button>
+            </td>
+            }
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    } @else if (admin.listaRevisiones().length) {
+    <p class="ayuda" role="status">
+      Ningún registro coincide con ese filtro.
+    </p>
+    } @else {
+    <p class="ayuda" role="status">
+      Aún no hay validaciones guardadas. Ve a Señas, elige una y guarda la
+      primera.
+    </p>
+    }
+  </section>
+  } @else if (pestana() === 'intencion') {
+  <section class="panel" aria-label="Pruebas de intención">
+    <p class="ayuda">
+      Compara la búsqueda local con Muse Spark, frase a frase o por lote.
+      Meta solo elige una expresión existente o «fuera del catálogo».
+    </p>
+    <div class="fila">
+      <input
+        type="text"
+        class="crece-input"
+        [ngModel]="fraseUnica()"
+        (ngModelChange)="fraseUnica.set($event)"
+        placeholder="Escribe una frase natural…"
+        aria-label="Frase de prueba"
+      />
+      <button
+        type="button"
+        class="primario"
+        [disabled]="intencion.ocupado()"
+        (click)="probarUnica()"
+      >
+        {{ intencion.ocupado() ? 'Interpretando…' : 'Probar con Meta' }}
+      </button>
+    </div>
+    <label for="frases-lote">Frases por lote (una por línea, máx. 30)</label>
+    <textarea
+      id="frases-lote"
+      rows="6"
+      [ngModel]="frasesLote()"
+      (ngModelChange)="frasesLote.set($event)"
+    ></textarea>
+    <div class="fila">
+      <button
+        type="button"
+        [disabled]="probandoLote() || intencion.ocupado()"
+        (click)="probarLote()"
+      >
+        {{ probandoLote() ? 'Probando…' : 'Probar lote' }}
+      </button>
+      @if (intencion.error()) {
+      <span class="ayuda" role="alert">{{ intencion.error() }}</span>
+      }
+    </div>
+    @if (filas().length) {
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Frase</th>
+            <th>Local</th>
+            <th>Meta</th>
+            <th>Conf.</th>
+            <th>Tiempo</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of filas(); track $index) {
+          <tr>
+            <td>{{ fila.frase }}</td>
+            <td>{{ fila.local }}</td>
+            <td>{{ fila.meta }}</td>
+            <td>{{ fila.confianza ?? '—' }}</td>
+            <td>
+              {{ fila.latenciaMs !== null ? (fila.latenciaMs / 1000).toFixed(1)
+              + ' s' : '—' }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </section>
+  } @else {
+  <section class="panel" aria-label="Sesiones de evaluación">
+    <p class="ayuda">
+      Guarda el JSON descargado de Comunicar → Detalles técnicos → Evaluación
+      como una sesión (p. ej. P1) y analiza una o varias sesiones juntas para
+      decidir si una candidata puede activarse.
+    </p>
+    <div class="fila">
+      <label>
+        Código
+        <input
+          type="text"
+          [ngModel]="codigoSesion()"
+          (ngModelChange)="codigoSesion.set($event)"
+          placeholder="P1"
+          maxlength="24"
+          aria-label="Código de la sesión"
+        />
+      </label>
+      <label class="crece">
+        Notas (equipo, luz, incidencias)
+        <input
+          type="text"
+          [ngModel]="notasSesion()"
+          (ngModelChange)="notasSesion.set($event)"
+          placeholder="Portátil, luz buena…"
+          maxlength="500"
+        />
+      </label>
+      <label class="boton-archivo">
+        Guardar JSON como sesión
+        <input
+          type="file"
+          accept=".json"
+          (change)="guardarSesionEnsayos($event)"
+          hidden
+        />
+      </label>
+    </div>
+    @if (archivoEnsayos()) {
+    <span class="ayuda">Último archivo: {{ archivoEnsayos() }}</span>
+    } @if (admin.cargandoSesiones()) {
+    <p role="status">Cargando sesiones…</p>
+    } @else if (admin.sesiones().length) {
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th><span class="solo-lectura">Elegir</span></th>
+            <th>Código</th>
+            <th>Fecha</th>
+            <th>Ensayos</th>
+            <th>Aciertos</th>
+            <th>Notas</th>
+            <th><span class="solo-lectura">Borrar</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sesion of admin.sesiones(); track sesion.id) {
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                [checked]="sesionesElegidas().includes(sesion.id)"
+                (change)="alternarSesion(sesion.id, $event)"
+                [attr.aria-label]="'Elegir sesión ' + sesion.codigo"
+              />
+            </td>
+            <td>{{ sesion.codigo }}</td>
+            <td>{{ sesion.createdAt.slice(0, 10) }}</td>
+            <td>{{ sesion.total }}</td>
+            <td>
+              {{ sesion.correctos }}/{{ sesion.total }} @if (sesion.total) {
+              ({{ ((sesion.correctos / sesion.total) * 100).toFixed(1) }} %)
+              }
+            </td>
+            <td>{{ sesion.notas || '—' }}</td>
+            <td>
+              <button type="button" (click)="borrarSesion(sesion.id)">
+                Borrar
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="fila">
+      <button
+        type="button"
+        class="primario"
+        [disabled]="!sesionesElegidas().length || analizando()"
+        (click)="analizarSesiones()"
+      >
+        {{ analizando() ? 'Analizando…' : 'Analizar elegidas' }}
+      </button>
+    </div>
+    } @else {
+    <p class="ayuda">Aún no hay sesiones guardadas.</p>
+    } @if (analisis(); as resultado) {
+    <p role="status" class="resultado">
+      <strong>
+        {{ resultado.correctos }}/{{ resultado.total }} aciertos
+      </strong>
+      @if (resultado.total) {
+      ({{ (resultado.correctos / resultado.total * 100).toFixed(1) }} %)
+      } @if (resultado.rechazo) { · «otra»:
+      {{ resultado.rechazo.correctos }}/{{ resultado.rechazo.intentos }} } @if
+      (resultado.latenciaMedianaMs !== null) { · mediana:
+      {{ (resultado.latenciaMedianaMs / 1000).toFixed(1) }} s }
+    </p>
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Esperada</th>
+            <th>Intentos</th>
+            <th>Aciertos</th>
+            <th>Exactitud</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of resultado.porClase; track fila.esperada) {
+          <tr>
+            <td>{{ fila.esperada }}</td>
+            <td>{{ fila.intentos }}</td>
+            <td>{{ fila.aciertos }}</td>
+            <td>
+              {{ fila.intentos ? (fila.aciertos / fila.intentos *
+              100).toFixed(1) + ' %' : '—' }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (resultado.confusion.length) {
+    <h3>Confusiones</h3>
+    <ul class="compacta">
+      @for (error of resultado.confusion; track $index) {
+      <li>
+        {{ error.real }} → {{ error.predicha }} ({{ error.veces }}×)
+      </li>
+      }
+    </ul>
+    } @if (resultado.erroresConfianzaAlta.length) {
+    <h3>Errores con confianza ≥ 0,8</h3>
+    <ul class="compacta">
+      @for (error of resultado.erroresConfianzaAlta; track $index) {
+      <li>
+        {{ error.esperada }} → {{ error.clase }} ({{ error.confianza }})
+      </li>
+      }
+    </ul>
+    } }
+  </section>
+  }
+</div>

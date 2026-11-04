@@ -1,0 +1,400 @@
+.admin {
+  padding-bottom: 2rem;
+}
+
+.fila-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.25rem 0 0.25rem;
+}
+
+.fila-titulo h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.admin-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.admin-stats strong {
+  color: var(--texto);
+}
+
+.intro,
+.ayuda {
+  color: var(--texto-suave);
+  font-size: 0.86rem;
+}
+
+.intro {
+  margin: 0 0 0.5rem;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  background: var(--pista);
+  border-radius: 12px;
+  padding: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.tabs button[role="tab"] {
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  min-height: 38px;
+  font-weight: 500;
+}
+
+.tabs button[role="tab"].activa {
+  background: #fff;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgb(16 24 32 / 0.15);
+}
+
+.tabs .token {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tabs .token input {
+  width: 10rem;
+  min-height: 36px;
+  font-size: 0.85rem;
+}
+
+.panel {
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-top: 0.75rem;
+  background: #fff;
+}
+
+.panel h3 {
+  font-size: 0.95rem;
+  margin: 1rem 0 0.4rem;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: end;
+  margin: 0.6rem 0;
+}
+
+.fila label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.fila label.crece,
+.crece-input {
+  flex: 1 1 12rem;
+  min-width: 10rem;
+}
+
+.aviso {
+  color: #6b4a00;
+  background: #fff6e0;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.aviso-fuerte {
+  background: #fdecea;
+  color: #7a1f1a;
+}
+
+.aviso-ok {
+  background: #e7f2eb;
+  color: var(--acento-oscuro);
+}
+
+.senas {
+  display: grid;
+  grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 0.75rem;
+  align-items: start;
+}
+
+.lista-senas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 32rem;
+  overflow-y: auto;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 0.4rem;
+}
+
+button.item-sena {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  min-height: 38px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.88rem;
+}
+
+button.item-sena:hover {
+  background: var(--pista);
+}
+
+button.item-sena.activo {
+  background: #e7f2eb;
+  font-weight: 700;
+}
+
+.punto {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--borde);
+}
+
+.punto-activo {
+  background: var(--acento);
+}
+
+.item-nombre {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visto {
+  color: var(--acento-oscuro);
+  font-weight: 700;
+}
+
+.detalle-sena {
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  min-width: 0;
+}
+
+.detalle-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.detalle-cabecera h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.detalle-cabecera .ayuda {
+  margin: 0.2rem 0 0;
+}
+
+.insignia {
+  flex: none;
+  border-radius: 999px;
+  background: var(--pista);
+  padding: 0.15rem 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.insignia-activa {
+  background: #e7f2eb;
+  color: var(--acento-oscuro);
+}
+
+.detalle-sena > label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.86rem;
+  margin: 0.8rem 0 0.3rem;
+}
+
+.detalle-sena textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.87rem;
+  line-height: 1.55;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  resize: vertical;
+}
+
+.panel textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.87rem;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  resize: vertical;
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+  margin-top: 0.75rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.87rem;
+}
+
+th,
+td {
+  border-top: 1px solid var(--borde);
+  padding: 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.resultado {
+  font-size: 0.95rem;
+}
+
+ul.compacta {
+  margin: 0.3rem 0;
+  padding-left: 1.3rem;
+  font-size: 0.87rem;
+}
+
+.boton-archivo {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  min-height: 42px;
+  cursor: pointer;
+  font-weight: 500;
+  background: #fff;
+  align-self: end;
+}
+
+.solo-lectura {
+  font-weight: 600;
+}
+
+.boton-archivo:hover {
+  border-color: var(--acento);
+}
+
+label[for="frases-lote"] {
+  display: block;
+  font-weight: 600;
+  font-size: 0.86rem;
+  margin-top: 0.8rem;
+}
+
+.vista-sena {
+  margin-top: 0.9rem;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: var(--pista);
+}
+
+.vista-sena .ayuda {
+  margin: 0.5rem 0 0;
+}
+
+.historial {
+  margin: 0.3rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.88rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.historial-notas {
+  color: var(--texto-suave);
+}
+
+.resumen-registros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  font-size: 0.88rem;
+  margin: 0.5rem 0;
+}
+
+button.enlace-sena {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--acento-oscuro);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.admin-avanzado {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--borde);
+  padding-top: 0.75rem;
+}
+
+.admin-avanzado summary {
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.admin-avanzado > label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.86rem;
+  margin: 0.8rem 0 0.3rem;
+}
+
+@media (max-width: 720px) {
+  .senas {
+    grid-template-columns: 1fr;
+  }
+
+  .lista-senas {
+    max-height: 14rem;
+  }
+}

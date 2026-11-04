@@ -300,6 +300,8 @@ export class AvatarLsc implements OnDestroy {
   /** Permite que la galería controle un único reproductor reutilizable. */
   readonly previsualizacionActiva = input<boolean | null>(null);
   readonly vistaPreviaLista = output<boolean>();
+  /** Se emite cuando la reproducción llega al último fotograma por sí sola. */
+  readonly finalizada = output<void>();
   /**
    * Modo espejo en vivo: el avatar refleja los puntos del cuerpo que llegan
    * por `fotogramaEnVivo` (vista Señas → Español). No usa secuencia ni
@@ -307,6 +309,12 @@ export class AvatarLsc implements OnDestroy {
    */
   readonly enVivo = input(false);
   readonly fotogramaEnVivo = input<FotogramaAvatar | null>(null);
+  /**
+   * Vitrina compacta (p. ej. diálogo guiado): solo el lienzo, sin panel de
+   * controles ni ajustes de vista. Los controles completos viven en
+   * Expresiones y Comunicar.
+   */
+  readonly mostrarControles = input(true);
 
   /** Fotogramas por segundo de referencia para mostrar el progreso .vrma. */
   readonly FPS_ANIMACION = 30;
@@ -470,6 +478,11 @@ export class AvatarLsc implements OnDestroy {
         // La liberación es oportunista.
       }
     }
+  }
+
+  /** Vuelve al inicio y reproduce: lo usa el diálogo guiado al encadenar pasos. */
+  reiniciar(): void {
+    this.repetir();
   }
 
   protected alternarReproduccion(): void {
@@ -778,6 +791,7 @@ export class AvatarLsc implements OnDestroy {
         if (this.posicion() >= this.totalFotogramas() - 1) {
           this.posicion.set(this.totalFotogramas() - 1);
           this.detener();
+          this.finalizada.emit();
           return;
         }
         this.rafId = requestAnimationFrame(paso);
@@ -789,6 +803,7 @@ export class AvatarLsc implements OnDestroy {
       if (siguiente >= secuencia.fotogramas.length - 1) {
         this.posicion.set(secuencia.fotogramas.length - 1);
         this.detener();
+        this.finalizada.emit();
         return;
       }
       this.posicion.set(siguiente);

@@ -1,0 +1,24 @@
+<section class="pipeline" aria-label="Cómo trabaja el sistema">
+  <h2 class="pipeline-titulo">Cómo trabaja el reconocimiento</h2>
+  <ol class="etapas">
+    @for (etapa of etapas(); track etapa.id) {
+    <li class="etapa etapa-{{ etapa.estado }}" [title]="etapa.detalle">
+      <span class="etapa-marca" aria-hidden="true">
+        @if (etapa.estado === 'hecha') { ✓ } @else if (etapa.estado ===
+        'error') { ! } @else { {{ $index + 1 }} }
+      </span>
+      <span class="etapa-nombre">{{ etapa.nombre }}</span>
+    </li>
+    }
+  </ol>
+  @if (ficha(); as datos) {
+  <dl class="pipeline-ficha">
+    @for (dato of datos; track dato.termino) {
+    <div>
+      <dt>{{ dato.termino }}</dt>
+      <dd>{{ dato.valor }}</dd>
+    </div>
+    }
+  </dl>
+  }
+</section>

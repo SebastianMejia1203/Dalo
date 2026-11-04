@@ -1,0 +1,170 @@
+.pipeline {
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: #fff;
+  padding: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.pipeline-titulo {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--texto);
+  margin: 0 0 0.6rem;
+}
+
+.etapas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.2rem;
+}
+
+.etapa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  color: var(--texto-suave);
+  padding: 0.15rem 0.1rem;
+}
+
+.etapa + .etapa::before {
+  content: "→";
+  color: var(--borde);
+  margin-right: 0.45rem;
+  font-size: 0.8rem;
+}
+
+.etapa-marca {
+  flex: none;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--pista);
+  color: var(--texto-suave);
+}
+
+.etapa-hecha {
+  color: var(--texto);
+}
+
+.etapa-hecha .etapa-marca {
+  background: var(--acento);
+  color: #fff;
+}
+
+.etapa-activa {
+  color: var(--texto);
+  font-weight: 600;
+}
+
+.etapa-activa .etapa-marca {
+  background: #e7f2eb;
+  color: var(--acento-oscuro);
+  animation: pulso-etapa 1.5s ease-in-out infinite;
+}
+
+.etapa-error .etapa-marca {
+  background: #b3261e;
+  color: #fff;
+}
+
+@keyframes pulso-etapa {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etapa-activa .etapa-marca {
+    animation: none;
+  }
+}
+
+.etapa-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pipeline-ficha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0 0;
+  border-top: 1px dashed var(--borde);
+  font-size: 0.8rem;
+}
+
+.pipeline-ficha div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin: 0;
+  background: var(--pista);
+  border-radius: 10px;
+  padding: 0.45rem 0.7rem;
+  min-width: 0;
+}
+
+.pipeline-ficha dt {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+
+.pipeline-ficha dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .pipeline {
+    padding: 0.9rem;
+  }
+
+  .etapas {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .etapa {
+    position: relative;
+    white-space: normal;
+    padding: 0.4rem 0 0.4rem 0.1rem;
+  }
+
+  .etapa + .etapa::before {
+    content: none;
+  }
+
+  .etapa:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 0.775rem;
+    top: 2.1rem;
+    bottom: -0.15rem;
+    width: 2px;
+    background: var(--borde);
+  }
+
+  .etapa-hecha:not(:last-child)::after {
+    background: var(--acento);
+  }
+}

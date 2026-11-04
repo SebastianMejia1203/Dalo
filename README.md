@@ -10,7 +10,7 @@ Puedes escribir o dictar una expresión para ver su seña, o usar la cámara par
 
 ## Qué puedes hacer
 
-- **Español → Señas:** escribe o dicta una expresión del catálogo y reproduce su animación.
+- **Español → Señas:** escribe o dicta una expresión del catálogo y reproduce su animación. También acepta frases naturales: Muse Spark interpreta la intención y elige la expresión equivalente del catálogo, o indica que no hay ninguna.
 - **Señas → Español:** pulsa Capturar, espera el **3, 2, 1** y realiza tu seña cuando aparezca el punto rojo. La grabación dura tres segundos; después revisas y confirmas la propuesta.
 - **Explorar expresiones:** busca, filtra por cámara o avatar y amplía las animaciones.
 
@@ -85,7 +85,7 @@ Las siguientes soluciones son líneas de trabajo pendientes; su eficacia debe co
 | Lectura inconsistente del movimiento | Algunas respuestas describen solo reposo aunque el video contiene una seña. | Comparar video y fotogramas cronológicos sobre los mismos ejemplos, revisar encuadre y calidad, y medir si el cambio reduce errores. |
 | Palabras fuera del catálogo | Una seña desconocida puede confundirse con una del catálogo. | Ampliar las palabras negativas y evaluar falsos positivos antes de habilitar cada candidata. Mantener la confirmación del usuario. |
 | Confianza sin calibrar | Un 90 % declarado por el modelo puede acompañar una respuesta equivocada. Las muestras son pocas y tienen historial previo de uso. | Evaluar con más personas y grabaciones nuevas, separar desarrollo de evaluación y comprobar la relación entre confianza y aciertos. |
-| Vocabulario y animaciones limitados | Hay **11 señas reconocibles** y **33 expresiones animadas**. Español → Señas busca en el catálogo; no traduce frases libres. Las animaciones requieren revisión lingüística y de permisos. | Incorporar señas gradualmente, comprobar regresiones y revisar animaciones y derechos antes de publicarlas. |
+| Vocabulario y animaciones limitados | Hay **11 señas reconocibles** y **33 expresiones animadas**. Español → Señas relaciona la intención con el catálogo cerrado; no traduce libremente frases. Las animaciones requieren revisión lingüística y de permisos. | Incorporar señas gradualmente, comprobar regresiones y revisar animaciones y derechos antes de publicarlas. |
 | Dependencia de la API | El reconocimiento y el dictado necesitan Internet. Las respuestas pueden tardar o fallar. | Medir latencia y disponibilidad, comunicar los fallos y evaluar reintentos acotados para errores transitorios. |
 
 El prototipo **no dispone de validación independiente que garantice precisión con personas nuevas**. Consulta el [estado y las limitaciones](docs/GUIA-TECNICA.md#estado-y-limitaciones). El repositorio contiene el código y los recursos de ejecución; no distribuye datasets, grabaciones ni resultados privados de evaluación.
@@ -105,6 +105,24 @@ npm run build
 - [Frontend: funcionamiento y comprobaciones](web-meta/README.md)
 - [Guía técnica: modelos, señas y evaluación](docs/GUIA-TECNICA.md)
 - [Entornos y publicación](docs/ENTORNOS.md)
+
+## Modelos en tiempo de ejecución
+
+Por las reglas del evento, ningún modelo ajeno a Meta corre en tiempo de ejecución. El reconocimiento usa `muse-spark-1.3-contributor` y el dictado `muse-voice-transcribe-1.0`, ambos desde el backend. La versión anterior con MediaPipe y una GRU local (ONNX) se retiró por esa regla y no forma parte de esta variante. `speechSynthesis` es una función del navegador, no un modelo; Three.js y FFmpeg procesan gráficos y medios sin inferencia. No hay modelo open-weight de Meta en ejecución: evaluarlo queda pendiente (ver abajo).
+
+## Plan original y lo que falta
+
+La idea original era la que hoy hace el prototipo: intercambios básicos y bidireccionales entre LSC y español mediante un catálogo acotado, con confirmación del usuario ante resultados ambiguos y apoyo junto a videollamadas compartiendo la ventana de Daló o copiando el texto confirmado al chat. Siguen fuera de alcance la traducción universal o continua de LSC, traducir frases libres del español y sustituir intérpretes profesionales.
+
+Para llegar a esa idea completa falta, en este orden:
+
+- Validación de señas y animaciones con personas competentes en LSC y participación de personas sordas.
+- Evaluación independiente con personas, cámaras y grabaciones nuevas, separada de los datos de desarrollo.
+- Ampliar el vocabulario de forma gradual (hoy solo hay cordialidad; números y colores están vacíos y 22 definiciones siguen desactivadas), midiendo confusiones y rechazo de señas ajenas antes de activar cada candidata.
+- Comprobar el uso junto a una videollamada concreta (cámara compartida, qué ve y oye la otra persona) antes de ofrecerlo como función verificada.
+- Evaluar un modelo open-weight de Meta y el funcionamiento sin conexión, y medir costo y latencia por interacción en la demo pública.
+
+El seguimiento detallado de estas mejoras está en [Mejoras para el hackathon](docs/MEJORAS-HACKATHON.md).
 
 ## Créditos
 

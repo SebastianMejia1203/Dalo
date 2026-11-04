@@ -67,9 +67,31 @@ no sustituye la confirmación del usuario.
 ## Catálogo y detalles técnicos
 
 **Español → Señas** busca entre 33 expresiones animadas: escribe o dicta una
-expresión y reproduce su animación. No traduce frases libres. Las fuentes,
-los recursos del avatar y el diagnóstico de dictado se despliegan en
-**Detalles técnicos**.
+expresión y reproduce su animación. La coincidencia exacta se resuelve en
+local; si el mensaje está en lenguaje libre («todo salió muy bien», «perdona,
+¿me esperas un momento?»), Muse Spark interpreta su intención desde el
+backend (`POST /api/intent`, contexto `lsc-intent-v1`) y elige una expresión
+del catálogo cerrado o ninguna. Si Meta no responde se conserva la búsqueda
+local. No traduce oraciones a LSC ni genera una seña por palabra. Solo en
+Señas → Español, encima de los paneles, **Así trabaja Meta en Daló**
+muestra la tira de etapas del reconocimiento con su estado en vivo y la
+ficha de la última respuesta (modelo, latencia y confianza sin calibrar).
+Las fuentes, los recursos del avatar y el diagnóstico de dictado se
+despliegan en **Detalles técnicos**.
+
+La página **Validación** (navegación superior) es pública: cualquier persona
+escribe su nombre, mira la animación de cada seña y guarda un veredicto
+(se entiende, hay que corregir o no es válida) con notas opcionales. Cada
+guardado crea un registro nuevo en SQLite —varias personas pueden validar
+la misma seña sin sobrescribirse— y todos los registros se consultan,
+filtran y exportan en la pestaña **Registros**, además del historial por
+seña. También concentra la edición de descripciones visuales y la
+activación de candidatas desde el backend (aplica al reiniciarlo), un banco
+de pruebas de intención que compara búsqueda local y Meta frase a frase o
+por lote, y el análisis de los JSON de ensayos descargados (aciertos,
+confusiones, rechazo y latencia). Si el backend define `ADMIN_TOKEN`, ese
+token solo se pide para definiciones, importaciones y borrados; nunca para
+validar.
 
 En **Expresiones**, los filtros iniciales son **Cámara: Sí** y **Avatar: Sí**.
 Selecciona Todas/Todos para explorar también las entradas sin reconocimiento.

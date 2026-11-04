@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { findById, matchSpanishText } from '../adapters';
 export type Direccion = 'lsc-es' | 'es-lsc';
-export type Vista = 'comunicar' | 'expresiones' | 'ajustes';
+export type Vista = 'comunicar' | 'expresiones' | 'ajustes' | 'admin';
 export type EstadoCamara = 'apagada' | 'solicitando' | 'activa' | 'permiso-denegado' | 'no-disponible';
 export type FaseLsc = 'reposo' | 'grabando' | 'analizando' | 'candidata' | 'ambigua' | 'desconocida' | 'confirmada';
 export type EstadoEsl = 'reposo' | 'directa' | 'ambigua' | 'fuera' | 'vacio';
@@ -48,6 +48,8 @@ export class DaloService {
   readonly turnos = signal<string[]>([]);
 
   readonly resultadoEsl = signal<ResultadoEsl>({ estado: 'reposo', id: null, ids: [] });
+  /** Cómo se resolvió el último texto: búsqueda local o intención con Meta. */
+  readonly viaEsl = signal<'local' | 'meta' | null>(null);
   readonly avisoEsl = signal('');
   readonly mensajeCopiado = signal('');
   /** Texto sugerido desde el catálogo; el comunicador lo toma y lo limpia. */
@@ -98,6 +100,10 @@ export class DaloService {
 
   abrirAjustes(): void {
     this.vista.set('ajustes');
+  }
+
+  abrirValidacion(): void {
+    this.vista.set('admin');
   }
 
   cerrarAjustes(): void {
@@ -282,8 +288,24 @@ export class DaloService {
   }
   nuevaExpresion(): void { this.repetirCaptura(); }
 
+  /**
+   * Aplica el resultado de la intención con Meta: un id del catálogo se
+   * muestra directo; `null` significa fuera del catálogo. Si el id no existe
+   * en el catálogo visual, también se trata como fuera.
+   */
+  aplicarIntencion(id: string | null): void {
+    this.avisoEsl.set('');
+    this.viaEsl.set('meta');
+    if (id && findById(id)) {
+      this.resultadoEsl.set({ estado: 'directa', id, ids: [] });
+    } else {
+      this.resultadoEsl.set({ estado: 'fuera', id: null, ids: [] });
+    }
+  }
+
   buscarEnLsc(texto: string): void {
     this.avisoEsl.set('');
+    this.viaEsl.set('local');
     const coincidencia = matchSpanishText(texto);
     if (coincidencia.kind === 'vacio') {
       this.resultadoEsl.set({ estado: 'vacio', id: null, ids: [] });

@@ -1,22 +1,20 @@
 <div [class]="claseTexto()">
   <header class="cabecera">
-    <p class="marca">Daló.</p>
+    <button
+      type="button"
+      class="marca"
+      (click)="dalo.mostrarComunicar()"
+      aria-label="Daló: ir a Comunicar"
+    >
+      Daló.
+    </button>
     <nav aria-label="Secciones">
-      @if (dalo.vista() === 'comunicar') {
-      <button
-        id="nav-expresiones"
-        type="button"
-        class="pildora"
-        (click)="dalo.mostrarExpresiones()"
-      >
-        <i-lucide name="book-open" [size]="18" aria-hidden="true"></i-lucide>
-        Expresiones
-      </button>
-      } @else {
       <button
         id="nav-comunicar"
         type="button"
         class="pildora"
+        [class.activa]="dalo.vista() === 'comunicar'"
+        [attr.aria-current]="dalo.vista() === 'comunicar' ? 'page' : null"
         (click)="dalo.mostrarComunicar()"
       >
         <i-lucide
@@ -26,21 +24,38 @@
         ></i-lucide>
         Comunicar
       </button>
-      } @if (dalo.vista() === 'ajustes') {
       <button
-        id="nav-expresiones-2"
+        id="nav-expresiones"
         type="button"
         class="pildora"
+        [class.activa]="dalo.vista() === 'expresiones'"
+        [attr.aria-current]="dalo.vista() === 'expresiones' ? 'page' : null"
         (click)="dalo.mostrarExpresiones()"
       >
         <i-lucide name="book-open" [size]="18" aria-hidden="true"></i-lucide>
         Expresiones
       </button>
-      } @else {
+      <button
+        id="nav-validacion"
+        type="button"
+        class="pildora"
+        [class.activa]="dalo.vista() === 'admin'"
+        [attr.aria-current]="dalo.vista() === 'admin' ? 'page' : null"
+        (click)="dalo.abrirValidacion()"
+      >
+        <i-lucide
+          name="shield-check"
+          [size]="18"
+          aria-hidden="true"
+        ></i-lucide>
+        Validación
+      </button>
       <button
         id="nav-ajustes"
         type="button"
         class="pildora"
+        [class.activa]="dalo.vista() === 'ajustes'"
+        [attr.aria-current]="dalo.vista() === 'ajustes' ? 'page' : null"
         (click)="dalo.abrirAjustes()"
       >
         <i-lucide
@@ -50,7 +65,6 @@
         ></i-lucide>
         Ajustes
       </button>
-      }
     </nav>
   </header>
 
@@ -59,6 +73,8 @@
     <app-comunicador />
     } @else if (dalo.vista() === 'ajustes') {
     <app-ajustes />
+    } @else if (dalo.vista() === 'admin') {
+    <app-admin />
     }
     <!-- Expresiones se monta una sola vez y se oculta: así los avatares no
       se reconstruyen (ni muestran "Cargando") al entrar y salir. -->

@@ -40,7 +40,7 @@ export class MetaService {
   readonly resumenModelo = signal("");
   readonly contexto = signal<ContextoMeta | null>(null);
   readonly errorContexto = signal("");
-  readonly pasos = signal<{ mensaje: string; ms: number }[]>([]);
+  readonly pasos = signal<{ mensaje: string; ms: number; etapa?: string }[]>([]);
   readonly fotogramas = signal<string[]>([]);
   readonly videoCapturado = signal<string | null>(null);
   readonly transcurrido = signal(0);
@@ -53,11 +53,15 @@ export class MetaService {
   private abortador: AbortController | null = null;
   private inicio = 0;
 
-  private registrar(mensaje: string): void {
+  private registrar(mensaje: string, etapa?: string): void {
     this.estado.set(mensaje);
     this.pasos.update((pasos) => [
       ...pasos,
-      { mensaje, ms: Math.max(0, Math.round(performance.now() - this.inicio)) },
+      {
+        mensaje,
+        ms: Math.max(0, Math.round(performance.now() - this.inicio)),
+        etapa,
+      },
     ]);
   }
 
@@ -151,12 +155,13 @@ export class MetaService {
           if (!line.trim()) continue;
           const event = JSON.parse(line) as {
             type: string;
+            stage?: string;
             message?: string;
             text?: string;
             result?: ResultadoMeta;
           };
           if (event.type === "stage" && event.message)
-            this.registrar(event.message);
+            this.registrar(event.message, event.stage);
           if (event.type === "summary" && typeof event.text === "string")
             this.resumenModelo.set(event.text);
           if (event.type === "error")

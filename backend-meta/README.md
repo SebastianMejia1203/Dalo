@@ -141,6 +141,22 @@ ni límites por usuario en un despliegue público.
   `otra` indica rechazo. El backend valida clases y rango de confianza.
 - Clave ausente: HTTP 503; petición inválida: 400; proveedor inválido: 502;
   otro análisis en curso: 429. Timeout del proveedor: 60 s.
+- `POST /api/intent`: `{ "text": "..." }` (1–300 caracteres). Muse Spark elige
+  una expresión del catálogo cerrado cuya intención coincide con el mensaje en
+  lenguaje libre, o `id: null` si ninguna corresponde. Respuesta:
+  `{id, confianza, motivo, model, latencyMs, promptVersion}` con contexto
+  `lsc-intent-v1`. No traduce oraciones a LSC; es un enrutador de intenciones
+  y el frontend conserva la búsqueda local como respaldo. Latencia real medida
+  de 3–10 s por llamada: la interfaz solo la usa tras una pausa al escribir o
+  al dictar, nunca en la coincidencia exacta local.
+- `GET /api/admin/signs` y `PATCH /api/admin/signs/:id`: definiciones de las 33 señas (editar `descripcion`, cambiar `activa`). Persiste en los JSON de `senas/` y aplica al reiniciar el backend (`restartRequired`). Si `ADMIN_TOKEN` está configurado exige la cabecera `x-admin-token`; sin token el acceso queda abierto para desarrollo local.
+- Revisión por seña (base SQLite `ADMIN_DB_PATH`, por defecto `backend-meta/data/admin.db`, excluida de Git; tablas `revisions`, `eval_sessions`, `eval_trials`):
+  - `GET /api/admin/revisions`: todas las revisiones.
+  - `PUT /api/admin/revisions/:id`: crea o actualiza `{veredicto, notas?, validador?}` (fecha del servidor). Seña desconocida: 404.
+  - `POST /api/admin/revisions/import`: reemplaza todo con `{revisiones: {...}}`.
+  - `POST /api/admin/eval-sessions`: guarda una sesión `{codigo, notas?, ensayos[]}` (1–500 ensayos validados) y devuelve conteos.
+  - `GET /api/admin/eval-sessions`, `GET /api/admin/eval-sessions/:id/trials` y `DELETE /api/admin/eval-sessions/:id`.
+  La vista **Validación** del frontend usa estos endpoints: las revisiones ya no viven en el navegador y las sesiones persisten entre visitas.
 - `POST /api/transcribe`: WAV canónico mono PCM16 a 16 o 24 kHz; el backend lo
   envía como multipart a `muse-voice-transcribe-1.0`, modo `PUSH_TO_TALK`, con
   preferencia de idioma español y vocabulario del catálogo. Devuelve la transcripción.

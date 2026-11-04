@@ -43,6 +43,7 @@
   No se pudo cargar el avatar 3D en este navegador.
 </p>
 }
+@if (mostrarControles()) {
 <div class="panel-controles">
   @if (!enVivo()) {
   <div class="acciones" role="group" aria-label="Controles de reproducción">
@@ -236,6 +237,7 @@
     Arrastra sobre el avatar para girarlo; usa la rueda o pellizca para acercar.
   </p>
 </details>
+}
 } } @else if (estado() === 'cargando') {
 <p class="sin-avatar" role="status">Cargando avatar…</p>
 } @else {

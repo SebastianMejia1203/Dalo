@@ -9,6 +9,8 @@ import { errorHandler, HttpError } from "./shared/http/errors.ts";
 import { catalogRoutes } from "./modules/signs/sign.routes.ts";
 import { recognitionRoutes } from "./modules/recognition/recognition.routes.ts";
 import { transcriptionRoutes } from "./modules/transcription/transcription.routes.ts";
+import { intentRoutes } from "./modules/intent/intent.routes.ts";
+import { adminRoutes } from "./modules/admin/admin.routes.ts";
 
 export function createApp(options: Partial<RecognitionDependencies> = {}, config: AppConfig = loadConfig()) {
   const dependencies = {
@@ -27,6 +29,8 @@ export function createApp(options: Partial<RecognitionDependencies> = {}, config
   app.use("/api", catalogRoutes(dependencies));
   app.use("/api", transcriptionRoutes(dependencies));
   app.use("/api", recognitionRoutes(dependencies));
+  app.use("/api", intentRoutes(dependencies));
+  app.use("/api", adminRoutes(config));
   // Las rutas API desconocidas nunca deben recibir index.html.
   app.use("/api", (_req, _res) => {
     throw new HttpError(404, "NOT_FOUND", "Ruta no encontrada.");

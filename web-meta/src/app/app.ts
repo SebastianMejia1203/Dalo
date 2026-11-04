@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Ajustes } from './ajustes/ajustes';
+import { Admin } from './admin/admin';
 import { Comunicador } from './comunicador/comunicador';
 import { Expresiones } from './expresiones/expresiones';
 import { DaloService } from './servicios/dalo';
@@ -8,7 +9,7 @@ import { ModeloAvatarService } from './avatar-lsc/modelo-avatar';
 
 @Component({
   selector: 'app-root',
-  imports: [Ajustes, Comunicador, Expresiones, LucideAngularModule],
+  imports: [Ajustes, Admin, Comunicador, Expresiones, LucideAngularModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

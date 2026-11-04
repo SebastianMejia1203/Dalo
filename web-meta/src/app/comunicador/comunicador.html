@@ -1,5 +1,4 @@
-<div class="fila-titulo">
-  <h1>Comunicar</h1>
+<div class="fila-direccion">
   <div class="segmentado" role="group" aria-label="Dirección de comunicación">
     <button
       id="tab-lsc-es"
@@ -21,6 +20,10 @@
     </button>
   </div>
 </div>
+
+@if (dalo.direccion() === 'lsc-es') {
+<app-pipeline />
+}
 
 <div
   class="paneles"
@@ -366,7 +369,10 @@
   } @else {
   <section class="panel-mensaje" aria-label="Tu mensaje">
     <h2 class="etiqueta">¿Qué quieres comunicar?</h2>
-    <p class="ayuda">Escribe o dicta una expresión del catálogo.</p>
+    <p class="ayuda">
+      Escribe o dicta una expresión del catálogo, o una frase natural y Meta
+      buscará la expresión equivalente.
+    </p>
     <textarea
       id="texto-es"
       [formControl]="texto"
@@ -495,9 +501,25 @@
       </p>
       <h3>Conversión de texto</h3>
       <p>
-        Se buscan coincidencias en el catálogo local. No se traducen frases
-        libres ni se genera una secuencia de señas para cada palabra.
+        La coincidencia exacta se resuelve con el catálogo local. Si el
+        mensaje está en lenguaje libre, Muse Spark interpreta su intención
+        y elige una expresión del catálogo cerrado (o ninguna); si Meta no
+        responde, se conserva la búsqueda local. No se traducen oraciones a
+        LSC ni se genera una seña por cada palabra.
       </p>
+      @if (intencion.resultado(); as intencionResultado) {
+      <p>
+        Última intención con Meta: {{
+        intencionResultado.id ?? 'fuera del catálogo' }} · confianza {{
+        intencionResultado.confianza }} sin calibrar · {{
+        (intencionResultado.latencyMs / 1000).toFixed(1) }} s ·
+        {{ intencionResultado.model }} ({{ intencionResultado.promptVersion
+        }})<br />
+        {{ intencionResultado.motivo }}
+      </p>
+      } @if (intencion.error()) {
+      <p role="alert">{{ intencion.error() }}</p>
+      }
       @if (entradaEsl(); as entrada) {
       <h3>Seña: {{ entrada.nombre }}</h3>
       <p class="nota-avatar" role="note">

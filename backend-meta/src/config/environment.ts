@@ -31,6 +31,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
     frontendDist: resolve(backendRoot, env.FRONTEND_DIST || "../web-meta/dist/web-meta/browser"),
     apiKey: env.META_API_KEY ?? "",
     model: env.META_MODEL || "muse-spark-1.3-contributor",
+    adminToken: env.ADMIN_TOKEN ?? "",
+    adminDbPath:
+      env.ADMIN_DB_PATH || resolve(backendRoot, "data/admin.db"),
   };
 }
 

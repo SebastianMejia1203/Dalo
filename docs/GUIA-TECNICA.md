@@ -59,12 +59,15 @@ salida de rechazo `otra`. La etiqueta esperada permanece fuera de la petición.
 Flujos:
 
 ```text
-Texto → catálogo local → animación VRMA/JSON → avatar
-Audio → backend → Voice Transcribe → texto → catálogo local → avatar
+Texto → coincidencia local exacta → animación VRMA/JSON → avatar
+      └→ si es lenguaje libre → backend → Spark (intención) → id del catálogo → avatar
+Audio → backend → Voice Transcribe → texto → (misma ruta de texto) → avatar
 Cámara → cuenta previa → video → backend/FFmpeg → Spark Contributor
                                                 ↓
                            propuesta → confirmación → texto / voz
 ```
+
+El enrutador de intención (`POST /api/intent`, contexto `lsc-intent-v1`) solo elige una expresión existente o `id: null`; el frontend conserva la búsqueda local como respaldo y la coincidencia exacta nunca espera a Meta. La vista **Validación** edita descripciones y el estado `activa` de las definiciones vía `GET/PATCH /api/admin/signs` (persistencia en los JSON, efecto al reiniciar; token opcional `ADMIN_TOKEN`); las revisiones por seña y las sesiones de evaluación viven en la base SQLite (`ADMIN_DB_PATH`, `backend-meta/data/admin.db`, excluida de Git).
 
 La conversión Español → Señas busca expresiones del catálogo; no traduce libremente frases ni concatena una seña por cada palabra. Python y Blender se utilizan para autoría, datos y evaluación, no para arrancar Daló.
 
@@ -97,6 +100,8 @@ Limitaciones pendientes:
   de LSC y requieren revisión lingüística y de permisos.
 - Cámara, iluminación, nitidez, red y disponibilidad de la API condicionan el uso.
 - No hay seguimiento corporal en vivo, uso de SAM ni reconocimiento sin conexión.
+- La validación con personas competentes en LSC sigue pendiente (a 2 de noviembre no se consiguió quién la hiciera); la vista Validación ya registra veredictos por seña en la base cuando ocurra.
+- Las candidatas Sí, No, Por favor y Ayuda siguen desactivadas en cámara: sin personas ni dataset disponible no se ejecutó la evaluación que exige el criterio de activación. El escenario «En una recepción» solo usa expresiones ya animadas.
 
 Los evaluadores por lotes, los datasets, las grabaciones y los resultados privados
 no forman parte de la distribución. Para ejecutar Daló bastan el código, sus

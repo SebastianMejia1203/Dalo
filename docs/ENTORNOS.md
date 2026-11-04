@@ -51,6 +51,22 @@ El backend sirve `web-meta/dist/web-meta/browser` y la API `/api` desde el mismo
 
 En un servidor público, termina HTTPS en el proxy inverso y reenvía las peticiones a `127.0.0.1:3001`. Establece `HOST=127.0.0.1` si el proxy corre en la misma máquina; `0.0.0.0` sirve para contenedores o interfaces externas. Conserva el streaming sin buffering y un timeout superior a 75 segundos en el proxy. Cámara y micrófono requieren HTTPS fuera de localhost.
 
+### Despliegue actual: dalo.sebastianmejia.dev
+
+- **Origen:** servicio systemd de usuario `dalo.service` en el VPS
+  (`/home/okler/dalo/current`, backend en `127.0.0.1:3011`; el puerto 3001
+  lo usa otro proyecto).
+- **Proxy:** vhost Nginx propio para `dalo.sebastianmejia.dev` con el
+  certificado Origin de Cloudflare que ya cubre `*.sebastianmejia.dev`;
+  todo el tráfico va al backend, que sirve la API y el frontend compilado.
+- **Datos persistentes:** `ADMIN_DB_PATH=/home/okler/dalo/shared/data/admin.db`
+  (fuera de cada release, para no perder validaciones al desplegar) y
+  secretos solo en `/home/okler/dalo/shared/.env.production` (permisos 600,
+  fuera de Git). Define `ADMIN_TOKEN` aleatorio: protege definiciones,
+  importaciones y borrados; la validación de señas es pública sin token.
+- **FFmpeg:** binario estático en `/home/okler/dalo/shared/bin/ffmpeg`
+  (`FFMPEG_PATH`), el VPS no lo trae instalado.
+
 También puedes servir Angular con Nginx u otro servidor: configura `SERVE_FRONTEND=false` y reenvía `/api` al backend bajo el mismo dominio público. El resto de las rutas debe servir Angular con fallback a `index.html`; los recursos inexistentes y las rutas API desconocidas deben conservar su 404.
 
 ## Variables del backend
