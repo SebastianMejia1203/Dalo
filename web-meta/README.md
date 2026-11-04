@@ -83,15 +83,11 @@ La página **Validación** (navegación superior) es pública: cualquier persona
 escribe su nombre, mira la animación de cada seña y guarda un veredicto
 (se entiende, hay que corregir o no es válida) con notas opcionales. Cada
 guardado crea un registro nuevo en SQLite —varias personas pueden validar
-la misma seña sin sobrescribirse— y todos los registros se consultan,
-filtran y exportan en la pestaña **Registros**, además del historial por
-seña. También concentra la edición de descripciones visuales y la
-activación de candidatas desde el backend (aplica al reiniciarlo), un banco
-de pruebas de intención que compara búsqueda local y Meta frase a frase o
-por lote, y el análisis de los JSON de ensayos descargados (aciertos,
-confusiones, rechazo y latencia). Si el backend define `ADMIN_TOKEN`, ese
-token solo se pide para definiciones, importaciones y borrados; nunca para
-validar.
+la misma seña sin sobrescribirse— y todos los registros se consultan y
+filtran en la pestaña **Registros**, además del historial por seña.
+También concentra un banco de pruebas de intención que compara búsqueda
+local y Meta frase a frase o por lote, y el análisis de los JSON de
+ensayos descargados (aciertos, confusiones, rechazo y latencia).
 
 En **Expresiones**, los filtros iniciales son **Cámara: Sí** y **Avatar: Sí**.
 Selecciona Todas/Todos para explorar también las entradas sin reconocimiento.

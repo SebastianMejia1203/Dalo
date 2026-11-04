@@ -39,8 +39,6 @@
     </label>
   </div>
 </div>
-<p class="ayuda">Pasa el cursor para previsualizar · Pulsa para ampliar.</p>
-
 <div class="contenedor-lista">
   <ul id="lista-expresiones" class="lista">
     @for (entrada of catalogo(); track entrada.id) {
@@ -81,35 +79,6 @@
       }
       <div class="datos">
         <strong>{{ entrada.nombre }}</strong>
-        <span
-          class="estado-con-ayuda"
-          (mouseenter)="ayudaEstado.set(entrada.id)"
-          (mouseleave)="ayudaEstado.set(null)"
-        >
-          <button
-            type="button"
-            class="estado"
-            [attr.aria-describedby]="'estado-' + entrada.id"
-            [attr.aria-label]="entrada.estado + ': ver explicación de ' + entrada.nombre"
-            (focus)="ayudaEstado.set(entrada.id)"
-            (blur)="ayudaEstado.set(null)"
-            (click)="ayudaEstado.set(entrada.id)"
-            (keydown.escape)="ayudaEstado.set(null)"
-          >
-            {{ entrada.estado }} <span aria-hidden="true">ⓘ</span>
-          </button>
-          <span
-            class="tooltip-estado"
-            role="tooltip"
-            [id]="'estado-' + entrada.id"
-            [hidden]="ayudaEstado() !== entrada.id"
-          >
-            Estado asignado en el catálogo: falta validar la seña en LSC y
-            revisar el material y sus permisos de publicación. Tener cámara o
-            avatar disponible no equivale a estar validada. {{
-            entrada.validacion }}.
-          </span>
-        </span>
       </div>
       <p class="disp">
         Cámara: {{ entrada.reconocible ? 'Sí' : 'aún no' }} · Avatar: {{

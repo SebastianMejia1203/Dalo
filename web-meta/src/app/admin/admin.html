@@ -15,19 +15,7 @@
       <button type="button" (click)="admin.cargar()">Actualizar</button>
     </div>
   </div>
-  <p class="intro">
-    Cualquier persona puede validar: escribe tu nombre, mira la animación de
-    cada seña, elige si se entiende y pulsa <strong>Guardar validación</strong>.
-    Cada guardado crea un registro nuevo (no sobrescribe el de otras personas)
-    y queda visible en la pestaña <strong>Registros</strong>.
-  </p>
-
-  @if (admin.restartRequired()) {
-  <p class="aviso aviso-fuerte" role="alert">
-    Cambios guardados: reinicia el backend para que apliquen al
-    reconocimiento.
-  </p>
-  } @if (admin.error()) {
+  @if (admin.error()) {
   <p class="aviso" role="alert">{{ admin.error() }}</p>
   } @if (admin.aviso()) {
   <p class="aviso aviso-ok" role="status">{{ admin.aviso() }}</p>
@@ -70,18 +58,6 @@
     >
       Ensayos
     </button>
-    @if (admin.tokenRequired() || admin.token()) {
-    <label class="token">
-      Token admin (solo borrados y definiciones)
-      <input
-        type="password"
-        [ngModel]="admin.token()"
-        (ngModelChange)="admin.guardarToken($event)"
-        placeholder="No lo necesitas para validar"
-        aria-label="Token de administración (opcional, no necesario para validar)"
-      />
-    </label>
-    }
   </div>
 
   @if (pestana() === 'senas') {
@@ -110,23 +86,14 @@
         </select>
       </label>
       <label>
-        Tu nombre (obligatorio para guardar)
+        Tu nombre
         <input
           type="text"
           [ngModel]="validador()"
           (ngModelChange)="guardarValidador($event)"
           placeholder="Ej.: Ana Pérez"
           autocomplete="name"
-          aria-describedby="ayuda-validador"
         />
-        <span id="ayuda-validador" class="ayuda">
-          Se guarda en este equipo y firma tus registros.
-        </span>
-      </label>
-      <button type="button" (click)="exportarRevisiones()">Exportar</button>
-      <label class="boton-archivo">
-        Importar
-        <input type="file" accept=".json" (change)="importarRevisiones($event)" hidden />
       </label>
     </div>
 
@@ -167,12 +134,6 @@
         <div class="detalle-cabecera">
           <div>
             <h2>{{ signo.nombre }}</h2>
-            <p class="ayuda">
-              {{ signo.id }} · {{ signo.categoria }} · Avatar:
-              {{ signo.conAvatar ? 'sí' : 'no' }} ·
-              {{ signo.reconocibleEnCatalogo ? 'reconocible' : 'solo
-              animación' }}
-            </p>
           </div>
           <span
             class="insignia"
@@ -189,13 +150,8 @@
             [animacionUrl]="entrada.animacionUrl"
             [nombre]="entrada.nombre"
           />
-          <p class="ayuda">
-            Mira la animación completa y luego registra tu veredicto.
-          </p>
         </div>
-        } } @else {
-        <p class="ayuda">Esta seña aún no tiene animación para revisar.</p>
-        }
+        } }
 
         <h3>Tu validación</h3>
         <div class="fila">
@@ -232,9 +188,6 @@
             'Guardar validación' }}
           </button>
         </div>
-        @if (motivoNoGuardar(signo.id)) {
-        <p class="ayuda" role="status">{{ motivoNoGuardar(signo.id) }}</p>
-        }
 
         <h3>
           Registros guardados de esta seña ({{
@@ -253,58 +206,17 @@
           </li>
           }
         </ul>
-        } @else {
-        <p class="ayuda">
-          Todavía nadie ha validado esta seña. Tu registro será el primero.
-        </p>
         }
-
-        <details class="admin-avanzado">
-          <summary>Administración: descripción y activación en cámara</summary>
-          <p class="ayuda">
-            Solo para administración (puede requerir token). Cambiar esto no
-            es validar: la validación es el formulario anterior.
-          </p>
-          <label [attr.for]="'desc-' + signo.id">
-            Descripción visual que recibe el modelo
-          </label>
-          <textarea
-            [id]="'desc-' + signo.id"
-            rows="6"
-            [value]="descripcionDe(signo.id, signo.descripcion)"
-            (input)="editarDescripcion(signo.id, $event)"
-          ></textarea>
-          <div class="fila">
-            <button
-              type="button"
-              [disabled]="admin.guardando() === signo.id"
-              (click)="guardarDescripcion(signo.id, signo.descripcion)"
-            >
-              Guardar descripción
-            </button>
-            <button
-              type="button"
-              [disabled]="admin.guardando() === signo.id"
-              (click)="alternarActiva(signo.id, signo.activa)"
-            >
-              {{ signo.activa ? 'Desactivar cámara' : 'Activar en cámara' }}
-            </button>
-          </div>
-        </details>
 
       </article>
       } @else {
-      <p class="ayuda">Sin señas para este filtro.</p>
+      <p role="status">Sin señas para este filtro.</p>
       }
     </div>
     }
   </section>
   } @else if (pestana() === 'registros') {
   <section class="panel" aria-label="Registros de validación guardados">
-    <p class="ayuda">
-      Cada fila es una validación guardada por una persona. Si validas la
-      misma seña otra vez, se crea un registro nuevo sin borrar los demás.
-    </p>
     <div class="resumen-registros" aria-label="Resumen por veredicto">
       <span
         ><strong>{{ admin.listaRevisiones().length }}</strong> registros</span
@@ -321,20 +233,6 @@
         >No válida:
         <strong>{{ conteoVeredicto()['no-valida'] ?? 0 }}</strong></span
       >
-      <button type="button" (click)="exportarRevisiones()">
-        Exportar JSON
-      </button>
-      @if (admin.tokenRequired() || admin.token()) {
-      <label class="boton-archivo">
-        Importar (admin)
-        <input
-          type="file"
-          accept=".json"
-          (change)="importarRevisiones($event)"
-          hidden
-        />
-      </label>
-      }
     </div>
     <div class="fila filtros">
       <label>
@@ -372,9 +270,6 @@
             <th>Veredicto</th>
             <th>Persona</th>
             <th>Notas</th>
-            @if (admin.tokenRequired() || admin.token()) {
-            <th><span class="solo-lectura">Borrar</span></th>
-            }
           </tr>
         </thead>
         <tbody>
@@ -399,39 +294,17 @@
             </td>
             <td>{{ registro.validador || '—' }}</td>
             <td>{{ registro.notas || '—' }}</td>
-            @if (admin.tokenRequired() || admin.token()) {
-            <td>
-              <button
-                type="button"
-                (click)="admin.borrarRevision(registro.id)"
-                [attr.aria-label]="'Borrar registro de ' + registro.validador"
-              >
-                Borrar
-              </button>
-            </td>
-            }
           </tr>
           }
         </tbody>
       </table>
     </div>
-    } @else if (admin.listaRevisiones().length) {
-    <p class="ayuda" role="status">
-      Ningún registro coincide con ese filtro.
-    </p>
     } @else {
-    <p class="ayuda" role="status">
-      Aún no hay validaciones guardadas. Ve a Señas, elige una y guarda la
-      primera.
-    </p>
+    <p role="status">Sin registros.</p>
     }
   </section>
   } @else if (pestana() === 'intencion') {
   <section class="panel" aria-label="Pruebas de intención">
-    <p class="ayuda">
-      Compara la búsqueda local con Muse Spark, frase a frase o por lote.
-      Meta solo elige una expresión existente o «fuera del catálogo».
-    </p>
     <div class="fila">
       <input
         type="text"
@@ -466,7 +339,7 @@
         {{ probandoLote() ? 'Probando…' : 'Probar lote' }}
       </button>
       @if (intencion.error()) {
-      <span class="ayuda" role="alert">{{ intencion.error() }}</span>
+      <span role="alert">{{ intencion.error() }}</span>
       }
     </div>
     @if (filas().length) {
@@ -501,11 +374,6 @@
   </section>
   } @else {
   <section class="panel" aria-label="Sesiones de evaluación">
-    <p class="ayuda">
-      Guarda el JSON descargado de Comunicar → Detalles técnicos → Evaluación
-      como una sesión (p. ej. P1) y analiza una o varias sesiones juntas para
-      decidir si una candidata puede activarse.
-    </p>
     <div class="fila">
       <label>
         Código
@@ -538,9 +406,7 @@
         />
       </label>
     </div>
-    @if (archivoEnsayos()) {
-    <span class="ayuda">Último archivo: {{ archivoEnsayos() }}</span>
-    } @if (admin.cargandoSesiones()) {
+    @if (admin.cargandoSesiones()) {
     <p role="status">Cargando sesiones…</p>
     } @else if (admin.sesiones().length) {
     <div class="tabla-scroll">
@@ -597,7 +463,7 @@
       </button>
     </div>
     } @else {
-    <p class="ayuda">Aún no hay sesiones guardadas.</p>
+    <p role="status">Sin sesiones guardadas.</p>
     } @if (analisis(); as resultado) {
     <p role="status" class="resultado">
       <strong>

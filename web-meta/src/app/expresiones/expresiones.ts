@@ -29,7 +29,6 @@ export class Expresiones {
   protected readonly busqueda = signal("");
   protected readonly filtroCamara = signal("si");
   protected readonly filtroAvatar = signal("si");
-  protected readonly ayudaEstado = signal<string | null>(null);
   protected readonly pagina = signal(0);
   private readonly filtradas = computed(() => {
     const termino = normalizeSpanish(this.busqueda());
@@ -146,7 +145,6 @@ export class Expresiones {
     const valor = (evento.target as HTMLSelectElement).value;
     if (!["si", "no", "todos"].includes(valor)) return;
     this.cerrarVistaPrevia();
-    this.ayudaEstado.set(null);
     (tipo === "camara" ? this.filtroCamara : this.filtroAvatar).set(valor);
     this.pagina.set(0);
   }

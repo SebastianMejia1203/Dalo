@@ -31,16 +31,6 @@
   color: var(--texto);
 }
 
-.intro,
-.ayuda {
-  color: var(--texto-suave);
-  font-size: 0.86rem;
-}
-
-.intro {
-  margin: 0 0 0.5rem;
-}
-
 .tabs {
   display: flex;
   align-items: center;
@@ -64,21 +54,6 @@
   background: #fff;
   font-weight: 700;
   box-shadow: 0 1px 3px rgb(16 24 32 / 0.15);
-}
-
-.tabs .token {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.tabs .token input {
-  width: 10rem;
-  min-height: 36px;
-  font-size: 0.85rem;
 }
 
 .panel {
@@ -122,11 +97,6 @@
   border-radius: 8px;
   padding: 0.6rem 0.75rem;
   font-size: 0.9rem;
-}
-
-.aviso-fuerte {
-  background: #fdecea;
-  color: #7a1f1a;
 }
 
 .aviso-ok {
@@ -220,10 +190,6 @@ button.item-sena.activo {
 .detalle-cabecera h2 {
   margin: 0;
   font-size: 1.15rem;
-}
-
-.detalle-cabecera .ayuda {
-  margin: 0.2rem 0 0;
 }
 
 .insignia {
@@ -333,10 +299,6 @@ label[for="frases-lote"] {
   background: var(--pista);
 }
 
-.vista-sena .ayuda {
-  margin: 0.5rem 0 0;
-}
-
 .historial {
   margin: 0.3rem 0 0;
   padding-left: 1.2rem;
@@ -368,25 +330,6 @@ button.enlace-sena {
   color: var(--acento-oscuro);
   cursor: pointer;
   text-decoration: underline;
-}
-
-.admin-avanzado {
-  margin-top: 1.25rem;
-  border-top: 1px solid var(--borde);
-  padding-top: 0.75rem;
-}
-
-.admin-avanzado summary {
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.admin-avanzado > label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.86rem;
-  margin: 0.8rem 0 0.3rem;
 }
 
 @media (max-width: 720px) {

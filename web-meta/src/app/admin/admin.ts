@@ -68,7 +68,6 @@ export class Admin {
   protected readonly filtro = signal("todas");
   protected readonly busqueda = signal("");
   protected readonly seleccionada = signal<string | null>(null);
-  protected readonly descripciones = signal<Record<string, string>>({});
   protected readonly veredictos = signal<Record<string, Veredicto>>({});
   protected readonly notas = signal<Record<string, string>>({});
   protected readonly validador = signal(
@@ -158,15 +157,6 @@ export class Admin {
     if (pestana === "ensayos") void this.admin.cargarSesiones();
   }
 
-  protected descripcionDe(id: string, original: string): string {
-    return this.descripciones()[id] ?? original;
-  }
-
-  protected editarDescripcion(id: string, evento: Event): void {
-    const valor = (evento.target as HTMLTextAreaElement).value;
-    this.descripciones.update((actuales) => ({ ...actuales, [id]: valor }));
-  }
-
   protected veredictoDe(id: string): Veredicto {
     // Cada registro nuevo parte sin elegir: no hereda el veredicto anterior.
     return this.veredictos()[id] ?? "sin-revisar";
@@ -197,13 +187,6 @@ export class Admin {
     );
   }
 
-  protected motivoNoGuardar(id: string): string {
-    if (!this.validador().trim()) return "Escribe tu nombre arriba para guardar.";
-    if (this.veredictoDe(id) === "sin-revisar")
-      return "Elige un veredicto para esta seña.";
-    return "";
-  }
-
   protected elegirVeredicto(id: string, evento: Event): void {
     const valor = (evento.target as HTMLSelectElement).value as Veredicto;
     this.veredictos.update((actuales) => ({ ...actuales, [id]: valor }));
@@ -218,21 +201,8 @@ export class Admin {
     this.notas.update((actuales) => ({ ...actuales, [id]: valor }));
   }
 
-  protected guardarDescripcion(id: string, original: string): void {
-    void this.admin.guardarSigno(id, {
-      descripcion: this.descripcionDe(id, original),
-    });
-  }
-
-  protected alternarActiva(id: string, actual: boolean): void {
-    void this.admin.guardarSigno(id, { activa: !actual });
-  }
-
   protected async guardarRevision(id: string): Promise<void> {
-    if (!this.puedeGuardarRevision(id)) {
-      this.admin.error.set(this.motivoNoGuardar(id));
-      return;
-    }
+    if (!this.puedeGuardarRevision(id)) return;
     const ok = await this.admin.guardarRevision(id, {
       veredicto: this.veredictoDe(id),
       notas: this.notaDe(id),
@@ -397,24 +367,4 @@ export class Admin {
       );
   }
 
-  protected async importarRevisiones(evento: Event): Promise<void> {
-    const entrada = evento.target as HTMLInputElement;
-    const archivo = entrada.files?.[0];
-    if (!archivo) return;
-    await this.admin.importarRevisiones(await archivo.text());
-    entrada.value = "";
-  }
-
-  protected exportarRevisiones(): void {
-    const url = URL.createObjectURL(
-      new Blob([this.admin.exportarRevisiones()], {
-        type: "application/json",
-      }),
-    );
-    const enlace = document.createElement("a");
-    enlace.href = url;
-    enlace.download = "dalo-revisiones-lsc.json";
-    enlace.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
 }
