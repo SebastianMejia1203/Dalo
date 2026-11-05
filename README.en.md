@@ -6,6 +6,8 @@ Daló supports everyday communication between users of **Colombian Sign Language
 
 Type or dictate an expression to see its sign, or use the camera to get a suggested interpretation in Spanish.
 
+**Live Demo:** [dalo.sebastianmejia.dev](https://dalo.sebastianmejia.dev)
+
 > **Experimental prototype:** includes 33 animated expressions and recognizes 11 signs through the camera, including Muy bien. Its vocabulary is limited and requires validation by people proficient in LSC. It does not replace professional interpreters.
 
 ## What you can do
