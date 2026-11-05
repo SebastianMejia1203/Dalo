@@ -6,6 +6,8 @@ Daló ayuda a comunicar expresiones cotidianas entre personas usuarias de **Leng
 
 Puedes escribir o dictar una expresión para ver su seña, o usar la cámara para obtener una propuesta en español.
 
+**Demo en vivo:** [dalo.sebastianmejia.dev](https://dalo.sebastianmejia.dev)
+
 > **Prototipo experimental:** incluye 33 expresiones animadas y reconoce 11 señas por cámara, incluida Muy bien. Su vocabulario es limitado y necesita validación con personas competentes en LSC. No sustituye a intérpretes profesionales.
 
 ## Qué puedes hacer
